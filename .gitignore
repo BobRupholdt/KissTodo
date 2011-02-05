@@ -1,0 +1,7 @@
+*.pyc
+untracked
+# -- some examples --
+#.DS_Store
+#*~
+#*.swp
+#tmp/**/* 
