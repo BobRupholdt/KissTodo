@@ -1,5 +1,10 @@
 *.pyc
 untracked
+.gaedata
+dbindexer
+django
+djangoappengine
+djangotoolbox
 # -- some examples --
 #.DS_Store
 #*~

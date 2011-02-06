@@ -1,0 +1,86 @@
+{% extends "todo/base_site.html" %}
+
+{% block extra_head %}
+{{ block.super }}
+<script type="text/javascript">
+ $(function() {
+   $('#test_id').addClass('test_class');
+ });
+</script>
+{% endblock %}
+
+{% block content_title %}Test page title{% endblock %}
+
+{% block content %}
+<p>
+css test: <span class="test_class">Ok</span><br/>
+jquery test: <span id="test_id">Ok</span><br/>
+MEDIA_URL: {{MEDIA_URL}}<br/>
+MEDIA_ROOT: {{media_root}}<br/>
+</p>
+
+<p>
+<h1>Header 1</h1>
+<h2>Header 2</h2>
+<h3>Header 3</h3>
+<h4>Header 4</h4>
+<a href="#" class="link">link</a>, <a href="#" class="selected_link">selected link</a>
+</p>
+
+<p>
+<form method="post">
+<fieldset>
+<legend>fields</legend>
+
+<label for="t1">Text:</label> <input id="t1" type="text">
+<br/>
+
+<label for="s1">Select:</label>
+    <select id="s1">
+    <option>option 1</option>
+    <option>option 2</option>
+    <option>option 3</option>
+</select>
+<br/>
+
+<label for="ta1">Text area:</label>
+<textarea id="ta1">content</textarea>
+<br/>
+
+<label for="remember">Remember me:</label>
+<input type="checkbox" id="remember" name="remember" value="remember" />
+<br/><br/>
+
+<label for="sex">Sex:</label>
+<input type="radio" id="sex" name="sex" value="male" /> Male
+<input type="radio" id="sex" name="sex" value="female" /> Female
+<br/><br/>
+
+</fieldset>
+<p/>
+<fieldset>
+<legend>new todo list</legend>
+<label for="t2">Name:</label><input type="text" name="add" id="t2"> <input type="submit" value="create" />
+</fieldset>
+{% csrf_token %}
+</form>
+</p>
+
+<p>
+<ul>
+{% for tl in todo_lists.all %}  
+    <li>{{ tl.name }}</li>
+{% endfor %} 
+</ul>
+</p>
+
+<p>
+<table class="grid">
+    <tr><th>field 1</th><th>field 2</th><th>field 3</th></tr>
+    <tr><td>value 1a</td><td>value 2a</td><td>value 3a</td></tr>
+    <tr class="alternate_row"><td>value 1b</td><td>value 2b</td><td>value 3b</td></tr>
+    <tr><td>value 1c</td><td>value 2c</td><td>value 3c</td></tr>
+    <tr class="alternate_row"><td>value 1d</td><td>value 2d</td><td>value 3d</td></tr>
+</table>
+</p>
+{% endblock %}

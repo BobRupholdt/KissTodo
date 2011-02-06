@@ -1,0 +1,80 @@
+.test_class { 
+    color:#0a0;
+}
+
+body {
+    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+	font-size: 12px;
+    margin:10px;
+}
+
+img {border:0}
+
+h1  {
+    color:#666;
+    font-size:20px;
+    margin:0 0 0.2em;
+    padding:0 6px 0 0;
+}
+
+h2 {
+	font-weight: lighter;
+	font-size: 18px;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight:bold;
+}
+
+input, select, textarea
+{
+	border: 1px solid #ddd;
+	padding:3px 1px;
+	margin:3px 0;
+}
+	
+textarea { width: 400px;}
+
+input:focus, select:focus, textarea:focus {
+    background-color: #efe578;
+}
+
+a:link, a:visited  {color: #666; text-decoration: none}
+a:hover, a.selected_link   {background: #efe578; text-decoration: none; }
+
+.logo a:hover
+{
+    background:#fff
+}
+
+fieldset {
+    border:0;
+    border-top:1px solid #ddd;
+}
+
+label {
+	width:100px; text-align:  right; margin-right:10px; float:left;
+	padding:3px;
+	margin:3px;
+}
+
+table.grid { border-collapse: collapse; }
+table.grid,table.grid th,table.grid td { border: 1px solid #ddd; padding: 6px; }
+table.grid th {color: #666; background-color: #efe578; padding:2px;}
+table.grid tr.alternate_row { background-color: #f3f3f3;}
+
+.menu {
+    padding: 8px 0px;
+}
+
+.menu_border {
+    border-top: 1px solid #ddd;
+}
+
+.float_right {
+	float:right;
+    text-align: right;
+}
+
+
+
