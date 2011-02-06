@@ -20,4 +20,10 @@ from todo.views import *
 
 urlpatterns = patterns('',
     (r'^test_page$', test_page),
+    (r'^board$', board),
+    (r'^ajax/todo_list/(?P<list_id>.*)', todo_list),
+
 )
+
+
+

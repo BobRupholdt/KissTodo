@@ -1,0 +1,41 @@
+﻿{% extends "todo/base_site.html" %}
+
+{% block extra_head %}
+{{ block.super }}
+<script type="text/javascript">
+ $(function() {
+   $('.list').click(function () { 
+      var list_id=$(this).attr('id').replace('list_','');
+      
+       $("#wait").fadeIn(100);
+       $("#todo_list").fadeOut(100);
+
+        $.get("ajax/todo_list/"+list_id, function(response) {
+            $("#todo_list").html(response);
+            $("#todo_list").fadeIn(100);
+			$("#wait").fadeOut(100, function(){ $("#wait").css("display", "none");});
+        });
+		
+        return false;
+    });
+ });
+</script>
+{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block content %}
+
+{{lists.all.count}} lists:
+<ul>
+{% for l in lists.all %}  
+    <li><a class="list" id="list_{{l.id}}" href="#">{{ l.name }}</a></li>
+{% endfor %} 
+</ul>
+
+
+<div id="todo_list">
+<span id="wait" style="display:none">w8...</span>
+</div>
+
+{% endblock %}

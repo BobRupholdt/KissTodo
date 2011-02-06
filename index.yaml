@@ -15,3 +15,8 @@ indexes:
   - name: user_id
   - name: action_time
     direction: desc
+
+- kind: todo_todo
+  properties:
+  - name: list_id
+  - name: description

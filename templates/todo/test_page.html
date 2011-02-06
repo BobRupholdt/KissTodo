@@ -59,8 +59,13 @@ MEDIA_ROOT: {{media_root}}<br/>
 </fieldset>
 <p/>
 <fieldset>
-<legend>new todo list</legend>
-<label for="t2">Name:</label><input type="text" name="add" id="t2"> <input type="submit" value="create" />
+<legend>new list</legend>
+<label for="t2">Name:</label><input type="text" name="add" id="t2">
+<input type="submit" name='op' value="create list" /> 
+<input type="submit" name='op' value="create todo" />
+<br/>
+<input type="submit" name='op' value="clear data" />
+<input type="submit" name='op' value="simulate error" />
 </fieldset>
 {% csrf_token %}
 </form>
@@ -68,10 +73,16 @@ MEDIA_ROOT: {{media_root}}<br/>
 
 <p>
 <ul>
-{% for tl in todo_lists.all %}  
-    <li>{{ tl.name }}</li>
+{% for l in lists.all %}  
+    <li>{{ l.name }}</li>
+    <ol>
+    {% for t in l.todo_set.all %}  
+        <li>{{ t.description }}</li>
+    {% endfor %} 
+    </ol>
 {% endfor %} 
 </ul>
+
 </p>
 
 <p>
