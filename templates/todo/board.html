@@ -3,22 +3,77 @@
 {% block extra_head %}
 {{ block.super }}
 <script type="text/javascript">
- $(function() {
-   $('.list').click(function () { 
-      var list_id=$(this).attr('id').replace('list_','');
-      
-       $("#wait").fadeIn(100);
-       $("#todo_list").fadeOut(100);
-
-        $.get("ajax/todo_list/"+list_id, function(response) {
-            $("#todo_list").html(response);
-            $("#todo_list").fadeIn(100);
-			$("#wait").fadeOut(100, function(){ $("#wait").css("display", "none");});
-        });
+$(function() {
+    refresh_list_list();
+    
+    $('.list').live('click', function () { 
+        $('.list').removeClass('selected_link');
+        $('.list').removeClass('selected_list');
+        $(this).addClass('selected_link');
+        $(this).addClass('selected_list');
+   
+        refresh_todo_list();
 		
         return false;
     });
- });
+});
+
+function refresh_list_list(selected_list_id) {    
+    $("#wait").fadeIn(200);
+    $("#list_list").fadeOut(200);
+
+    $.get("ajax/list_list/"+selected_list_id, function(response) {
+        $("#list_list").html(response);
+        $("#list_list").fadeIn(200);
+        $("#wait").fadeOut(200);
+    });   
+}
+
+function refresh_todo_list() {
+    var list_id=$('.selected_list').attr('id').replace('list_','');
+    
+    $("#wait").fadeIn(200);
+    $("#todo_list").fadeOut(200);
+
+    $.get("ajax/todo_list/"+list_id, function(response) {
+        $("#todo_list").html(response);
+        $("#todo_list").fadeIn(200);
+        $("#wait").fadeOut(200);
+    });   
+}
+ 
+function add_list() {
+    var item = $("#add_list_form");
+
+    var data = {
+        csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
+        name: item.find("#name").val()
+    };
+    
+    item.find("#name").val("")
+            
+    $.post("{%url todo.views.add_list%}", data, function (response) {
+        refresh_list_list(response);
+        refresh_todo_list();
+    });
+
+    return false;
+ }
+ 
+function add_todo() {
+    var item = $("#add_todo_form");
+    var data = {
+        csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
+        description: item.find("#description").val(),
+        list_id: item.find("#list_id").val()
+    };
+            
+    $.post("{%url todo.views.add_todo%}", data, function (response) {
+        refresh_todo_list();
+    });
+
+    return false;
+ }
 </script>
 {% endblock %}
 
@@ -26,16 +81,10 @@
 
 {% block content %}
 
-{{lists.all.count}} lists:
-<ul>
-{% for l in lists.all %}  
-    <li><a class="list" id="list_{{l.id}}" href="#">{{ l.name }}</a></li>
-{% endfor %} 
-</ul>
-
-
-<div id="todo_list">
-<span id="wait" style="display:none">w8...</span>
-</div>
+<form method="post" action="." id="add_list_form" onSubmit="return add_list()">Create a new list: <input type="text" id="name" name="name" />{% csrf_token %}</form>
+<div id="list_list" ></div>
+<br />
+<span id="wait" style="display:none;float:left;"><img src="{{MEDIA_URL}}img/wait.gif" alt="wait" /></span>
+<div id="todo_list" ></div>
 
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
@@ -38,4 +39,25 @@ def board(request):
         RequestContext(request, {'lists':List.objects,}))
     
 def todo_list(request, list_id):
-    return render_to_response('todo/todo_list.html', RequestContext(request, {'todos':Todo.objects.filter(list__id=list_id)}))
+    #import time
+    #time.sleep(1)
+    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.objects.filter(list__id=list_id)}))
+    
+def list_list(request, selected_list_id):
+    return render_to_response('todo/list_list.html', RequestContext(request, {'lists':List.objects.all(), 'selected_list_id': str(selected_list_id)}))    
+
+def add_list(request):
+    l=List()
+    l.name=request.POST['name'];
+    l.save()
+    out = l.id
+    return HttpResponse(out, mimetype="text/plain") 
+    
+def add_todo(request):
+    l=List.objects.get(id=request.POST['list_id'])
+    t=Todo()
+    t.description=request.POST['description']
+    t.list=l
+    t.save()
+    out = t.id
+    return HttpResponse(out, mimetype="text/plain")     

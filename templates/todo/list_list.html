@@ -1,0 +1,3 @@
+{% for l in lists.all %}
+<a class="list{% if l.id|stringformat:"s" == selected_list_id %} selected_link selected_list{% endif %}" id="list_{{l.id}}" href="#">{{ l.name }}</a> | 
+{% endfor %} 
