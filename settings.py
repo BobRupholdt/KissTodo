@@ -16,6 +16,8 @@ MEDIA_URL = '/static/'
 ROOT_URLCONF = 'urls'
 
 INSTALLED_APPS = (
+    'todo', # barmassimo
+    
     'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.auth',
