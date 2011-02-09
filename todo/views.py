@@ -69,6 +69,11 @@ def add_list(request):
     out = l.id
     return HttpResponse(out, mimetype="text/plain") 
     
+def delete_list(request):
+    l=List.objects.get(id=int(request.POST['list_id']))
+    l.delete()
+    return HttpResponse("", mimetype="text/plain")     
+    
 def add_todo(request):
     l=List.objects.get(id=request.POST['list_id'])
     t=Todo()

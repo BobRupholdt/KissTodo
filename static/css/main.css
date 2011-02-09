@@ -4,7 +4,7 @@
 
 body {
     font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
-	font-size: 12px;
+	font-size: 13px;
     margin:10px;
 }
 
@@ -32,17 +32,22 @@ input, select, textarea
 	padding:3px 1px;
 	margin:3px 0;
 }
-	
+
+input.blur {
+    color: #999;
+}
+
 textarea { width: 400px;}
 
 input:focus, select:focus, textarea:focus {
-    background-color: #efe578;
+    /*background-color: #efe578;*/
+    border: 1px solid #efe578;
 }
 
 a:link, a:visited  {color: #666; text-decoration: none}
 a:hover, a.selected_link   {background: #efe578; text-decoration: none; }
 
-.logo a:hover
+.no_background a:hover
 {
     background:#fff
 }
@@ -76,5 +81,20 @@ table.grid tr.alternate_row { background-color: #f3f3f3;}
     text-align: right;
 }
 
+.list {
+    font-size: 16px;
+}
 
+.light {color:#ddd;}
 
+ul.todos {
+    list-style-type: none;
+}
+
+ul.todos li {
+    /*background-image: url("../img/li.png");x
+            background-position: 0.5em 0.3em; */
+    background-repeat: no-repeat;
+    padding-left: 0;
+    margin-left: -30px;
+}

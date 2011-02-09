@@ -9,6 +9,9 @@
     <link href="{{MEDIA_URL}}css/main.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery-1.5.min.js"></script> 
     
+    <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/overlay/jquery.hint.js"></script> 
+    
+    
     {% block extra_head %}{% endblock %}      
 </head>
 
@@ -16,9 +19,9 @@
     <div class="container"> 
         
         <div class="header">
-            <span class="logo"><a class="nobg" href="/admin/"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a></span>
+            <span class="no_background"><a class="nobg" href="/admin/"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a></span>
             <div class="float_right">
-                <div class="menu">
+                <div class="menu" style="display:none;">
                     Welcome, <strong>{{ user }}</strong>.
                     <a href="/admin/doc/">Documentation</a> | <a href="/admin/password_change/">Change password</a> | <a href="/admin/logout/">Log out</a>
                 </div>
@@ -41,7 +44,7 @@
             {% block content_headline%}{% endblock %}
         </p>
         
-        <p />
+        
         
         <div class="content">
             {% block content %}{% endblock %}

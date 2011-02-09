@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     (r'^ajax/todo_list/(?P<list_id>.*)', todo_list),
     (r'^ajax/list_list/(?P<selected_list_id>.*)', list_list),
     (r'^ajax/add_list/$', add_list),
+    (r'^ajax/delete_list/$', delete_list),
     (r'^ajax/add_todo/$', add_todo),
 )
 

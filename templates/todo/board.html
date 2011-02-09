@@ -5,19 +5,39 @@
 <script type="text/javascript">
 $(function() {
     refresh_list_list();
+    refresh_todo_list(-1);
+    
+    $('input[title!=""]').hint();
     
     $('.list').live('click', function () { 
-        $('.list').removeClass('selected_link');
-        $('.list').removeClass('selected_list');
-        $(this).addClass('selected_link');
-        $(this).addClass('selected_list');
+        $('.list').removeClass('selected_link').removeClass('selected_list');
+        $(this).addClass('selected_link').addClass('selected_list');
         
         var list_id=$('.selected_list').attr('id').replace('list_','');
-   
+        
         refresh_todo_list(list_id);
 		
         return false;
     });
+    
+    $('.list_delete').live('click', function () { 
+        
+        
+        var list_id=$(this).attr('id').replace('list_delete_','');
+        var item = $("#delete_list_form_"+list_id);
+        
+        var data = {
+            csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
+            list_id: list_id
+        };
+   
+        $.post("{%url todo.views.delete_list%}", data, function (response) {
+                refresh_list_list(-1);
+                refresh_todo_list(-1);
+        });        
+		
+        return false;
+    });    
 });
 
 function refresh_list_list(selected_list_id) {    
@@ -41,7 +61,14 @@ function refresh_todo_list(list_id) {
         $("#todo_list").fadeIn(200);
         $("#wait").fadeOut(200);
         $("#add_todo_form").find("#description").focus();
+        
+        $(".list_delete").hide();
+        $("#list_delete_"+list_id).show();
+        
+        if (list_id==-1) $("#todo_list").html("");
     });   
+    
+       
 }
  
 function add_list() {
@@ -52,7 +79,7 @@ function add_list() {
         name: item.find("#name").val()
     };
     
-    item.find("#name").val("")
+    item.find("#name").val("");
             
     $.post("{%url todo.views.add_list%}", data, function (response) {
         refresh_list_list(response);
@@ -60,7 +87,7 @@ function add_list() {
     });
 
     return false;
- }
+}
  
 function add_todo() {
     var item = $("#add_todo_form");
@@ -90,8 +117,8 @@ function add_todo() {
 </div>
 <p style="clear:both;display:none;">
 
-<form method="post" action="." id="add_list_form" onSubmit="return add_list()">Create a new list: <input type="text" id="name" name="name" />{% csrf_token %}</form>
+<form method="post" action="." id="add_list_form" onSubmit="return add_list()"><input title="CREATE A NEW LIST" size="40" type="text" id="name" name="name" />{% csrf_token %}</form>
 <div id="list_list" ></div>
-<div id="todo_list" ></div>
+<span id="todo_list" ></span>
 
 {% endblock %}
