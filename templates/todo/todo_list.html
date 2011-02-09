@@ -1,7 +1,7 @@
 <form method="post" action="." id="add_todo_form" onSubmit="return add_todo()">
-add: <input type="text" id="description" name="description" />
-<input type="hidden" value="{{list_id}}" id="list_id" name="list_id" />
-{% csrf_token %}
+    add: <input type="text" id="description" name="description" />
+    <input type="hidden" value="{{list_id}}" id="list_id" name="list_id" />
+    {% csrf_token %}
 </form>
 <ul>
     {% for t in todos.all %}  

@@ -11,8 +11,10 @@ $(function() {
         $('.list').removeClass('selected_list');
         $(this).addClass('selected_link');
         $(this).addClass('selected_list');
+        
+        var list_id=$('.selected_list').attr('id').replace('list_','');
    
-        refresh_todo_list();
+        refresh_todo_list(list_id);
 		
         return false;
     });
@@ -29,9 +31,8 @@ function refresh_list_list(selected_list_id) {
     });   
 }
 
-function refresh_todo_list() {
-    var list_id=$('.selected_list').attr('id').replace('list_','');
-    
+function refresh_todo_list(list_id) {
+        
     $("#wait").fadeIn(200);
     $("#todo_list").fadeOut(200);
 
@@ -39,6 +40,7 @@ function refresh_todo_list() {
         $("#todo_list").html(response);
         $("#todo_list").fadeIn(200);
         $("#wait").fadeOut(200);
+        $("#add_todo_form").find("#description").focus();
     });   
 }
  
@@ -54,7 +56,7 @@ function add_list() {
             
     $.post("{%url todo.views.add_list%}", data, function (response) {
         refresh_list_list(response);
-        refresh_todo_list();
+        refresh_todo_list(response);
     });
 
     return false;
@@ -69,7 +71,8 @@ function add_todo() {
     };
             
     $.post("{%url todo.views.add_todo%}", data, function (response) {
-        refresh_todo_list();
+        var list_id=$('.selected_list').attr('id').replace('list_','');
+        refresh_todo_list(list_id);
     });
 
     return false;
@@ -77,14 +80,18 @@ function add_todo() {
 </script>
 {% endblock %}
 
-{% block content_title %}{% endblock %}
+{% block content_title %}My todo{% endblock %}
 
 {% block content %}
+<div style="display:none;height:10px;">
+    <span id="wait" style="display:none;float:left;">
+    <img src="{{MEDIA_URL}}img/wait.gif" alt="wait" />
+    </span>
+</div>
+<p style="clear:both;display:none;">
 
 <form method="post" action="." id="add_list_form" onSubmit="return add_list()">Create a new list: <input type="text" id="name" name="name" />{% csrf_token %}</form>
 <div id="list_list" ></div>
-<br />
-<span id="wait" style="display:none;float:left;"><img src="{{MEDIA_URL}}img/wait.gif" alt="wait" /></span>
 <div id="todo_list" ></div>
 
 {% endblock %}
