@@ -8,5 +8,5 @@
     <a style="display:none" href="#" class="list_delete" id="list_delete_{{l.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a> 
 </span>
 
-<span class="list light">  |  </span>
+{% if not forloop.last %}<span class="list light">  |  </span>{% endif %}
 {% endfor %} 

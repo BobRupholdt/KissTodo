@@ -89,6 +89,8 @@ table.grid tr.alternate_row { background-color: #f3f3f3;}
 
 ul.todos {
     list-style-type: none;
+    margin: 4px;
+    padding: 2px;
 }
 
 ul.todos li {
@@ -96,5 +98,16 @@ ul.todos li {
             background-position: 0.5em 0.3em; */
     background-repeat: no-repeat;
     padding-left: 0;
-    margin-left: -30px;
+}
+
+.big {
+    font-size: 16px;
+	padding: 5px;
+}
+
+.complete {
+    color:#999;
+    text-decoration: line-through;
+    font-style:italic;
+    
 }

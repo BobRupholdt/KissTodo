@@ -21,8 +21,6 @@ $(function() {
     });
     
     $('.list_delete').live('click', function () { 
-        
-        
         var list_id=$(this).attr('id').replace('list_delete_','');
         var item = $("#delete_list_form_"+list_id);
         
@@ -38,6 +36,44 @@ $(function() {
 		
         return false;
     });    
+    
+    $('.todo_delete').live('click', function () { 
+        var todo_id=$(this).attr("id").replace("todo_delete_","");
+        var todo=$(this).parents("li");
+        
+        var item = $("#delete_todo_form_"+todo_id);
+        
+        var data = {
+            csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
+            todo_id: todo_id
+        };
+        
+        $.post("{%url todo.views.delete_todo%}", data, function (response) {
+            todo.hide(200);
+        });        
+		
+        return false;
+    });     
+
+    $('.todo_complete').live('click', function () { 
+        var todo_id=$(this).attr("id").replace("todo_complete_","");
+        var todo=$(this).parents("li");
+        var yesno = $(this).attr("checked");
+
+        var item = $("#delete_todo_form_"+todo_id);
+        
+        var data = {
+            csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
+            todo_id: todo_id,
+            complete: yesno
+        };
+        
+        $.post("{%url todo.views.complete_todo%}", data, function (response) {
+            todo.toggleClass("complete");
+        });        
+		
+        return true;
+    });         
 });
 
 function refresh_list_list(selected_list_id) {    
@@ -107,17 +143,11 @@ function add_todo() {
 </script>
 {% endblock %}
 
-{% block content_title %}My todo{% endblock %}
+{% block content_title %}KissTodo{% endblock %}
 
 {% block content %}
-<div style="display:none;height:10px;">
-    <span id="wait" style="display:none;float:left;">
-    <img src="{{MEDIA_URL}}img/wait.gif" alt="wait" />
-    </span>
-</div>
-<p style="clear:both;display:none;">
 
-<form method="post" action="." id="add_list_form" onSubmit="return add_list()"><input title="CREATE A NEW LIST" size="40" type="text" id="name" name="name" />{% csrf_token %}</form>
+<form method="post" action="." id="add_list_form" onSubmit="return add_list()"><input class="big" title="&raquo; CREATE A NEW LIST" size="35" type="text" id="name" name="name" />{% csrf_token %}</form>
 <div id="list_list" ></div>
 <span id="todo_list" ></span>
 

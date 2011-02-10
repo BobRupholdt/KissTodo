@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from google.appengine.api import users
 from django import template
 import app_version
 
@@ -22,3 +23,12 @@ register = template.Library()
 @register.simple_tag
 def app_version_info():
     return app_version.APP_VERSION
+    
+@register.simple_tag    
+def google_user():
+    user = users.get_current_user()
+    if user:
+        return str(user.nickname())
+    else:
+        return "[a]"
+    

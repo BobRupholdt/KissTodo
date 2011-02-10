@@ -74,6 +74,20 @@ def delete_list(request):
     l.delete()
     return HttpResponse("", mimetype="text/plain")     
     
+def delete_todo(request):
+    t=Todo.objects.get(id=int(request.POST['todo_id']))
+    t.delete()
+    return HttpResponse("", mimetype="text/plain")    
+    
+def complete_todo(request):
+    t=Todo.objects.get(id=int(request.POST['todo_id']))
+    if request.POST['complete']=='true':
+        t.complete=True
+    else:
+        t.complete=False
+    t.save()
+    return HttpResponse("", mimetype="text/plain")        
+    
 def add_todo(request):
     l=List.objects.get(id=request.POST['list_id'])
     t=Todo()

@@ -22,29 +22,35 @@
             <span class="no_background"><a class="nobg" href="/admin/"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a></span>
             <div class="float_right">
                 <div class="menu" style="display:none;">
-                    Welcome, <strong>{{ user }}</strong>.
-                    <a href="/admin/doc/">Documentation</a> | <a href="/admin/password_change/">Change password</a> | <a href="/admin/logout/">Log out</a>
+                    Welcome, <strong>{%google_user%}{{ user_OFF }}</strong>
                 </div>
-
+                
+                {% if user.is_authenticated %}
                 <div class="menu menu_border">
-                    {% if user.is_authenticated %}
+                    
                     <span>
                         <a href="/pm/task_board">Projects</a> | 
                         <a href="/admin/auth/user/">Users</a> | 
                         <a href="/admin/auth/group/">Groups</a> | 
                         <a href="/admin">Admin</a>
                     </span>
-                    {% endif %}
+                    
                 </div>      
+                {% endif %}
             </div>
         </div>
         
-        <p class="content_title">
+        <p class="content_title" style="width:100px;">
             <h1 style="display:inline">{% block content_title %}{% endblock %}</h1>
-            {% block content_headline%}{% endblock %}
+            {% block content_headline%}
+                <br/>
+                welcome, <strong>{% google_user %}{{ user_OFF }}</strong>
+            {% endblock %}
         </p>
         
-        
+        <div class="message" style="height:16px;margin:2px;">
+            <span id="wait" style="display:none"><img src="{{MEDIA_URL}}img/wait.gif" alt="wait" /></span>
+        </div>
         
         <div class="content">
             {% block content %}{% endblock %}
