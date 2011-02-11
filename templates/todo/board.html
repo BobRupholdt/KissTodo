@@ -115,6 +115,8 @@ function add_list() {
         name: item.find("#name").val()
     };
     
+    if (data.name == '') return false;
+    
     item.find("#name").val("");
             
     $.post("{%url todo.views.add_list%}", data, function (response) {
@@ -132,6 +134,8 @@ function add_todo() {
         description: item.find("#description").val(),
         list_id: item.find("#list_id").val()
     };
+    
+    if (data.description == '') return false;
             
     $.post("{%url todo.views.add_todo%}", data, function (response) {
         var list_id=$('.selected_list').attr('id').replace('list_','');
@@ -147,7 +151,7 @@ function add_todo() {
 
 {% block content %}
 
-<form method="post" action="." id="add_list_form" onSubmit="return add_list()"><input class="big" title="&raquo; CREATE A NEW LIST" size="35" type="text" id="name" name="name" />{% csrf_token %}</form>
+<form method="post" action="." id="add_list_form" onSubmit="return add_list()"><input class="big" title="&raquo; CREATE A NEW LIST" size="25" type="text" id="name" name="name" />{% csrf_token %}</form>
 <div id="list_list" ></div>
 <span id="todo_list" ></span>
 

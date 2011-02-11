@@ -11,7 +11,6 @@
     
     <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/overlay/jquery.hint.js"></script> 
     
-    
     {% block extra_head %}{% endblock %}      
 </head>
 
@@ -19,7 +18,7 @@
     <div class="container"> 
         
         <div class="header">
-            <span class="no_background"><a class="nobg" href="/admin/"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a></span>
+            <span class="no_background"><a class="nobg" href="{% url todo.views.board %}"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a></span>
             <div class="float_right">
                 <div class="menu" style="display:none;">
                     Welcome, <strong>{%google_user%}{{ user_OFF }}</strong>

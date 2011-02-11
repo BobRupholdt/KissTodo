@@ -1,11 +1,11 @@
 <ul class="todos">
     <li>
         <form method="post" action="." id="add_todo_form" onSubmit="return add_todo()">
-        <input type="text" title="&raquo; ADD A TODO" id="description" name="description" />
+        <input type="text" id="description" name="description" />
         <input type="hidden" value="{{list_id}}" id="list_id" name="list_id" />
         {% csrf_token %}
         </form>
-        <script type="text/javascript">$('#description').hint();$('input[title!=""]').hint();</script>
+        <script type="text/javascript">$('#name').hint();</script>
     </li>
     {% for t in todos.all %}  
     <li {% if t.complete %}class="complete"{% endif %}>
