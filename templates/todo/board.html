@@ -2,11 +2,14 @@
 
 {% block extra_head %}
 {{ block.super }}
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/overlay/jquery.hint.js"></script> 
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/blockui/jquery.blockUI.js"></script> 
+
 <script type="text/javascript">
 $(function() {
     refresh_list_list();
     refresh_todo_list(-1);
-    
+   
     $('input[title!=""]').hint();
     
     $('.list').live('click', function () { 
@@ -49,7 +52,7 @@ $(function() {
         };
         
         $.post("{%url todo.views.delete_todo%}", data, function (response) {
-            todo.hide(200);
+            todo.hide(default_animation_speed);
         });        
 		
         return false;
@@ -76,32 +79,52 @@ $(function() {
     });         
 });
 
-function refresh_list_list(selected_list_id) {    
-    $("#wait").fadeIn(200);
-    $("#list_list").fadeOut(200);
+default_animation_speed=150;
 
-    $.get("ajax/list_list/"+selected_list_id, function(response) {
+function lockGui() {
+    //$("#wait").fadeIn(default_animation_speed);
+    $.blockUI({message:"", overlayCSS:  {
+		backgroundColor: '#000',
+		opacity:	  	 0.1,
+		cursor:		  	 'wait'
+	},css: { backgroundColor: '#fff', color: '#fff'}});
+    
+    
+}
+
+function unlockGui() {
+    $.unblockUI();
+}
+
+function refresh_list_list(selected_list_id) {    
+    lockGui();
+    $("#list_list").fadeOut(default_animation_speed);
+
+    $.get("{% url todo.views.list_list '' %}"+selected_list_id, function(response) {
         $("#list_list").html(response);
-        $("#list_list").fadeIn(200);
-        $("#wait").fadeOut(200);
+        
+        unlockGui();
+        $("#list_list").fadeIn(default_animation_speed);
     });   
 }
 
 function refresh_todo_list(list_id) {
         
-    $("#wait").fadeIn(200);
-    $("#todo_list").fadeOut(200);
+    lockGui();
+    $("#todo_list").fadeOut(default_animation_speed);
 
-    $.get("ajax/todo_list/"+list_id, function(response) {
+    $.get("{% url todo.views.todo_list '' %}"+list_id, function(response) {
         $("#todo_list").html(response);
-        $("#todo_list").fadeIn(200);
-        $("#wait").fadeOut(200);
+        $("#todo_list").fadeIn(default_animation_speed);
+        
         $("#add_todo_form").find("#description").focus();
         
         $(".list_delete").hide();
         $("#list_delete_"+list_id).show();
         
         if (list_id==-1) $("#todo_list").html("");
+        
+        unlockGui();
     });   
     
        
@@ -151,7 +174,7 @@ function add_todo() {
 
 {% block content %}
 
-<form method="post" action="." id="add_list_form" onSubmit="return add_list()"><input class="big" title="&raquo; CREATE A NEW LIST" size="25" type="text" id="name" name="name" />{% csrf_token %}</form>
+<form method="post" action="." id="add_list_form" onSubmit="return add_list()"><input class="big" title="&raquo; CREATE A NEW LIST" size="22" type="text" id="name" name="name" />{% csrf_token %}</form>
 <div id="list_list" ></div>
 <span id="todo_list" ></span>
 

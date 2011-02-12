@@ -5,12 +5,11 @@
 <head>
     <title>{% block title %}KissTodo {%app_version_info%}{% endblock %}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-    
+    <link rel="icon" href="/favicon.ico" />
+
     <link href="{{MEDIA_URL}}css/main.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery-1.5.min.js"></script> 
-    
-    <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/overlay/jquery.hint.js"></script> 
-    
+        
     {% block extra_head %}{% endblock %}      
 </head>
 
@@ -47,7 +46,7 @@
             {% endblock %}
         </p>
         
-        <div class="message" style="height:16px;margin:2px;">
+        <div class="message" style="display:none;height:16px;margin:2px;">
             <span id="wait" style="display:none"><img src="{{MEDIA_URL}}img/wait.gif" alt="wait" /></span>
         </div>
         
