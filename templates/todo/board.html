@@ -241,6 +241,10 @@ var kisstodo_board = (function () {
         if (event.which == 38) {
             if (kisstodo_board.operation_pending) return;
             
+            if (kisstodo_board.focused_element=='name') {
+                return;
+            }
+            
             if (kisstodo_board.focused_element=='description') {
                 $('#name').focus();
                 return;
@@ -297,14 +301,10 @@ var kisstodo_board = (function () {
                 
         kisstodo_board.selected_todo_index+=increment;
         
-
-                
         if (kisstodo_board.selected_todo_index<0) { kisstodo_board.selected_todo_index=0; $('#description').focus();}
-        if (kisstodo_board.selected_todo_index>selected_todo_index_max) kisstodo_board.selected_todo_index=selected_todo_index_max;
+        if (kisstodo_board.selected_todo_index>selected_todo_index_max) { kisstodo_board.selected_todo_index=selected_todo_index_max; }
         
         $('.todos li.todo_li:eq('+kisstodo_board.selected_todo_index+')').addClass("selected_todo");
-       
-        //$('html,body').animate({scrollTop: $('.todos:eq('+kisstodo_board.selected_todo_index+')').offset().top-250}, 10, "linear", function(){scrolling = false;} );
     }
      
     res.selected_todo_index=0;
