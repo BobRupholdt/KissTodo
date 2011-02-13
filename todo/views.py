@@ -83,6 +83,15 @@ def complete_todo(request):
     t=Todo.objects.get(id=int(request.POST['todo_id']))
     t.complete=not t.complete
     t.save()
+    return HttpResponse("", mimetype="text/plain")    
+
+def edit_todo(request):
+    t=Todo.objects.get(id=int(request.POST['todo_id']))
+    
+    if 'priority' in request.POST: t.priority=int(request.POST['priority'])
+    # ...        
+    
+    t.save()
     return HttpResponse("", mimetype="text/plain")        
     
 def add_todo(request):

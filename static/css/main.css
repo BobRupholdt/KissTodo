@@ -115,3 +115,15 @@ ul.todos li {
     background-color:#efe578;
     /*font-style:italic;*/
 }
+
+.todo_priority {
+    font-weight: bold;
+    background-color:#ee0505;
+    color:#fff;
+    font-size:10px;
+}
+
+.complete .todo_priority {
+    background-color:#ddd;
+    color:#000;
+}

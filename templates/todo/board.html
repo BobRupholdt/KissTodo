@@ -99,6 +99,17 @@ var kisstodo_board = (function () {
         });    
     }
     
+    res.update_todo = function(todo_id, data) {
+        data.todo_id=todo_id
+            
+        $.post("{%url todo.views.edit_todo%}", data, function (response) {
+            var p=''; 
+            if (data.priority<4) p='P'+data.priority;
+            $('#todo_li_'+data.todo_id+' .todo_priority').html(p);
+        });    
+        
+    }
+    
     res.refresh_todo_list = function (list_id) {
         //kisstodo_board.lockGui();
         $("#todo_list").fadeOut(kisstodo_board.default_animation_speed);
@@ -205,8 +216,7 @@ var kisstodo_board = (function () {
         });
 
         return false;
-    }
-     
+    }     
     
     res.event_keypress = function(event) {
         
@@ -221,6 +231,13 @@ var kisstodo_board = (function () {
         if (event.which == 99) {
             $(".selected_todo .todo_complete").click();
         }        
+        
+        // 1..4
+        if (event.which >= 49 && event.which<=52) {
+           if ($(".selected_todo").length==0) return;
+           var todo_id=$(".selected_todo").attr("id").replace('todo_li_', '');
+           kisstodo_board.update_todo(todo_id, {priority:event.which-48});
+        }
     }
 
     res.event_keydown = function(event) {  
@@ -232,7 +249,6 @@ var kisstodo_board = (function () {
             if (kisstodo_board.operation_pending) return;
             kisstodo_board.select_next_todo(0);
             if (kisstodo_board.focused_element!='') $('#'+kisstodo_board.focused_element).blur();
-            
         }        
         
         // UP

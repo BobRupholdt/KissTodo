@@ -30,4 +30,19 @@ indexes:
 - kind: todo_todo
   properties:
   - name: list_id
+  - name: complete
+  - name: priority
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: list_id
+  - name: complete
+  - name: priority
+    direction: desc
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: list_id
   - name: description

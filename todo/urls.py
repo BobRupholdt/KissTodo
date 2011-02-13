@@ -28,7 +28,7 @@ urlpatterns = patterns('',
     (r'^ajax/add_todo/$', add_todo),
     (r'^ajax/delete_todo/$', delete_todo),
     (r'^ajax/complete_todo/$', complete_todo),
-    
+    (r'^ajax/edit_todo/$', edit_todo),
 )
 
 

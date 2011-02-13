@@ -8,8 +8,9 @@
         <script type="text/javascript">$('#name').hint();</script>
     </li>
     {% for t in todos.all %}  
-    <li class="todo_li {% if t.complete %}complete{% endif %}">
+    <li id="todo_li_{{ t.id }}" class="todo_li {% if t.complete %}complete{% endif %}">
         <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} /> 
+        <span class="todo_priority">{% if t.priority < 4%}P{{ t.priority }}{% endif %}</span>
         <span class="todo_description">{{ t.description }}</span>
         <span class="no_background">
             <a href="#" class="todo_delete" id="todo_delete_{{t.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a> 

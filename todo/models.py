@@ -27,14 +27,14 @@ class List(models.Model):
         
 class Todo(models.Model):
     description = models.CharField(max_length=1000)
-    priority = models.IntegerField(default=0)
+    priority = models.IntegerField(default=4)
     complete = models.BooleanField(default=False)
     list = models.ForeignKey(List)
-
+            
     def __unicode__(self):
         return u'%s' % (self.description)
 
     class Meta:
-        ordering = ("complete","description","id")        
+        ordering = ("complete","priority","description","id")        
 
         
