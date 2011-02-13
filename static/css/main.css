@@ -109,10 +109,9 @@ ul.todos li {
     color:#999;
     text-decoration: line-through;
     font-style:italic;
-    
 }
 
-.selected_todo  .todo_description{
+.selected_todo  .todo_description {
     background-color:#efe578;
     /*font-style:italic;*/
 }

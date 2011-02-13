@@ -90,7 +90,7 @@ var kisstodo_board = (function () {
             var data = {
                 csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
                 todo_id: todo_id,
-                complete: yesno
+                complete: !yesno
             };
             
             $.post("{%url todo.views.complete_todo%}", data, function (response) {

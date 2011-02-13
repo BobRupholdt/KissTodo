@@ -8,7 +8,7 @@
         <script type="text/javascript">$('#name').hint();</script>
     </li>
     {% for t in todos.all %}  
-    <li class="todo_li" {% if t.complete %}class="complete"{% endif %}>
+    <li class="todo_li {% if t.complete %}complete{% endif %}">
         <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} /> 
         <span class="todo_description">{{ t.description }}</span>
         <span class="no_background">
