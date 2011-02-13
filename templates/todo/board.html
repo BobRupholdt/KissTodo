@@ -6,166 +6,171 @@
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/blockui/jquery.blockUI.js"></script> 
 
 <script type="text/javascript">
-var kisstodo_board = {};
 
-kisstodo_board.default_animation_speed=150;
+var kisstodo_board = (function () { 
+    var res = {};
+     
+    res.default_animation_speed=150;
+    res.init_board=function() {
 
-kisstodo_board.init_board=function() {
-
-    kisstodo_board.refresh_list_list();
-    kisstodo_board.refresh_todo_list(-1);
-   
-    $('input[title!=""]').hint();
-    
-    $('.list').live('click', function () { 
-        $('.list').removeClass('selected_link').removeClass('selected_list');
-        $(this).addClass('selected_link').addClass('selected_list');
+        kisstodo_board.refresh_list_list();
+        kisstodo_board.refresh_todo_list(-1);
+       
+        $('input[title!=""]').hint();
         
-        var list_id=$('.selected_list').attr('id').replace('list_','');
-        
-        kisstodo_board.refresh_todo_list(list_id);
-		
-        return false;
-    });
-    
-    $('.list_delete').live('click', function () { 
-        var list_id=$(this).attr('id').replace('list_delete_','');
-        var item = $("#delete_list_form_"+list_id);
-        
-        var data = {
-            csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
-            list_id: list_id
-        };
-   
-        $.post("{%url todo.views.delete_list%}", data, function (response) {
-                kisstodo_board.refresh_list_list(-1);
-                kisstodo_board.refresh_todo_list(-1);
-        });        
-		
-        return false;
-    });    
-    
-    $('.todo_delete').live('click', function () { 
-        var todo_id=$(this).attr("id").replace("todo_delete_","");
-        var todo=$(this).parents("li");
-        
-        var item = $("#delete_todo_form_"+todo_id);
-        
-        var data = {
-            csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
-            todo_id: todo_id
-        };
-        
-        $.post("{%url todo.views.delete_todo%}", data, function (response) {
-            todo.hide(kisstodo_board.default_animation_speed);
-        });        
-		
-        return false;
-    });     
-
-    $('.todo_complete').live('click', function () { 
-        var todo_id=$(this).attr("id").replace("todo_complete_","");
-        var todo=$(this).parents("li");
-        var yesno = $(this).attr("checked");
-
-        var item = $("#delete_todo_form_"+todo_id);
-        
-        var data = {
-            csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
-            todo_id: todo_id,
-            complete: yesno
-        };
-        
-        $.post("{%url todo.views.complete_todo%}", data, function (response) {
-            todo.toggleClass("complete");
-        });        
-		
-        return true;
-    });    
-}
-
-kisstodo_board.refresh_todo_list = function (list_id) {
-        
-    kisstodo_board.lockGui();
-    $("#todo_list").fadeOut(kisstodo_board.default_animation_speed);
-
-    $.get("{% url todo.views.todo_list '' %}"+list_id, function(response) {
-        $("#todo_list").html(response);
-        $("#todo_list").fadeIn(kisstodo_board.default_animation_speed);
-        
-        $("#add_todo_form").find("#description").focus();
-        
-        $(".list_delete").hide();
-        $("#list_delete_"+list_id).show();
-        
-        if (list_id==-1) $("#todo_list").html("");
-        
-        kisstodo_board.unlockGui();
-    });      
-}
-
-kisstodo_board.refresh_list_list = function(selected_list_id) {    
-    kisstodo_board.lockGui();
-    $("#list_list").fadeOut(kisstodo_board.default_animation_speed);
-
-    $.get("{% url todo.views.list_list '' %}"+selected_list_id, function(response) {
-        $("#list_list").html(response);
-        
-        kisstodo_board.unlockGui();
-        $("#list_list").fadeIn(kisstodo_board.default_animation_speed);
-    });   
-}
-
-kisstodo_board.lockGui = function() {
-    $.blockUI({message:"", overlayCSS:  {
-		backgroundColor: '#000',
-		opacity:	  	 0.1,
-		cursor:		  	 'wait'
-	},css: { backgroundColor: '#fff', color: '#fff'}});
-}
-
-kisstodo_board.unlockGui = function() {
-    $.unblockUI();
-}
-
-kisstodo_board.add_list = function() {
-    
-    var item = $("#add_list_form");
-
-    var data = {
-        csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
-        name: item.find("#name").val()
-    };
-    
-    if (data.name == '') return false;
-    
-    item.find("#name").val("");
+        $('.list').live('click', function () { 
+            $('.list').removeClass('selected_link').removeClass('selected_list');
+            $(this).addClass('selected_link').addClass('selected_list');
             
-    $.post("{%url todo.views.add_list%}", data, function (response) {
-        kisstodo_board.refresh_list_list(response);
-        kisstodo_board.refresh_todo_list(response);
-    });
-
-    return false;
-}
-
-kisstodo_board.add_todo = function() {
-    var item = $("#add_todo_form");
-    var data = {
-        csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
-        description: item.find("#description").val(),
-        list_id: item.find("#list_id").val()
-    };
-    
-    if (data.description == '') return false;
+            var list_id=$('.selected_list').attr('id').replace('list_','');
             
-    $.post("{%url todo.views.add_todo%}", data, function (response) {
-        var list_id=$('.selected_list').attr('id').replace('list_','');
-        kisstodo_board.refresh_todo_list(list_id);
-    });
+            kisstodo_board.refresh_todo_list(list_id);
+    		
+            return false;
+        });
+    
+        $('.list_delete').live('click', function () { 
+            var list_id=$(this).attr('id').replace('list_delete_','');
+            var item = $("#delete_list_form_"+list_id);
+            
+            var data = {
+                csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
+                list_id: list_id
+            };
+       
+            $.post("{%url todo.views.delete_list%}", data, function (response) {
+                    kisstodo_board.refresh_list_list(-1);
+                    kisstodo_board.refresh_todo_list(-1);
+            });        
+    		
+            return false;
+        });    
+    
+        $('.todo_delete').live('click', function () { 
+            var todo_id=$(this).attr("id").replace("todo_delete_","");
+            var todo=$(this).parents("li");
+            
+            var item = $("#delete_todo_form_"+todo_id);
+            
+            var data = {
+                csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
+                todo_id: todo_id
+            };
+            
+            $.post("{%url todo.views.delete_todo%}", data, function (response) {
+                todo.hide(kisstodo_board.default_animation_speed);
+            });        
+    		
+            return false;
+        });     
 
-    return false;
- }
+        $('.todo_complete').live('click', function () { 
+            var todo_id=$(this).attr("id").replace("todo_complete_","");
+            var todo=$(this).parents("li");
+            var yesno = $(this).attr("checked");
+
+            var item = $("#delete_todo_form_"+todo_id);
+            
+            var data = {
+                csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
+                todo_id: todo_id,
+                complete: yesno
+            };
+            
+            $.post("{%url todo.views.complete_todo%}", data, function (response) {
+                todo.toggleClass("complete");
+            });        
+    		
+            return true;
+        });    
+    }
+    
+    
+    res.refresh_todo_list = function (list_id) {
+            
+        kisstodo_board.lockGui();
+        $("#todo_list").fadeOut(kisstodo_board.default_animation_speed);
+
+        $.get("{% url todo.views.todo_list '' %}"+list_id, function(response) {
+            $("#todo_list").html(response);
+            $("#todo_list").fadeIn(kisstodo_board.default_animation_speed);
+            
+            $("#add_todo_form").find("#description").focus();
+            
+            $(".list_delete").hide();
+            $("#list_delete_"+list_id).show();
+            
+            if (list_id==-1) $("#todo_list").html("");
+            
+            kisstodo_board.unlockGui();
+        });      
+    }
+    
+    res.refresh_list_list = function(selected_list_id) {    
+        kisstodo_board.lockGui();
+        $("#list_list").fadeOut(kisstodo_board.default_animation_speed);
+
+        $.get("{% url todo.views.list_list '' %}"+selected_list_id, function(response) {
+            $("#list_list").html(response);
+            
+            kisstodo_board.unlockGui();
+            $("#list_list").fadeIn(kisstodo_board.default_animation_speed);
+        });   
+    }    
+
+    res.lockGui = function() {
+        $.blockUI({message:"", overlayCSS:  {
+    		backgroundColor: '#000',
+    		opacity:	  	 0.1,
+    		cursor:		  	 'wait'
+    	},css: { backgroundColor: '#fff', color: '#fff'}});
+    }
+
+    res.unlockGui = function() {
+        $.unblockUI();
+    }
+    
+    res.add_list = function() {
+        
+        var item = $("#add_list_form");
+
+        var data = {
+            csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
+            name: item.find("#name").val()
+        };
+        
+        if (data.name == '') return false;
+        
+        item.find("#name").val("");
+                
+        $.post("{%url todo.views.add_list%}", data, function (response) {
+            kisstodo_board.refresh_list_list(response);
+            kisstodo_board.refresh_todo_list(response);
+        });
+
+        return false;
+    }    
+    
+    res.add_todo = function() {
+        var item = $("#add_todo_form");
+        var data = {
+            csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
+            description: item.find("#description").val(),
+            list_id: item.find("#list_id").val()
+        };
+        
+        if (data.description == '') return false;
+                
+        $.post("{%url todo.views.add_todo%}", data, function (response) {
+            var list_id=$('.selected_list').attr('id').replace('list_','');
+            kisstodo_board.refresh_todo_list(list_id);
+        });
+
+        return false;
+    }
+     
+    return res; 
+}());
 
 $(function() {
       kisstodo_board.init_board();
