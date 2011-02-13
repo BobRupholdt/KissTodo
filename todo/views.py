@@ -81,10 +81,7 @@ def delete_todo(request):
     
 def complete_todo(request):
     t=Todo.objects.get(id=int(request.POST['todo_id']))
-    if request.POST['complete']=='true':
-        t.complete=True
-    else:
-        t.complete=False
+    t.complete=not t.complete
     t.save()
     return HttpResponse("", mimetype="text/plain")        
     

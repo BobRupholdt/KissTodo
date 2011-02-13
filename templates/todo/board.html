@@ -83,14 +83,12 @@ var kisstodo_board = (function () {
         $('.todo_complete').live('click', function () { 
             var todo_id=$(this).attr("id").replace("todo_complete_","");
             var todo=$(this).parents("li");
-            var yesno = $(this).attr("checked");
 
             var item = $("#delete_todo_form_"+todo_id);
             
             var data = {
                 csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
                 todo_id: todo_id,
-                complete: !yesno
             };
             
             $.post("{%url todo.views.complete_todo%}", data, function (response) {
