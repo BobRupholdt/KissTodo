@@ -111,3 +111,8 @@ ul.todos li {
     font-style:italic;
     
 }
+
+.selected_todo  .todo_description{
+    background-color:#efe578;
+    /*font-style:italic;*/
+}

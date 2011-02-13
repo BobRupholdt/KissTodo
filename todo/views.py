@@ -54,7 +54,7 @@ def board(request):
     return render_to_response('todo/board.html', 
         RequestContext(request, {'lists':List.objects,}))
     
-def todo_list(request, list_id):
+def list_todo(request, list_id):
     #import time
     #time.sleep(1)
     return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.objects.filter(list__id=list_id)}))

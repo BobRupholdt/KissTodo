@@ -1,15 +1,16 @@
 <ul class="todos">
     <li>
         <form method="post" action="." id="add_todo_form" onSubmit="return kisstodo_board.add_todo()">
-        <input type="text" id="description" name="description" />
+        <input type="text" autocomplete="off" id="description" name="description" />
         <input type="hidden" value="{{list_id}}" id="list_id" name="list_id" />
         {% csrf_token %}
         </form>
         <script type="text/javascript">$('#name').hint();</script>
     </li>
     {% for t in todos.all %}  
-    <li {% if t.complete %}class="complete"{% endif %}>
-        <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} /> {{ t.description }} 
+    <li class="todo_li" {% if t.complete %}class="complete"{% endif %}>
+        <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} /> 
+        <span class="todo_description">{{ t.description }}</span>
         <span class="no_background">
             <a href="#" class="todo_delete" id="todo_delete_{{t.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a> 
         </span>
