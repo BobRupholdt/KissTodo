@@ -50,7 +50,6 @@ var kisstodo_board = (function () {
             var item = $("#delete_list_form_"+list_id);
             
             var data = {
-                csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
                 list_id: list_id
             };
        
@@ -69,7 +68,6 @@ var kisstodo_board = (function () {
             var item = $("#delete_todo_form_"+todo_id);
             
             var data = {
-                csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
                 todo_id: todo_id
             };
             
@@ -87,7 +85,6 @@ var kisstodo_board = (function () {
             var item = $("#delete_todo_form_"+todo_id);
             
             var data = {
-                csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
                 todo_id: todo_id,
             };
             
@@ -184,7 +181,6 @@ var kisstodo_board = (function () {
         var item = $("#add_list_form");
 
         var data = {
-            csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
             name: item.find("#name").val()
         };
         
@@ -203,7 +199,6 @@ var kisstodo_board = (function () {
     res.add_todo = function() {
         var item = $("#add_todo_form");
         var data = {
-            csrfmiddlewaretoken: item.find("input:text[name=csrfmiddlewaretoken]").val(),
             description: item.find("#description").val(),
             list_id: item.find("#list_id").val()
         };
@@ -339,7 +334,8 @@ var kisstodo_board = (function () {
 
 {% block content %}
 
-<form method="post" action="." id="add_list_form" onSubmit="return kisstodo_board.add_list()"><input class="big" title="&raquo; CREATE A NEW LIST" size="22" autocomplete="off" type="text" id="name" name="name" />{% csrf_token %}</form>
+<form method="post" action="." id="add_list_form" onSubmit="return kisstodo_board.add_list()">
+<input class="big" title="&raquo; CREATE A NEW LIST" size="22" autocomplete="off" type="text" id="name" name="name" /></form>
 <div id="list_list" ></div>
 <span id="todo_list" ></span>
 

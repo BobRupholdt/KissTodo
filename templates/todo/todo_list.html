@@ -3,7 +3,6 @@
         <form method="post" action="." id="add_todo_form" onSubmit="return kisstodo_board.add_todo()">
         <input type="text" autocomplete="off" id="description" name="description" />
         <input type="hidden" value="{{list_id}}" id="list_id" name="list_id" />
-        {% csrf_token %}
         </form>
         <script type="text/javascript">$('#name').hint();</script>
     </li>
@@ -17,7 +16,6 @@
         </span>
         <form style="display:none" method="post" action="." class="delete_todo_form" id="delete_todo_form_{{l.id}}" onSubmit="return false;">
             <input type="hidden" value="{{todo_id}}" id="todo_id" name="todo_id" />
-            {% csrf_token %}
         </form>
     </li>
     {% endfor %} 
