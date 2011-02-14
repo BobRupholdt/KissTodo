@@ -23,6 +23,12 @@ indexes:
 
 - kind: todo_todo
   properties:
+  - name: complete
+  - name: priority
+  - name: description
+
+- kind: todo_todo
+  properties:
   - name: list_id
   - name: complete
   - name: description
