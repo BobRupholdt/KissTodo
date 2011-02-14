@@ -54,7 +54,7 @@ def board(request):
     return render_to_response('todo/board.html', 
         RequestContext(request, {'lists':List.objects,}))
     
-def list_todo(request, list_id):
+def todo_list(request, list_id):
     #import time
     #time.sleep(1)
     return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.objects.filter(list__id=list_id)}))
@@ -62,30 +62,30 @@ def list_todo(request, list_id):
 def list_list(request, selected_list_id):
     return render_to_response('todo/list_list.html', RequestContext(request, {'lists':List.objects.all(), 'selected_list_id': str(selected_list_id)}))    
 
-def add_list(request):
+def list_add(request):
     l=List()
     l.name=request.POST['name'];
     l.save()
     out = l.id
     return HttpResponse(out, mimetype="text/plain") 
     
-def delete_list(request):
+def list_delete(request):
     l=List.objects.get(id=int(request.POST['list_id']))
     l.delete()
     return HttpResponse("", mimetype="text/plain")     
     
-def delete_todo(request):
+def todo_delete(request):
     t=Todo.objects.get(id=int(request.POST['todo_id']))
     t.delete()
     return HttpResponse("", mimetype="text/plain")    
     
-def complete_todo(request):
+def todo_complete(request):
     t=Todo.objects.get(id=int(request.POST['todo_id']))
     t.complete=not t.complete
     t.save()
     return HttpResponse("", mimetype="text/plain")    
 
-def edit_todo(request):
+def todo_edit(request):
     t=Todo.objects.get(id=int(request.POST['todo_id']))
     
     if 'priority' in request.POST: t.priority=int(request.POST['priority'])
@@ -94,7 +94,7 @@ def edit_todo(request):
     t.save()
     return HttpResponse("", mimetype="text/plain")        
     
-def add_todo(request):
+def todo_add(request):
     l=List.objects.get(id=request.POST['list_id'])
     t=Todo()
     t.description=request.POST['description']

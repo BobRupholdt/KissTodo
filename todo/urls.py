@@ -21,14 +21,14 @@ from todo.views import *
 urlpatterns = patterns('',
     (r'^test_page$', test_page),
     (r'^board$', board),
-    (r'^ajax/list_todo/(?P<list_id>.*)', list_todo),
-    (r'^ajax/list_list/(?P<selected_list_id>.*)', list_list),
-    (r'^ajax/add_list/$', add_list),
-    (r'^ajax/delete_list/$', delete_list),
-    (r'^ajax/add_todo/$', add_todo),
-    (r'^ajax/delete_todo/$', delete_todo),
-    (r'^ajax/complete_todo/$', complete_todo),
-    (r'^ajax/edit_todo/$', edit_todo),
+    (r'^ajax/list/list/(?P<selected_list_id>.*)$', list_list),
+    (r'^ajax/list/add/$', list_add),
+    (r'^ajax/list/delete/$', list_delete),
+    (r'^ajax/todo/list/(?P<list_id>.*)$', todo_list),
+    (r'^ajax/todo/add/$', todo_add),
+    (r'^ajax/todo/delete/$', todo_delete),
+    (r'^ajax/todo/complete/$', todo_complete),
+    (r'^ajax/todo/edit/$', todo_edit),
 )
 
 

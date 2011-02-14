@@ -54,7 +54,7 @@ var kisstodo_board = (function () {
                 list_id: list_id
             };
        
-            $.post("{%url todo.views.delete_list%}", data, function (response) {
+            $.post("{%url todo.views.list_delete%}", data, function (response) {
                     kisstodo_board.refresh_list_list(-1);
                     kisstodo_board.refresh_todo_list(-1);
             });        
@@ -73,7 +73,7 @@ var kisstodo_board = (function () {
                 todo_id: todo_id
             };
             
-            $.post("{%url todo.views.delete_todo%}", data, function (response) {
+            $.post("{%url todo.views.todo_delete%}", data, function (response) {
                 todo.remove();
             });        
     		
@@ -91,7 +91,7 @@ var kisstodo_board = (function () {
                 todo_id: todo_id,
             };
             
-            $.post("{%url todo.views.complete_todo%}", data, function (response) {
+            $.post("{%url todo.views.todo_complete%}", data, function (response) {
                 todo.toggleClass("complete");
             });        
     		
@@ -102,7 +102,7 @@ var kisstodo_board = (function () {
     res.update_todo = function(todo_id, data) {
         data.todo_id=todo_id
             
-        $.post("{%url todo.views.edit_todo%}", data, function (response) {
+        $.post("{%url todo.views.todo_edit%}", data, function (response) {
             var p=''; 
             if (data.priority<4) p='P'+data.priority;
             $('#todo_li_'+data.todo_id+' .todo_priority').html(p);
@@ -114,7 +114,7 @@ var kisstodo_board = (function () {
         //kisstodo_board.lockGui();
         $("#todo_list").fadeOut(kisstodo_board.default_animation_speed);
 
-        $.get("{% url todo.views.list_todo '' %}"+list_id, function(response) {
+        $.get("{% url todo.views.todo_list '' %}"+list_id, function(response) {
             $("#todo_list").html(response);
             $("#todo_list").fadeIn(kisstodo_board.default_animation_speed);
             
@@ -192,7 +192,7 @@ var kisstodo_board = (function () {
         
         item.find("#name").val("");
                 
-        $.post("{%url todo.views.add_list%}", data, function (response) {
+        $.post("{%url todo.views.list_add%}", data, function (response) {
             kisstodo_board.refresh_list_list(response);
             kisstodo_board.refresh_todo_list(response);
         });
@@ -210,7 +210,7 @@ var kisstodo_board = (function () {
         
         if (data.description == '') return false;
                 
-        $.post("{%url todo.views.add_todo%}", data, function (response) {
+        $.post("{%url todo.views.todo_add%}", data, function (response) {
             var list_id=$('.selected_list').attr('id').replace('list_','');
             kisstodo_board.refresh_todo_list(list_id);
         });
