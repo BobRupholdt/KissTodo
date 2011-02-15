@@ -25,11 +25,23 @@ class List(models.Model):
     class Meta:
         ordering = ("name","id")
         
+class TodoManager(models.Manager):
+    def get_query_set(self):
+        return super(TodoManager, self).get_query_set().filter(deleted=False)
+        
 class Todo(models.Model):
     description = models.CharField(max_length=1000)
     priority = models.IntegerField(default=4)
     complete = models.BooleanField(default=False)
     list = models.ForeignKey(List)
+    
+    deleted = models.BooleanField(default=False)
+    
+    objects = TodoManager() 
+    
+    def delete(self): 
+        self.deleted=True
+        self.save()
             
     def __unicode__(self):
         return u'%s' % (self.description)

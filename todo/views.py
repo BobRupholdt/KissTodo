@@ -72,14 +72,21 @@ def todo_complete(request):
     t.save()
     return HttpResponse("", mimetype="text/plain")    
 
-def todo_edit(request):
-    t=Todo.objects.get(id=int(request.POST['todo_id']))
+def todo_edit(request, todo_id):
+    if request.method == 'POST':
+        t=Todo.objects.get(id=int(todo_id))
     
-    if 'priority' in request.POST: t.priority=int(request.POST['priority'])
-    # ...        
-    
-    t.save()
-    return HttpResponse("", mimetype="text/plain")        
+        if 'priority' in request.POST: t.priority=int(request.POST['priority'])
+        if 'description' in request.POST: t.description=request.POST['description']
+        t.save()
+        
+        #return HttpResponse("", mimetype="text/plain")  
+        return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
+    else:
+        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':Todo.objects.get(id=int(todo_id)),}))    
+
+def todo_show_item(request, todo_id):
+    return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':Todo.objects.get(id=int(todo_id)),}))    
     
 def todo_add(request):
     l=List.objects.get(id=request.POST['list_id'])

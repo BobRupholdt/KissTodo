@@ -28,7 +28,8 @@ urlpatterns = patterns('',
     (r'^ajax/todo/add/$', todo_add),
     (r'^ajax/todo/delete/$', todo_delete),
     (r'^ajax/todo/complete/$', todo_complete),
-    (r'^ajax/todo/edit/$', todo_edit),
+    (r'^ajax/todo/edit/(?P<todo_id>.*)$', todo_edit),
+    (r'^ajax/todo/show_item/(?P<todo_id>.*)$', todo_show_item),
 )
 
 

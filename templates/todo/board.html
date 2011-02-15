@@ -26,8 +26,8 @@ var kisstodo_board = (function () {
         $(document).bind('keydown', kisstodo_board.event_keydown);
         
         $('input[type=text]').live('focus', function () {           
-            kisstodo_board.select_next_todo(0);
             kisstodo_board.focused_element = $(this).attr('id');
+            if (kisstodo_board.focused_element!='edit_todo_description') kisstodo_board.select_next_todo(0);
         });
         
         $('input[type=text]').live('blur', function () {           
@@ -85,7 +85,7 @@ var kisstodo_board = (function () {
             var item = $("#delete_todo_form_"+todo_id);
             
             var data = {
-                todo_id: todo_id,
+                todo_id: todo_id
             };
             
             $.post("{%url todo.views.todo_complete%}", data, function (response) {
@@ -99,7 +99,7 @@ var kisstodo_board = (function () {
     res.update_todo = function(todo_id, data) {
         data.todo_id=todo_id
             
-        $.post("{%url todo.views.todo_edit%}", data, function (response) {
+        $.post("{%url todo.views.todo_edit ''%}"+todo_id, data, function (response) {
             var p=''; 
             if (data.priority<4) p='P'+data.priority;
             $('#todo_li_'+data.todo_id+' .todo_priority').html(p);
@@ -215,66 +215,114 @@ var kisstodo_board = (function () {
     
     res.event_keypress = function(event) {
         
-        //alert (event.which);
+        //console.log ("event_keypress: "+event.which);
+        
+        // enter
+        if (event.which == 13) {
+            
+            if ($(".selected_todo").hasClass('complete')) return;
+            
+            if (kisstodo_board.is_todo_edit_active()) {
+                todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
+                var d = $(".selected_todo .todo_item");
+                
+                var data = {
+                    todo_id: todo_id,
+                    description: $('#edit_todo_description').val()
+                };
+                
+                $.post("{%url todo.views.todo_edit ''%}"+todo_id, data, function (response) {
+                    d.html(response);
+                    d.fadeIn(kisstodo_board.default_animation_speed);
+                });    
+            }
+            else if ($(".selected_todo").length>0) {
+                todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
+                var d = $(".selected_todo .todo_item");
+                d.fadeOut(kisstodo_board.default_animation_speed);
+                d.load("{%url todo.views.todo_edit ''%}"+todo_id, function () {
+                    d.fadeIn(kisstodo_board.default_animation_speed);
+                    $('#edit_todo_description').focus();
+                    //setTimeout( function(){$('#edit_todo_description').select();}, 20);
+                });
+                
+            }
+        }
         
         //  d
         if (event.which == 100) {
-           $(".selected_todo .todo_delete img").click();
+            if (kisstodo_board.is_todo_edit_active()) return;
+            $(".selected_todo .todo_delete img").click();
         }
         
         // c
         if (event.which == 99) {
+            if (kisstodo_board.is_todo_edit_active()) return;
             $(".selected_todo .todo_complete").click();
         }        
         
         // 1..4
         if (event.which >= 49 && event.which<=52) {
-           if ($(".selected_todo").length==0) return;
-           var todo_id=$(".selected_todo").attr("id").replace('todo_li_', '');
-           kisstodo_board.update_todo(todo_id, {priority:event.which-48});
+            if (kisstodo_board.is_todo_edit_active()) return;
+            if ($(".selected_todo").length==0) return;
+            var todo_id=$(".selected_todo").attr("id").replace('todo_li_', '');
+            kisstodo_board.update_todo(todo_id, {priority:event.which-48});
         }
+    }
+    
+    res.todo_edit_abort = function() {
+        var d = $(".selected_todo .todo_item");
+        console.log(d);
+        var todo_id=$(".selected_todo").attr("id").replace('todo_li_', '');
+        console.log(todo_id);
+        d.fadeOut(kisstodo_board.default_animation_speed);
+        d.load("{%url todo.views.todo_show_item '' %}"+todo_id, function () {d.fadeIn(kisstodo_board.default_animation_speed);});      
     }
 
     res.event_keydown = function(event) {  
         
-        //alert (event.which);
+        //console.log ("event_keydown: "+event.which);
         
         // ESC
         if (event.which == 27) {
-            if (kisstodo_board.operation_pending) return;
-            kisstodo_board.select_next_todo(0);
-            if (kisstodo_board.focused_element!='') $('#'+kisstodo_board.focused_element).blur();
+           
+            if (kisstodo_board.is_todo_edit_active()) {
+                setTimeout(function(){kisstodo_board.todo_edit_abort();}, 1);
+            }
+            else {
+                kisstodo_board.select_next_todo(0);
+                if (kisstodo_board.focused_element!='') $('#'+kisstodo_board.focused_element).blur();
+            }
         }        
         
         // UP
         if (event.which == 38) {
-            if (kisstodo_board.operation_pending) return;
-            
-            if (kisstodo_board.focused_element=='name') {
-                return;
-            }
+            if (kisstodo_board.focused_element=='name') return;
             
             if (kisstodo_board.focused_element=='description') {
                 $('#name').focus();
                 return;
             }
+            
+            if (kisstodo_board.is_todo_edit_active()) return; 
             kisstodo_board.select_next_todo(-1);
         }        
         
         // DOWN
         if (event.which == 40) {
-            if (kisstodo_board.operation_pending) return;
+            if (kisstodo_board.is_todo_edit_active()) return;
             
-             if (kisstodo_board.focused_element=='name') {
+            if (kisstodo_board.focused_element=='name') {
                 $('#description').focus();
                 return;
             }
+             
             kisstodo_board.select_next_todo(+1);
         }     
         
         // LEFT
         if (event.which == 37) {
-            if (kisstodo_board.operation_pending) return;
+            if (kisstodo_board.is_todo_edit_active()) return;
 
             if (kisstodo_board.focused_element=='description' && $("#description").val()) {
                 return;
@@ -284,7 +332,7 @@ var kisstodo_board = (function () {
         
         // RIGHT
         if (event.which == 39) {
-            if (kisstodo_board.operation_pending) return;
+            if (kisstodo_board.is_todo_edit_active()) return;
             
             if (kisstodo_board.focused_element=='description' && $("#description").val()) {
                 return;
@@ -293,7 +341,6 @@ var kisstodo_board = (function () {
         }            
 
     } 
-    
     
     res.select_next_todo = function(increment) {
        
@@ -315,15 +362,17 @@ var kisstodo_board = (function () {
         
         $('.todos li.todo_li:eq('+kisstodo_board.selected_todo_index+')').addClass("selected_todo");
     }
+    
+    res.is_todo_edit_active = function() {
+        return  $('#edit_todo_description').length>0;
+    }
      
     res.selected_todo_index=0;
-    res.operation_pending = false;
     res.focused_element = '';
     
     // CONFIG
     res.default_animation_speed=150;
-    
-    
+        
     return res; 
 }());
 

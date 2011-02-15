@@ -9,11 +9,9 @@
     {% for t in todos.all %}  
     <li id="todo_li_{{ t.id }}" class="todo_li {% if t.complete %}complete{% endif %}">
         <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} /> 
-        <span class="todo_priority">{% if t.priority < 4%}P{{ t.priority }}{% endif %}</span>
-        <span class="todo_description">{{ t.description }}</span>
-        <span class="no_background">
-            <a href="#" class="todo_delete" id="todo_delete_{{t.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a> 
-        </span>
+        {% with t as todo %}
+            {% include "todo/todo_item.html" %}
+        {% endwith %}
         <form style="display:none" method="post" action="." class="delete_todo_form" id="delete_todo_form_{{l.id}}" onSubmit="return false;">
             <input type="hidden" value="{{todo_id}}" id="todo_id" name="todo_id" />
         </form>
