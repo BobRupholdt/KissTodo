@@ -44,6 +44,15 @@ var kisstodo_board = (function () {
     		
             return false;
         });
+        
+        $('.todo_description').live('click', function () { 
+            if (kisstodo_board.is_todo_edit_active()) return;
+            
+            //todo_id=($(this).parents('li').attr('id').replace('todo_li_',''));
+            $('.todos li.todo_li').removeClass("selected_todo");
+            $($(this).parents('li')).addClass("selected_todo");
+            kisstodo_board.edit_selected_todo();
+        });        
     
         $('.list_delete').live('click', function () { 
             var list_id=$(this).attr('id').replace('list_delete_','');
@@ -213,6 +222,17 @@ var kisstodo_board = (function () {
         return false;
     }     
     
+    res.edit_selected_todo = function() {
+        todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
+        var d = $(".selected_todo .todo_item");
+        d.fadeOut(kisstodo_board.default_animation_speed);
+        d.load("{%url todo.views.todo_edit ''%}"+todo_id, function () {
+            d.fadeIn(kisstodo_board.default_animation_speed);
+            $('#edit_todo_description').focus();
+            //setTimeout( function(){$('#edit_todo_description').select();}, 20);
+        });
+    }     
+    
     res.event_keypress = function(event) {
         
         //console.log ("event_keypress: "+event.which);
@@ -237,15 +257,7 @@ var kisstodo_board = (function () {
                 });    
             }
             else if ($(".selected_todo").length>0) {
-                todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
-                var d = $(".selected_todo .todo_item");
-                d.fadeOut(kisstodo_board.default_animation_speed);
-                d.load("{%url todo.views.todo_edit ''%}"+todo_id, function () {
-                    d.fadeIn(kisstodo_board.default_animation_speed);
-                    $('#edit_todo_description').focus();
-                    //setTimeout( function(){$('#edit_todo_description').select();}, 20);
-                });
-                
+                kisstodo_board.edit_selected_todo();
             }
         }
         
