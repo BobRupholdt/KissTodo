@@ -27,7 +27,7 @@ var kisstodo_board = (function () {
         
         $('input[type=text]').live('focus', function () {           
             kisstodo_board.focused_element = $(this).attr('id');
-            if (kisstodo_board.focused_element!='edit_todo_description') kisstodo_board.select_next_todo(0);
+            if (kisstodo_board.focused_element.indexOf('edit_todo_')!=0) kisstodo_board.select_next_todo(0);
         });
         
         $('input[type=text]').live('blur', function () {           
@@ -247,7 +247,8 @@ var kisstodo_board = (function () {
                 
                 var data = {
                     todo_id: todo_id,
-                    description: $('#edit_todo_description').val()
+                    description: $('#edit_todo_description').val(),
+                    priority: $('#edit_todo_priority').val()
                 };
                 
                 $.post("{%url todo.views.todo_edit ''%}"+todo_id, data, function (response) {
