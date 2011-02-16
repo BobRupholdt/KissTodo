@@ -57,7 +57,20 @@ def list_add(request):
     return HttpResponse(out, mimetype="text/plain") 
     
 def list_delete(request):
+    
     l=List.objects.get(id=int(request.POST['list_id']))
+    
+    if l.name=="@inbox":
+        for t in l.todo_set.all(): t.delete()
+    elif len(l.todo_set.all())>0:
+        inbox_list=List.objects.filter(name="@inbox")
+        if len(inbox_list)==0:
+            inbox_list=List(name="@inbox")
+            inbox_list.save()
+        for t in l.todo_set.all(): 
+            t.list=inbox_list
+            t.save()
+            
     l.delete()
     return HttpResponse("", mimetype="text/plain")     
     
@@ -83,7 +96,19 @@ def todo_edit(request, todo_id):
         #return HttpResponse("", mimetype="text/plain")  
         return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
     else:
-        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':Todo.objects.get(id=int(todo_id)),}))    
+        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':Todo.objects.get(id=int(todo_id)),}))
+        
+def list_edit(request, list_id):
+    if request.method == 'POST':
+        l=List.objects.get(id=int(list_id))
+    
+        if 'name' in request.POST: l.name=request.POST['name']
+        l.save()
+        
+        return HttpResponse("", mimetype="text/plain")  
+        #return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
+    else:
+        return render_to_response('todo/list_edit.html', RequestContext(request, {'list':List.objects.get(id=int(list_id)),}))            
 
 def todo_show_item(request, todo_id):
     return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':Todo.objects.get(id=int(todo_id)),}))    
