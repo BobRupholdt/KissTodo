@@ -63,10 +63,8 @@ def list_delete(request):
     if l.name=="@inbox":
         for t in l.todo_set.all(): t.delete()
     elif len(l.todo_set.all())>0:
-        inbox_list=List.objects.filter(name="@inbox")
-        if len(inbox_list)==0:
-            inbox_list=List(name="@inbox")
-            inbox_list.save()
+        inbox_list, created = List.objects.get_or_create(name="@inbox")
+        
         for t in l.todo_set.all(): 
             t.list=inbox_list
             t.save()
