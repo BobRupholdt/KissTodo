@@ -89,12 +89,13 @@ def todo_edit(request, todo_id):
     
         if 'priority' in request.POST: t.priority=int(request.POST['priority'])
         if 'description' in request.POST: t.description=request.POST['description']
+        if 'list_id' in request.POST: t.list=List.objects.get(id=int(request.POST['list_id']))
         t.save()
         
         #return HttpResponse("", mimetype="text/plain")  
         return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
     else:
-        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':Todo.objects.get(id=int(todo_id)),}))
+        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':Todo.objects.get(id=int(todo_id)),'lists':List.objects}))
         
 def list_edit(request, list_id):
     if request.method == 'POST':

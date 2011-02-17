@@ -264,7 +264,8 @@ var kisstodo_board = (function () {
                 var data = {
                     todo_id: todo_id,
                     description: $('#edit_todo_description').val(),
-                    priority: $('#edit_todo_priority').val()
+                    priority: $('#edit_todo_priority').val(),
+                    list_id: $('#edit_todo_list_id').val()
                 };
                 
                 $.post("{%url todo.views.todo_edit ''%}"+todo_id, data, function (response) {

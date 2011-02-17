@@ -5,3 +5,8 @@
     <option value="3" {% if todo.priority = 3%}selected="selected"{% endif %}>P3</option>
 </select>
 <input type="text" value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
+<select id="edit_todo_list_id" name="edit_todo_list_id" >
+{% for l in lists.all %}
+    <option value="{{l.id}}" {% if todo.list.id = l.id%}selected="selected"{% endif %}>{{l.name}}</option>
+{% endfor %} 
+</select>
