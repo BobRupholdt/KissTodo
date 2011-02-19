@@ -1,8 +1,8 @@
 <select id="edit_todo_priority" name="edit_todo_priority" >
-    <option value="4" {% if todo.priority = 4%}selected="selected"{% endif %}> - </option>
-    <option value="1" {% if todo.priority = 1%}selected="selected"{% endif %}>P1</option>
-    <option value="2" {% if todo.priority = 2%}selected="selected"{% endif %}>P2</option>
-    <option value="3" {% if todo.priority = 3%}selected="selected"{% endif %}>P3</option>
+    <option value="4" {% if todo.priority = 4 %}selected="selected"{% endif %}> - </option>
+    <option value="1" {% if todo.priority = 1 %}selected="selected"{% endif %}>P1</option>
+    <option value="2" {% if todo.priority = 2 %}selected="selected"{% endif %}>P2</option>
+    <option value="3" {% if todo.priority = 3 %}selected="selected"{% endif %}>P3</option>
 </select>
 <input type="text" value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
 <select id="edit_todo_list_id" name="edit_todo_list_id" >

@@ -16,6 +16,11 @@ indexes:
   - name: action_time
     direction: desc
 
+- kind: todo_list
+  properties:
+  - name: owner
+  - name: name
+
 - kind: todo_todo
   properties:
   - name: complete
