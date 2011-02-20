@@ -59,26 +59,16 @@ def list_add(request):
     return HttpResponse(out, mimetype="text/plain") 
     
 def list_delete(request):
-    
     l=List.objects.get(id=int(request.POST['list_id']))
     _check_permission(l)
+    l.delete_safe(_get_current_user(), "@inbox")
     
-    if l.name=="@inbox":
-        for t in l.todo_set.all(): t.delete()
-    elif len(l.todo_set.all())>0:
-        inbox_list, created = List.objects.get_or_create(name="@inbox", owner=_get_current_user())
-        
-        for t in l.todo_set.all(): 
-            t.list=inbox_list
-            t.save()
-            
-    l.delete()
     return HttpResponse("", mimetype="text/plain")     
     
 def todo_delete(request):
     t=Todo.objects.get(id=int(request.POST['todo_id']))
     _check_permission(t.list)
-    t.delete()
+    t.delete_safe()
     return HttpResponse("", mimetype="text/plain")    
     
 def todo_complete(request):

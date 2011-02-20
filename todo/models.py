@@ -22,6 +22,22 @@ class List(models.Model):
 
     def __unicode__(self):
         return u'%s' % (self.name)
+        
+    def delete_safe(self, current_user, inbox_list_name): 
+        if len(self.todo_set.all())>0:
+            if self.name==inbox_list_name:
+                return
+            else:               
+                inbox_list, created = List.objects.get_or_create(owner=current_user, name=inbox_list_name)
+                for t in self.todo_set.all(): 
+                    t.list=inbox_list
+                    t.save()
+        
+        self.delete()    
+        
+    def delete(self):
+        for t in self.todo_set.all(): t.delete() # required by google app engine due to the lack of cascade delete
+        super(List, self).delete()
 
     class Meta:
         ordering = ("name","id")
@@ -35,14 +51,17 @@ class Todo(models.Model):
     priority = models.IntegerField(default=4)
     complete = models.BooleanField(default=False)
     list = models.ForeignKey(List)
-    
     deleted = models.BooleanField(default=False)
     
     objects = TodoManager() 
+    objects_raw = models.Manager() 
     
-    def delete(self): 
+    def delete_safe(self): 
         self.deleted=True
         self.save()
+        
+    def delete(self): 
+        super(Todo, self).delete()
             
     def __unicode__(self):
         return u'%s' % (self.description)
