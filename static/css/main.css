@@ -110,6 +110,11 @@ ul.todos li {
     text-decoration: line-through;
     font-style:italic;
 }
+
+.complete .todo_description a {
+    color:#999;
+}
+
 .complete a:hover {
     background-color:#fff;
     cursor: default;
