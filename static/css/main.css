@@ -130,3 +130,26 @@ ul.todos li {
     background-color:#ddd;
     color:#000;
 }
+
+.kbd {
+    -moz-border-radius: 4px 4px 4px 4px;
+    background-color: #EEEEEE;
+    border: 1px solid #AAAAAA;
+    line-height: 1.8em;
+    margin-left: 1px;
+    margin-right: 1px;
+    padding: 2px 3px;
+    vertical-align: baseline;
+    white-space: nowrap;
+    font-size:16px;
+}
+
+.small {
+    font-size: 6px;
+}
+
+#help {
+    border: 1px solid #ddd;
+    width: 280px;
+}
+
