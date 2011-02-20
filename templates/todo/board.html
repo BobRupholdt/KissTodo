@@ -16,8 +16,8 @@ var kisstodo_board = (function () {
     
     res.init_board=function() {
 
-        kisstodo_board.refresh_list_list();
-        kisstodo_board.refresh_todo_list(-1);
+        kisstodo_board.refresh_list_list({{inbox_list_id}});
+        kisstodo_board.refresh_todo_list({{inbox_list_id}});
        
         $('#description').hint();
         $('#description').blur();
@@ -452,6 +452,9 @@ var kisstodo_board = (function () {
     <tr><td><span class="kbd">ENTER</span></td><td>edit / save selected todo</td></td>
     <tr><td><span class="kbd">ESC</span></td><td>cancel current edit</td></td>
     </table>
+    <div style="margin:5px">
+    when you delete a list, all todo are moved to <b>@inbox</b>, a special, not deletable list.
+    </div>
 </div>
 {{ block.super }}
 {% endblock %}

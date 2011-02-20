@@ -35,8 +35,8 @@ def test_page(request):
         RequestContext(request, {'media_root':settings.MEDIA_ROOT}))
 
 def board(request):
-    return render_to_response('todo/board.html', 
-        RequestContext(request, {}))
+    l, created = List.objects.get_or_create(name="@inbox", owner=_get_current_user())
+    return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':l.id}))
     
 def todo_list(request, list_id):
     #import time
