@@ -89,14 +89,14 @@ table.grid tr.alternate_row { background-color: #f3f3f3;}
 
 ul.todos {
     list-style-type: none;
-    margin: 4px;
-    padding: 2px;
+    margin: 0px;
+    padding: 5px 0px;
 }
 
 ul.todos li {
     /*background-image: url("../img/li.png");x
-            background-position: 0.5em 0.3em; */
-    background-repeat: no-repeat;
+            background-position: 0.5em 0.3em; 
+    background-repeat: no-repeat;*/
     padding-left: 0;
 }
 

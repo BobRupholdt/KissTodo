@@ -54,8 +54,11 @@ def list_add(request):
     l=List()
     l.name=request.POST['name']
     l.owner=_get_current_user()
-    l.save()
-    out = l.id
+    if l.name!='@inbox': 
+        l.save()
+        out = l.id
+    else:
+        out=-1
     return HttpResponse(out, mimetype="text/plain") 
     
 def list_delete(request):
