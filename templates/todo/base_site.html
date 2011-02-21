@@ -42,14 +42,15 @@
                 <span class="no_background"><a class="nobg" href="{% url todo.views.board %}"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a></span>
                 <h1 style="display:inline">{% block content_title %}{% endblock %}</h1>
             </div>
-            {% block content_headline%}
+            {% block content_headline %}
                 <br/>
                 welcome, <strong>{% google_user %}{{ user_OFF }}</strong>
             {% endblock %}
         </p>
         
-        <div class="message" style="display:none;height:16px;margin:2px;">
+        <div class="message" style="height:16px;margin:2px;">
             <span id="wait" style="display:none"><img src="{{MEDIA_URL}}img/wait.gif" alt="wait" /></span>
+            <div id="message_text" style="display:none"></div>
         </div>
         
         <div class="content">

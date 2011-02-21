@@ -158,3 +158,12 @@ ul.todos li {
     width: 280px;
 }
 
+#message_text {
+    -moz-border-radius: 4px 4px 4px 4px;
+    background-color: #efe578;
+    color: #d21;
+    width:200px;
+    text-align:center;
+    font-weight: bold;
+}
+

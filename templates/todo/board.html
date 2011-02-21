@@ -67,6 +67,7 @@ var kisstodo_board = (function () {
                     kisstodo_board.refresh_todo_list(-1);
             });        
     		
+            kisstodo_board.show_message("List deleted.");
             return false;
         });   
 
@@ -224,6 +225,7 @@ var kisstodo_board = (function () {
             kisstodo_board.refresh_todo_list(response);
         });
 
+        kisstodo_board.show_message("List created.");
         return false;
     }    
     
@@ -427,11 +429,18 @@ var kisstodo_board = (function () {
         return  res.is_todo_edit_active() || res.is_list_edit_active();
     }    
     
+    res.show_message = function(message) {
+        $('#message_text').html(message).fadeIn(kisstodo_board.default_animation_speed*2);
+        
+        setTimeout(function() {$('#message_text').fadeOut(kisstodo_board.default_animation_speed*2);}, kisstodo_board.long_animation_speed);
+    }    
+    
     res.selected_todo_index=0;
     res.focused_element = '';
     
     // CONFIG
     res.default_animation_speed=150;
+    res.long_animation_speed=1500;
         
     return res; 
 }());
