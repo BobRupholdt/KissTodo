@@ -17,26 +17,27 @@
 from django.db import models
 
 class List(models.Model):
+
+    INBOX_LIST_NAME = '@inbox'
     name = models.CharField(max_length=1000)
     owner = models.CharField(max_length=255)
 
     def __unicode__(self):
         return u'%s' % (self.name)
         
-    def delete_safe(self, current_user, inbox_list_name): 
+    def delete(self, current_user): 
+        if self.name==List.INBOX_LIST_NAME: return
+        
         if len(self.todo_set.all())>0:
-            if self.name==inbox_list_name:
-                return
-            else:               
-                inbox_list, created = List.objects.get_or_create(owner=current_user, name=inbox_list_name)
-                for t in self.todo_set.all(): 
-                    t.list=inbox_list
-                    t.save()
+            inbox_list, created = List.objects.get_or_create(owner=current_user, name=List.INBOX_LIST_NAME)
+            for t in self.todo_set.all(): 
+                t.list=inbox_list
+                t.save()
         
-        self.delete()    
+        self.delete_raw()    
         
-    def delete(self):
-        for t in self.todo_set.all(): t.delete() # required by google app engine due to the lack of cascade delete
+    def delete_raw(self):
+        for t in self.todo_set.all(): t.delete_raw() # required by google app engine due to the lack of cascade delete
         super(List, self).delete()
 
     class Meta:
@@ -56,11 +57,11 @@ class Todo(models.Model):
     objects = TodoManager() 
     objects_raw = models.Manager() 
     
-    def delete_safe(self): 
+    def delete(self): 
         self.deleted=True
         self.save()
         
-    def delete(self): 
+    def delete_raw(self): 
         super(Todo, self).delete()
             
     def __unicode__(self):

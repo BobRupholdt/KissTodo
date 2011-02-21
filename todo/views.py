@@ -35,7 +35,7 @@ def test_page(request):
         RequestContext(request, {'media_root':settings.MEDIA_ROOT}))
 
 def board(request):
-    l, created = List.objects.get_or_create(name="@inbox", owner=_get_current_user())
+    l, created = List.objects.get_or_create(name=List.INBOX_LIST_NAME, owner=_get_current_user())
     return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':l.id}))
     
 def todo_list(request, list_id):
@@ -54,7 +54,7 @@ def list_add(request):
     l=List()
     l.name=request.POST['name']
     l.owner=_get_current_user()
-    if l.name!='@inbox': 
+    if l.name!=List.INBOX_LIST_NAME: 
         l.save()
         out = l.id
     else:
@@ -64,14 +64,14 @@ def list_add(request):
 def list_delete(request):
     l=List.objects.get(id=int(request.POST['list_id']))
     _check_permission(l)
-    l.delete_safe(_get_current_user(), "@inbox")
+    l.delete(_get_current_user())
     
     return HttpResponse("", mimetype="text/plain")     
     
 def todo_delete(request):
     t=Todo.objects.get(id=int(request.POST['todo_id']))
     _check_permission(t.list)
-    t.delete_safe()
+    t.delete()
     return HttpResponse("", mimetype="text/plain")    
     
 def todo_complete(request):

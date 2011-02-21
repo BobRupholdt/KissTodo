@@ -35,7 +35,7 @@ class TodoTest(TestCase):
         assert(len(Todo.objects.all())==1)
         assert(len(Todo.objects_raw.all())==1)        
         
-        t1.delete_safe()
+        t1.delete()
         
         assert(t1.deleted==True)
         
@@ -43,14 +43,14 @@ class TodoTest(TestCase):
         assert(len(Todo.objects.all())==0)
         assert(len(Todo.objects_raw.all())==1)                
         
-        t1.delete()        
+        t1.delete_raw()        
         
         assert(len(l.todo_set.all())==0)
         assert(len(Todo.objects.all())==0)
         assert(len(Todo.objects_raw.all())==0)                        
   
 class ListTest(TestCase):
-    def test_safe_delete(self):
+    def test_logic_delete(self):
         """
         Tests that List.delete move the todo to the inbox list before 
         deleting the list itself
@@ -65,14 +65,13 @@ class ListTest(TestCase):
         assert(len(List.objects.all())==1)
         assert(List.objects.all()[0].name=="myList")
         
-        l.delete_safe("me", "@inbox")
+        l.delete("me")
         
         assert(len(List.objects.all())==1)
-        assert(List.objects.all()[0].name=="@inbox")
-        
+        assert(List.objects.all()[0].name==List.INBOX_LIST_NAME)
         assert(List.objects.all()[0].todo_set.all()[0].description=="myTodo")
         
-    def test_delete(self):
+    def test_raw_delete(self):
         """
         Tests raw delete: all todo are also deleted
         """
@@ -87,7 +86,7 @@ class ListTest(TestCase):
         assert(List.objects.all()[0].name=="myList")
         assert(len(Todo.objects_raw.all())==1)
         
-        l.delete()
+        l.delete_raw()
         
         assert(len(List.objects.all())==0)
         assert(len(Todo.objects_raw.all())==0)
