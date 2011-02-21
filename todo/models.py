@@ -19,17 +19,18 @@ from django.db import models
 class List(models.Model):
 
     INBOX_LIST_NAME = '@inbox'
+    
     name = models.CharField(max_length=1000)
     owner = models.CharField(max_length=255)
 
     def __unicode__(self):
         return u'%s' % (self.name)
         
-    def delete(self, current_user): 
+    def delete(self): 
         if self.name==List.INBOX_LIST_NAME: return
         
         if len(self.todo_set.all())>0:
-            inbox_list, created = List.objects.get_or_create(owner=current_user, name=List.INBOX_LIST_NAME)
+            inbox_list, created = List.objects.get_or_create(owner=self.owner, name=List.INBOX_LIST_NAME)
             for t in self.todo_set.all(): 
                 t.list=inbox_list
                 t.save()

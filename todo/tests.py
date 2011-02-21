@@ -65,7 +65,7 @@ class ListTest(TestCase):
         assert(len(List.objects.all())==1)
         assert(List.objects.all()[0].name=="myList")
         
-        l.delete("me")
+        l.delete()
         
         assert(len(List.objects.all())==1)
         assert(List.objects.all()[0].name==List.INBOX_LIST_NAME)

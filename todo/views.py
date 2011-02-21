@@ -36,6 +36,7 @@ def test_page(request):
 
 def board(request):
     l, created = List.objects.get_or_create(name=List.INBOX_LIST_NAME, owner=_get_current_user())
+    
     return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':l.id}))
     
 def todo_list(request, list_id):
@@ -64,7 +65,7 @@ def list_add(request):
 def list_delete(request):
     l=List.objects.get(id=int(request.POST['list_id']))
     _check_permission(l)
-    l.delete(_get_current_user())
+    l.delete()
     
     return HttpResponse("", mimetype="text/plain")     
     
