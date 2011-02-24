@@ -167,3 +167,7 @@ ul.todos li {
     font-weight: bold;
 }
 
+.todo_list_name {
+    color:#999;
+    font-style:italic;    
+}

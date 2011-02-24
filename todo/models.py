@@ -48,6 +48,14 @@ class TodoManager(models.Manager):
     def get_query_set(self):
         return super(TodoManager, self).get_query_set().filter(deleted=False)
         
+    def hot(self, current_user):
+        hot = super(TodoManager, self).get_query_set().filter(complete=False, priority__lt=4, deleted=False).order_by("priority", "description")
+        
+        #due to a GAE limitation, it is not possibile to filter on list__owner
+        result=[t for t in hot if t.list.owner == current_user]
+            
+        return result
+        
 class Todo(models.Model):
     description = models.CharField(max_length=1000)
     priority = models.IntegerField(default=4)

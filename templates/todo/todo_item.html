@@ -1,6 +1,6 @@
 <span class="todo_item">
     <span class="todo_priority">{% if todo.priority < 4%}P{{ todo.priority }}{% endif %}</span>
-    <span class="todo_description"><a href="#">{{ todo.description }}</a></span>
+    <span class="todo_description"><a href="#">{{ todo.description }}{% if show_list %} <span class="small todo_list_name">[{{todo.list.name}}]</span>{% endif %}</a></span>
     <span class="no_background">
         <a href="#" class="todo_delete" id="todo_delete_{{todo.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a>
     </span>

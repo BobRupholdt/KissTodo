@@ -6,7 +6,7 @@
 </select>
 <input type="text" value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
 <select id="edit_todo_list_id" name="edit_todo_list_id" >
-{% for l in lists.all %}
+{% for l in lists %}
     <option value="{{l.id}}" {% if todo.list.id = l.id%}selected="selected"{% endif %}>{{l.name}}</option>
 {% endfor %} 
 </select>

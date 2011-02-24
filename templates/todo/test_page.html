@@ -62,10 +62,10 @@ MEDIA_ROOT: {{media_root}}<br/>
 
 <p>
 <ul>
-{% for l in lists.all %}  
+{% for l in lists %}  
     <li>{{ l.name }}</li>
     <ol>
-    {% for t in l.todo_set.all %}  
+    {% for t in l.todo_set %}  
         <li>{{ t.description }}</li>
     {% endfor %} 
     </ol>

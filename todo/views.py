@@ -45,8 +45,15 @@ def todo_list(request, list_id):
     if int(list_id)>0:
         l=List.objects.get(id=int(list_id))
         _check_permission(l)
-     
-    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.objects.filter(list__id=list_id)}))
+    
+    if int(list_id)==-2:
+        todos = Todo.objects.hot(_get_current_user())
+        show_list = True
+    else:
+        todos = Todo.objects.filter(list__id=list_id)
+        show_list = False
+        
+    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':todos, 'show_list':show_list}))
     
 def list_list(request, selected_list_id):
     return render_to_response('todo/list_list.html', RequestContext(request, {'lists':List.objects.filter(owner=_get_current_user()), 'selected_list_id': str(selected_list_id)}))    
