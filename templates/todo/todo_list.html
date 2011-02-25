@@ -5,9 +5,9 @@
         <input type="text" autocomplete="off" id="description" name="description" />
         <input type="hidden" value="{{list_id}}" id="list_id" name="list_id" />
         </form>
-        <script type="text/javascript">$('#name').hint();</script>
     </li>
     {% endif %}
+    <script type="text/javascript">$('#name').hint();</script>
     {% for t in todos %}  
     <li id="todo_li_{{ t.id }}" class="todo_li {% if t.complete %}complete{% endif %}">
         <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} /> 
