@@ -1,4 +1,5 @@
 <ul class="todos">
+    {% if not show_list %}
     <li>
         <form method="post" action="." id="add_todo_form" onSubmit="return kisstodo_board.add_todo()">
         <input type="text" autocomplete="off" id="description" name="description" />
@@ -6,6 +7,7 @@
         </form>
         <script type="text/javascript">$('#name').hint();</script>
     </li>
+    {% endif %}
     {% for t in todos %}  
     <li id="todo_li_{{ t.id }}" class="todo_li {% if t.complete %}complete{% endif %}">
         <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} /> 
