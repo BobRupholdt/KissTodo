@@ -100,7 +100,24 @@ var kisstodo_board = (function () {
             });        
     		
             return false;
-        });     
+        });   
+
+        $('.todo_undelete').live('click', function () { 
+            var todo_id=$(this).attr("id").replace("todo_undelete_","");
+            var todo=$(this).parents("li");
+            
+            var item = $("#delete_todo_form_"+todo_id);
+            
+            var data = {
+                todo_id: todo_id
+            };
+            
+            $.post("{%url todo.views.todo_undelete%}", data, function (response) {
+                todo.remove();
+            });        
+    		
+            return false;
+        });           
 
         $('.todo_complete').live('click', function () { 
             var todo_id=$(this).attr("id").replace("todo_complete_","");
@@ -452,21 +469,22 @@ var kisstodo_board = (function () {
 {% block content_headline%}<span class="no_background"><a class="help_toggle" href="#"><img src="{{MEDIA_URL}}img/help.png" /></a></span>
 <div id="help" style="display:none;">
     <table>
-    <tr><th colspan="2">keyboard shortcut</th></tr>
+    <tr><th colspan="2">Special lists</th></tr>
+    <tr><td colspan="2">when you delete a list, all todo are moved to <b>@inbox</b>, a special, not deletable list.</td></tr>
+    <tr><td colspan="2">when you delete a todo, it is moved to the <b>@trash</b> special list. You can un-delete the todo by clicking on the <img src="{{MEDIA_URL}}img/undo.png" /> icon.</td></tr>
+    <tr><td colspan="2"><b>@hot</b> is another special list containing all todo with a priority.</td></tr>
+    </table>
+    
+    <table>
+    <tr><th colspan="2">Keyboard shortcuts</th></tr>
     <tr><td><span class="kbd">&larr;</span> / <span class="kbd">&rarr;</span></td><td>select prev. / next list</td></td>
     <tr><td><span class="kbd">&uarr;</span> / <span class="kbd">&darr;</span></td><td>select prev. / next todo</td></td>
     <tr><td><span class="kbd">1</span> .. <span class="kbd">4</span></td><td>change todo priority<br/><span class="small">1 = max, 4 = none</span></td></td>
-    <tr><td><span class="kbd">C</span></td><td>(un)complete selected todo</td></td>
-    <tr><td><span class="kbd">D</span></td><td>delete selected todo</td></td>
+    <tr><td><span class="kbd">c</span></td><td>(un)complete selected todo</td></td>
+    <tr><td><span class="kbd">d</span></td><td>delete selected todo</td></td>
     <tr><td><span class="kbd">ENTER</span></td><td>edit / save selected todo</td></td>
     <tr><td><span class="kbd">ESC</span></td><td>cancel current edit</td></td>
     </table>
-    <div style="margin:5px">
-    when you delete a list, all todo are moved to <b>@inbox</b>, a special, not deletable list.
-    </div>
-    <div style="margin:5px">
-    <b>@hot</b> is another special list containing all todo with a priority.
-    </div>
 </div>
 {{ block.super }}
 {% endblock %}

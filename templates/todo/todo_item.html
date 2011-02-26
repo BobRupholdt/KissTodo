@@ -3,6 +3,7 @@
     <span class="todo_description"><a href="#">{{ todo.description }}{% if show_list %} <span class="small todo_list_name">[{{todo.list.name}}]</span>{% endif %}</a></span>
     <span class="no_background">
         <a href="#" class="todo_delete" id="todo_delete_{{todo.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a>
+        {% if todo.deleted %}<a href="#" class="todo_undelete" id="todo_undelete_{{todo.id}}"><img alt="undelete" src="{{MEDIA_URL}}img/undo.png" /></a>{% endif %}
     </span>
 </span>
 

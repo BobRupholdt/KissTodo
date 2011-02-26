@@ -42,8 +42,28 @@ indexes:
 - kind: todo_todo
   properties:
   - name: deleted
+  - name: complete
+  - name: priority
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: deleted
+  - name: deleted
+  - name: priority
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: deleted
   - name: list_id
   - name: complete
+  - name: priority
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: deleted
   - name: priority
   - name: description
 

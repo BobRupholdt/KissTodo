@@ -49,12 +49,16 @@ class TodoManager(models.Manager):
         return super(TodoManager, self).get_query_set().filter(deleted=False)
         
     def hot(self, current_user):
-        hot = super(TodoManager, self).get_query_set().filter(complete=False, priority__lt=4, deleted=False).order_by("priority", "description")
+        hot = self.get_query_set().filter(complete=False, priority__lt=4).order_by("priority", "description")
         
         #due to a GAE limitation, it is not possibile to filter on list__owner
-        result=[t for t in hot if t.list.owner == current_user]
-            
-        return result
+        return [t for t in hot if t.list.owner == current_user]
+        
+    def deleted(self, current_user):
+        deleted = super(TodoManager, self).get_query_set().filter(deleted=True).order_by("priority", "description")
+        
+        #due to a GAE limitation, it is not possibile to filter on list__owner
+        return [t for t in deleted if t.list.owner == current_user]        
         
 class Todo(models.Model):
     description = models.CharField(max_length=1000)
@@ -67,8 +71,15 @@ class Todo(models.Model):
     objects_raw = models.Manager() 
     
     def delete(self): 
-        self.deleted=True
-        self.save()
+        if self.deleted==False:
+            self.deleted=True
+            self.save()
+        else:
+            self.delete_raw()
+        
+    def undelete(self): 
+        self.deleted=False
+        self.save()        
         
     def delete_raw(self): 
         super(Todo, self).delete()

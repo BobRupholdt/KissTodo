@@ -46,12 +46,16 @@ def todo_list(request, list_id):
         l=List.objects.get(id=int(list_id))
         _check_permission(l)
     
+    show_list = False
+    
     if int(list_id)==-2:
         todos = Todo.objects.hot(_get_current_user())
         show_list = True
+    elif int(list_id)==-3:
+        todos = Todo.objects.deleted(_get_current_user())
+        show_list = True    
     else:
         todos = Todo.objects.filter(list__id=list_id)
-        show_list = False
         
     return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':todos, 'show_list':show_list}))
     
@@ -77,20 +81,26 @@ def list_delete(request):
     return HttpResponse("", mimetype="text/plain")     
     
 def todo_delete(request):
-    t=Todo.objects.get(id=int(request.POST['todo_id']))
+    t=Todo.objects_raw.get(id=int(request.POST['todo_id']))
     _check_permission(t.list)
     t.delete()
     return HttpResponse("", mimetype="text/plain")    
     
+def todo_undelete(request):
+    t=Todo.objects_raw.get(id=int(request.POST['todo_id']))
+    _check_permission(t.list)
+    t.undelete()
+    return HttpResponse("", mimetype="text/plain")        
+    
 def todo_complete(request):
-    t=Todo.objects.get(id=int(request.POST['todo_id']))
+    t=Todo.objects_raw.get(id=int(request.POST['todo_id']))
     _check_permission(t.list)
     t.complete=not t.complete
     t.save()
     return HttpResponse("", mimetype="text/plain")    
 
 def todo_edit(request, todo_id):
-    t=Todo.objects.get(id=int(todo_id))
+    t=Todo.objects_raw.get(id=int(todo_id))
     _check_permission(t.list)
     
     if request.method == 'POST':
@@ -103,7 +113,7 @@ def todo_edit(request, todo_id):
         #return HttpResponse("", mimetype="text/plain")  
         return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
     else:
-        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':Todo.objects.get(id=int(todo_id)),'lists':List.objects.filter(owner=_get_current_user())}))
+        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':t,'lists':List.objects.filter(owner=_get_current_user())}))
         
 def list_edit(request, list_id):
     l=List.objects.get(id=int(list_id))
