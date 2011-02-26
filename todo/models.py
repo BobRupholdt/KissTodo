@@ -19,6 +19,8 @@ from django.db import models
 class List(models.Model):
 
     INBOX_LIST_NAME = '@inbox'
+    HOT_LIST_NAME = '@hot'
+    TRASH_LIST_NAME = '@trash'
     
     name = models.CharField(max_length=1000)
     owner = models.CharField(max_length=255)
@@ -28,17 +30,20 @@ class List(models.Model):
         
     def delete(self): 
         if self.name==List.INBOX_LIST_NAME: return
+        if self.name==List.HOT_LIST_NAME: return
+        if self.name==List.TRASH_LIST_NAME: return
         
-        if len(self.todo_set.all())>0:
+        todos_raw = Todo.objects_raw.filter(list=self).all()
+        if len(todos_raw)>0:
             inbox_list, created = List.objects.get_or_create(owner=self.owner, name=List.INBOX_LIST_NAME)
-            for t in self.todo_set.all(): 
+            for t in todos_raw: 
                 t.list=inbox_list
                 t.save()
         
         self.delete_raw()    
         
     def delete_raw(self):
-        for t in self.todo_set.all(): t.delete_raw() # required by google app engine due to the lack of cascade delete
+        for t in Todo.objects_raw.filter(list=self).all(): t.delete_raw() # required by google app engine due to the lack of cascade delete
         super(List, self).delete()
 
     class Meta:

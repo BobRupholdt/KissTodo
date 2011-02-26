@@ -16,8 +16,8 @@ var kisstodo_board = (function () {
     
     res.init_board=function() {
 
-        kisstodo_board.refresh_list_list({{-2}});
-        kisstodo_board.refresh_todo_list({{-2}});
+        kisstodo_board.refresh_list_list({{inbox_list_id}});
+        kisstodo_board.refresh_todo_list({{inbox_list_id}});
        
         $('#description').hint();
         $('#description').blur();
@@ -383,7 +383,7 @@ var kisstodo_board = (function () {
         if (event.which == 40) {
             if (kisstodo_board.is_edit_active()) return;
             
-            if (kisstodo_board.focused_element=='name') {
+            if (kisstodo_board.focused_element=='name' && $('#description').length>0) {
                 $('#description').focus();
                 return;
             }
@@ -423,12 +423,13 @@ var kisstodo_board = (function () {
         }
         
         if (kisstodo_board.focused_element=="description") $('#description').blur();
+        if (kisstodo_board.focused_element=="name") $('#name').blur();
         
         var selected_todo_index_max=$('.todos li.todo_li').length-1;
                 
         kisstodo_board.selected_todo_index+=increment;
         
-        if (kisstodo_board.selected_todo_index<0) { kisstodo_board.selected_todo_index=0; $('#description').focus();}
+        if (kisstodo_board.selected_todo_index<0) { kisstodo_board.selected_todo_index=0; if ($('#description').length>0) $('#description').focus(); else $('#name').focus();}
         if (kisstodo_board.selected_todo_index>selected_todo_index_max) { kisstodo_board.selected_todo_index=selected_todo_index_max; }
         
         $('.todos li.todo_li:eq('+kisstodo_board.selected_todo_index+')').addClass("selected_todo");
@@ -469,10 +470,10 @@ var kisstodo_board = (function () {
 {% block content_headline%}<span class="no_background"><a class="help_toggle" href="#"><img src="{{MEDIA_URL}}img/help.png" /></a></span>
 <div id="help" style="display:none;">
     <table>
-    <tr><th colspan="2">Special lists</th></tr>
-    <tr><td colspan="2">when you delete a list, all todo are moved to <b>@inbox</b>, a special, not deletable list.</td></tr>
-    <tr><td colspan="2">when you delete a todo, it is moved to the <b>@trash</b> special list. You can un-delete the todo by clicking on the <img src="{{MEDIA_URL}}img/undo.png" /> icon.</td></tr>
-    <tr><td colspan="2"><b>@hot</b> is another special list containing all todo with a priority.</td></tr>
+    <tr><th colspan="2">Special, not deletable lists</th></tr>
+    <tr><td colspan="2"><b>@inbox</b>: when you delete a list, all todo are moved to @inbox.</td></tr>
+    <tr><td colspan="2"><b>@hot</b> a list containing all todo with a priority.</td></tr>
+    <tr><td colspan="2"><b>@trash</b> when you delete a todo, it is moved into @trash list. You can un-delete the todo by clicking on the <img src="{{MEDIA_URL}}img/undo.png" /> icon.</td></tr>
     </table>
     
     <table>

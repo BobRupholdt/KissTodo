@@ -66,7 +66,7 @@ def list_add(request):
     l=List()
     l.name=request.POST['name']
     l.owner=_get_current_user()
-    if l.name!=List.INBOX_LIST_NAME: 
+    if l.name!=List.INBOX_LIST_NAME and l.name!=List.HOT_LIST_NAME and l.name!=List.TRASH_LIST_NAME: 
         l.save()
         out = l.id
     else:
@@ -129,7 +129,7 @@ def list_edit(request, list_id):
         return render_to_response('todo/list_edit.html', RequestContext(request, {'list':List.objects.get(id=int(list_id)),}))            
 
 def todo_show_item(request, todo_id):
-    t = Todo.objects.get(id=int(todo_id))
+    t = Todo.objects_raw.get(id=int(todo_id))
     _check_permission(t.list)
     return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t}))    
     
