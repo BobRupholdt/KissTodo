@@ -35,7 +35,7 @@ def test_page(request):
         RequestContext(request, {'media_root':settings.MEDIA_ROOT}))
 
 def board(request):
-    inbox, created = List.objects.get_or_create(name=List.INBOX_LIST_NAME, owner=_get_current_user())
+    inbox = List.objects.get_or_create_inbox(_get_current_user())
     return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id}))
     
 def todo_list(request, list_id):
@@ -59,14 +59,14 @@ def todo_list(request, list_id):
     return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':todos, 'show_list':show_list}))
     
 def list_list(request, selected_list_id):
-    inbox, created = List.objects.get_or_create(name=List.INBOX_LIST_NAME, owner=_get_current_user())
+    inbox = List.objects.get_or_create_inbox(_get_current_user())
     return render_to_response('todo/list_list.html', RequestContext(request, {'lists':List.objects.filter(owner=_get_current_user()), 'inbox_list': inbox, 'selected_list_id': str(selected_list_id)}))    
 
 def list_add(request):
     l=List()
     l.name=request.POST['name']
     l.owner=_get_current_user()
-    if l.name!=List.INBOX_LIST_NAME and l.name!=List.HOT_LIST_NAME and l.name!=List.TRASH_LIST_NAME: 
+    if not l.is_special():
         l.save()
         out = l.id
     else:

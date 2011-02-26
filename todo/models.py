@@ -16,6 +16,12 @@
 
 from django.db import models
 
+class ListManager(models.Manager):
+    
+    def get_or_create_inbox(self, user):
+        inbox, created = self.get_or_create(name=List.INBOX_LIST_NAME, owner=user)
+        return inbox
+
 class List(models.Model):
 
     INBOX_LIST_NAME = '@inbox'
@@ -24,6 +30,11 @@ class List(models.Model):
     
     name = models.CharField(max_length=1000)
     owner = models.CharField(max_length=255)
+    
+    objects = ListManager() 
+    
+    def is_special(self):
+        return self.name==List.INBOX_LIST_NAME or self.name==List.HOT_LIST_NAME or self.name==List.TRASH_LIST_NAME
 
     def __unicode__(self):
         return u'%s' % (self.name)
@@ -34,8 +45,9 @@ class List(models.Model):
         if self.name==List.TRASH_LIST_NAME: return
         
         todos_raw = Todo.objects_raw.filter(list=self).all()
+        
         if len(todos_raw)>0:
-            inbox_list, created = List.objects.get_or_create(owner=self.owner, name=List.INBOX_LIST_NAME)
+            inbox_list = List.objects.get_or_create_inbox(self.owner)
             for t in todos_raw: 
                 t.list=inbox_list
                 t.save()
@@ -53,17 +65,17 @@ class TodoManager(models.Manager):
     def get_query_set(self):
         return super(TodoManager, self).get_query_set().filter(deleted=False)
         
-    def hot(self, current_user):
-        hot = self.get_query_set().filter(complete=False, priority__lt=4).order_by("priority", "description")
+    def hot(self, user):
+        hot = self.filter(complete=False, priority__lt=4).order_by("priority", "description")
         
         #due to a GAE limitation, it is not possibile to filter on list__owner
-        return [t for t in hot if t.list.owner == current_user]
+        return [t for t in hot if t.list.owner == user]
         
-    def deleted(self, current_user):
+    def deleted(self, user):
         deleted = super(TodoManager, self).get_query_set().filter(deleted=True).order_by("priority", "description")
         
         #due to a GAE limitation, it is not possibile to filter on list__owner
-        return [t for t in deleted if t.list.owner == current_user]        
+        return [t for t in deleted if t.list.owner == user]        
         
 class Todo(models.Model):
     description = models.CharField(max_length=1000)
