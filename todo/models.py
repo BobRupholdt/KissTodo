@@ -71,13 +71,13 @@ class TodoManager(models.Manager):
         
         next_days = datetime.now()+timedelta(days=7)
         
-        q1 = Q(complete=False, priority__lt=4)
-        q2 = Q(complete=False, due_date__lte=next_days, due_date__isnull=False)
+        todos_with_priority = Q(complete=False, priority__lt=4)
+        todo_within_next_days = Q(complete=False, due_date__lte=next_days, due_date__isnull=False)
         
-        hot = list(self.filter(q1).order_by("priority", "description"))
+        hot = list(self.filter(todos_with_priority).order_by("priority", "description"))
         
         # GAE does not supports OR query
-        for t in self.filter(q2).order_by("due_date", "description"):
+        for t in self.filter(todo_within_next_days).order_by("due_date", "description"):
             if not t in hot: hot.append(t)
         
         #hot = self.filter(complete=False, priority__lt=4).order_by("priority", "description")
