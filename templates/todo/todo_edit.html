@@ -5,8 +5,12 @@
     <option value="3" {% if todo.priority = 3 %}selected="selected"{% endif %}>P3</option>
 </select>
 <input type="text" value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
+<input type="text" value="{{todo.due_date|date:'Y/m/d'}}" id="edit_todo_due_date" name="edit_todo_due_date" />
 <select id="edit_todo_list_id" name="edit_todo_list_id" >
 {% for l in lists %}
     <option value="{{l.id}}" {% if todo.list.id = l.id%}selected="selected"{% endif %}>{{l.name}}</option>
 {% endfor %} 
 </select>
+<script type="text/javascript">
+    $("#edit_todo_due_date").datepicker({ dateFormat: 'yy/mm/dd', firstDay: 1 });
+</script>

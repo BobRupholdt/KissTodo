@@ -171,3 +171,7 @@ ul.todos li {
     color:#999;
     font-style:italic;    
 }
+
+div.ui-datepicker{
+ font-size:10px;
+}

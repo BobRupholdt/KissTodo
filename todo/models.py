@@ -83,6 +83,7 @@ class Todo(models.Model):
     complete = models.BooleanField(default=False)
     list = models.ForeignKey(List)
     deleted = models.BooleanField(default=False)
+    due_date = models.DateTimeField(null=True, blank=True)
     
     objects = TodoManager() 
     objects_raw = models.Manager() 
@@ -105,6 +106,34 @@ class Todo(models.Model):
         return u'%s' % (self.description)
 
     class Meta:
-        ordering = ("complete","priority","description","id")        
+        ordering = ("complete","due_date","priority","description","id")        
 
-        
+    @staticmethod
+    def todo_sort(todos): 
+        todos=list(todos)
+        todos.sort(Todo._date_todo_sort)
+        return todos
+    
+    @staticmethod    
+    def _date_todo_sort(t1, t2):
+        if t1.complete!=t2.complete:
+            if t1.complete: return 1
+            return -1
+        elif t1.due_date!=t2.due_date:
+            if t1.due_date==None: return 1
+            if t2.due_date==None: return -1
+            if t1.due_date<t2.due_date: return -1
+            return 1
+        elif t1.priority!=t2.priority:
+            if t1.priority<t2.priority: return -1
+            return 1   
+        elif t1.description!=t2.description:
+            if t1.description<t2.description: return -1
+            return 1   
+        elif t1.id!=t2.id:
+            if t1.id<t2.id: return -1
+            return 1               
+        else:
+            return 0
+
+                    
