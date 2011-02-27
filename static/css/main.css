@@ -132,6 +132,15 @@ ul.todos li {
     margin:0 1px;
 }
 
+.today{
+    font-weight: bold;
+}
+
+.overdue {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 .complete .todo_priority {
     background-color:#ddd;
     color:#000;

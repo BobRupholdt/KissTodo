@@ -115,6 +115,14 @@ class Todo(models.Model):
         
     def delete_raw(self): 
         super(Todo, self).delete()
+
+    def is_today(self): 
+        if self.due_date is None: return False
+        return self.due_date.date() == datetime.now().date()        
+        
+    def is_overdue(self): 
+        if self.due_date is None: return False
+        return self.due_date.date() < datetime.now().date()
             
     def __unicode__(self):
         return u'%s' % (self.description)

@@ -83,7 +83,8 @@ class TodoTest(TestCase):
         assert(todos[2].description=="t3")     
         assert(todos[3].description=="t1")     
         assert(todos[4].description=="t4")             
-        assert(todos[5].description=="t2")             
+        assert(todos[5].description=="t2")         
+                
   
 class ListTest(TestCase):
     def test_logic_delete(self):
