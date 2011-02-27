@@ -58,6 +58,15 @@ indexes:
   - name: deleted
   - name: list_id
   - name: complete
+  - name: due_date
+  - name: priority
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: deleted
+  - name: list_id
+  - name: complete
   - name: priority
   - name: description
 
@@ -71,6 +80,14 @@ indexes:
   properties:
   - name: list_id
   - name: complete
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: list_id
+  - name: complete
+  - name: due_date
+  - name: priority
   - name: description
 
 - kind: todo_todo

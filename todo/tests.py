@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.test import TestCase
+from datetime import date
 
 from todo.models import *
 
@@ -47,7 +48,42 @@ class TodoTest(TestCase):
         
         assert(len(l.todo_set.all())==0)
         assert(len(Todo.objects.all())==0)
-        assert(len(Todo.objects_raw.all())==0)                        
+        assert(len(Todo.objects_raw.all())==0)     
+
+    def test_sorting(self):
+        """
+        Tests Todo sorting
+        """
+        
+        l = List(name='myList', owner='me')
+        l.save()
+            
+        t=Todo(description='t0', list=l, due_date=date(1999, 12, 31))
+        t.save()
+        
+        t=Todo(description='t1', list=l, due_date=date(2030, 12, 31))
+        t.save()   
+
+        t=Todo(description='t2', list=l, due_date=date(2030, 12, 31), priority=1, complete=True)
+        t.save() 
+
+        t=Todo(description='t3', list=l, due_date=date(2030, 12, 31), priority=2)
+        t.save()         
+        
+        t=Todo(description='t4', list=l, priority=3)
+        t.save()            
+        
+        t=Todo(description='t5', list=l, due_date=date(1984, 12, 31))
+        t.save()                    
+    
+        todos = Todo.todo_sort(Todo.objects.all())
+        
+        assert(todos[0].description=="t5")     
+        assert(todos[1].description=="t0")     
+        assert(todos[2].description=="t3")     
+        assert(todos[3].description=="t1")     
+        assert(todos[4].description=="t4")             
+        assert(todos[5].description=="t2")             
   
 class ListTest(TestCase):
     def test_logic_delete(self):

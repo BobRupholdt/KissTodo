@@ -23,6 +23,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from random import choice
 from google.appengine.api import users
+from datetime import datetime
 
 from models import *
   
@@ -56,7 +57,7 @@ def todo_list(request, list_id):
     else:
         todos = Todo.objects.filter(list__id=list_id)
         
-    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':todos, 'show_list':show_list}))
+    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos), 'show_list':show_list}))
     
 def list_list(request, selected_list_id):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
@@ -108,6 +109,10 @@ def todo_edit(request, todo_id):
         if 'priority' in request.POST: t.priority=int(request.POST['priority'])
         if 'description' in request.POST: t.description=request.POST['description']
         if 'list_id' in request.POST: t.list=List.objects.get(id=int(request.POST['list_id']))
+        if 'due_date' in request.POST: 
+            t.due_date=None
+            if request.POST['due_date']: t.due_date=datetime.strptime(request.POST['due_date'],'%Y/%m/%d')
+            
         t.save()
         
         #return HttpResponse("", mimetype="text/plain")  

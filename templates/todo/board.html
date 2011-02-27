@@ -4,6 +4,10 @@
 {{ block.super }}
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/overlay/jquery.hint.js"></script> 
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/blockui/jquery.blockUI.js"></script> 
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/ui/js/jquery-ui-1.8.10.custom.min.js"></script>
+<link href="{{MEDIA_URL}}js/jquery/ui/css/blitzer/jquery-ui-1.8.10.custom.css" rel="stylesheet" type="text/css" />
+
+
 
 <script type="text/javascript">
 
@@ -290,7 +294,8 @@ var kisstodo_board = (function () {
                     todo_id: todo_id,
                     description: $('#edit_todo_description').val(),
                     priority: $('#edit_todo_priority').val(),
-                    list_id: $('#edit_todo_list_id').val()
+                    list_id: $('#edit_todo_list_id').val(),
+                    due_date: $('#edit_todo_due_date').val()
                 };
                 
                 $.post("{%url todo.views.todo_edit ''%}"+todo_id, data, function (response) {
