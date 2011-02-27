@@ -9,7 +9,7 @@
     {% endif %}
     <script type="text/javascript">$('#name').hint();</script>
     {% for t in todos %}  
-    <li id="todo_li_{{ t.id }}" class="todo_li {% if t.complete %}complete{% endif %}">
+    <li style="white-space:nowrap;" id="todo_li_{{ t.id }}" class="todo_li {% if t.complete %}complete{% endif %}">
         <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} /> 
         {% with t as todo %}
             {% include "todo/todo_item.html" %}

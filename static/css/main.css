@@ -129,6 +129,7 @@ ul.todos li {
     background-color:#ee0505;
     color:#fff;
     font-size:10px;
+    margin:0 1px;
 }
 
 .complete .todo_priority {
