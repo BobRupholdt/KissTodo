@@ -159,7 +159,7 @@ var kisstodo_board = (function () {
     }
     
     res.refresh_todo_list = function (list_id) {
-        //kisstodo_board.lockGui();
+        kisstodo_board.lockGui();
         $("#todo_list").fadeOut(kisstodo_board.default_animation_speed);
 
         $.get("{% url todo.views.todo_list '' %}"+list_id, function(response) {
@@ -175,7 +175,7 @@ var kisstodo_board = (function () {
             
             if (list_id==-1) $("#todo_list").html("");
             
-            //kisstodo_board.unlockGui();
+            kisstodo_board.unlockGui();
         });      
     }
     
@@ -223,10 +223,12 @@ var kisstodo_board = (function () {
     		opacity:	  	 0.1,
     		cursor:		  	 'wait'
     	},css: { backgroundColor: '#fff', color: '#fff'}});
+        $('#wait').fadeIn();
     }
 
     res.unlockGui = function() {
         $.unblockUI();
+        $('#wait').fadeOut();
     }
     
     res.add_list = function() {
@@ -270,6 +272,7 @@ var kisstodo_board = (function () {
     res.edit_selected_todo = function() {
         if ($(".selected_todo").hasClass('complete')) return;
         
+        kisstodo_board.lockGui();
         todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
         var d = $(".selected_todo .todo_item");
         d.fadeOut(kisstodo_board.default_animation_speed);
@@ -277,6 +280,7 @@ var kisstodo_board = (function () {
             d.fadeIn(kisstodo_board.default_animation_speed);
             $('#edit_todo_description').focus();
             //setTimeout( function(){$('#edit_todo_description').select();}, 20);
+            kisstodo_board.unlockGui();
         });
     }     
     
