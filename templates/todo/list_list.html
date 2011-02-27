@@ -18,9 +18,9 @@
         <input type="hidden" value="{{list_id}}" id="list_id" name="list_id" />
     </form>
 </span>    
-<br/>
 {% for l in lists %}
 {% if l.name != "@inbox" %}
+<span class="list light">  |  </span>
 <span class="list_item" id="list_item_{{l.id}}">
     <a class="list{% if l.id|stringformat:"s" == selected_list_id %} selected_link selected_list{% endif %}" id="list_{{l.id}}" href="#">{{ l.name }}</a>
     <form style="display:none" method="post" action="." class="delete_list_form" id="delete_list_form_{{l.id}}" onSubmit="return false;">
@@ -31,6 +31,6 @@
         <a style="display:none" href="#" class="list_delete" id="list_delete_{{l.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a> 
     </span>
 </span>
-{% if not forloop.last %}<span class="list light">  |  </span>{% endif %}
+{#{% if not forloop.last %}<span class="list light">  |  </span>{% endif %}#}
 {% endif %}    
 {% endfor %} 

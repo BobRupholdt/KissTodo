@@ -172,6 +172,10 @@ ul.todos li {
     font-style:italic;    
 }
 
-div.ui-datepicker{
+div.ui-datepicker {
  font-size:10px;
+}
+
+.content {
+    width:210px;
 }
