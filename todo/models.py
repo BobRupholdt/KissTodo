@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.db import models
+from django.db.models import Q
+from datetime import datetime, timedelta
 
 class ListManager(models.Manager):
     
@@ -66,7 +68,19 @@ class TodoManager(models.Manager):
         return super(TodoManager, self).get_query_set().filter(deleted=False)
         
     def hot(self, user):
-        hot = self.filter(complete=False, priority__lt=4).order_by("priority", "description")
+        
+        next_days = datetime.now()+timedelta(days=7)
+        
+        q1 = Q(complete=False, priority__lt=4)
+        q2 = Q(complete=False, due_date__lte=next_days, due_date__isnull=False)
+        
+        hot = list(self.filter(q1).order_by("priority", "description"))
+        
+        # GAE does not supports OR query
+        for t in self.filter(q2).order_by("due_date", "description"):
+            if not t in hot: hot.append(t)
+        
+        #hot = self.filter(complete=False, priority__lt=4).order_by("priority", "description")
         
         #due to a GAE limitation, it is not possibile to filter on list__owner
         return [t for t in hot if t.list.owner == user]

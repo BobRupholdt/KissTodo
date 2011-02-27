@@ -25,6 +25,13 @@ indexes:
   properties:
   - name: complete
   - name: deleted
+  - name: due_date
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: complete
+  - name: deleted
   - name: priority
   - name: description
 
