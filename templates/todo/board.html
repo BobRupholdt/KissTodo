@@ -358,6 +358,7 @@ var kisstodo_board = (function () {
             var todo_id=$(".selected_todo").attr("id").replace('todo_li_', '');
             kisstodo_board.update_todo(todo_id, {priority:event.which-48});
         }
+        
     }
     
     res.todo_edit_abort = function() {
@@ -376,6 +377,19 @@ var kisstodo_board = (function () {
     res.event_keydown = function(event) {  
         
         //console.log ("event_keydown: "+event.which);
+        
+        // TAB
+        if (event.which == 9) {
+            if (kisstodo_board.is_edit_active()) return;
+            
+            
+            if (kisstodo_board.sort_mode=='D') { 
+                $('#sort_mode_p').click();
+            } else {
+                $('#sort_mode_d').click();
+            }
+            return false;
+        }
         
         // ESC
         if (event.which == 27) {
@@ -510,8 +524,10 @@ var kisstodo_board = (function () {
     <tr><td><span class="kbd">1</span> .. <span class="kbd">4</span></td><td>change todo priority<br/><span class="small">1 = max, 4 = none</span></td></td>
     <tr><td><span class="kbd">c</span></td><td>(un)complete selected todo</td></td>
     <tr><td><span class="kbd">d</span></td><td>delete selected todo</td></td>
+    <tr><td><span class="kbd">TAB</span></td><td>change todo sorting</td></td>
     <tr><td><span class="kbd">ENTER</span></td><td>edit / save selected todo</td></td>
     <tr><td><span class="kbd">ESC</span></td><td>cancel current edit</td></td>
+    
     </table>
 </div>
 {{ block.super }}
