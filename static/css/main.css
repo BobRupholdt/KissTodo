@@ -90,7 +90,7 @@ table.grid tr.alternate_row { background-color: #f3f3f3;}
 ul.todos {
     list-style-type: none;
     margin: 0px;
-    padding: 5px 0px;
+    padding: 0 0;
 }
 
 ul.todos li {
@@ -161,6 +161,11 @@ ul.todos li {
 
 .small {
     font-size: 6px;
+    color: #666;
+}
+
+.sort_by {
+    padding: 10px 0 0 0;
 }
 
 #help {

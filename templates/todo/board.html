@@ -29,6 +29,22 @@ var kisstodo_board = (function () {
         $(document).bind('keypress', kisstodo_board.event_keypress);
         $(document).bind('keydown', kisstodo_board.event_keydown);
         
+        //$('#sort_mode').change(function() {kisstodo_board.refresh_selected_todo_list();});
+        
+        $('#sort_mode_p').live('click', function() {
+            $('.sort_mode').removeClass('selected_link');
+            $(this).addClass('selected_link');
+            kisstodo_board.sort_mode='P'; 
+            kisstodo_board.refresh_selected_todo_list();
+        });
+        
+        $('#sort_mode_d').live('click', function() {
+            $('.sort_mode').removeClass('selected_link');
+            $(this).addClass('selected_link');
+            kisstodo_board.sort_mode='D'; 
+            kisstodo_board.refresh_selected_todo_list();
+        });        
+        
         $('input[type=text]').live('focus', function () {           
             kisstodo_board.focused_element = $(this).attr('id');
             if (kisstodo_board.focused_element.indexOf('edit_todo_')!=0) kisstodo_board.select_next_todo(0);
@@ -93,8 +109,6 @@ var kisstodo_board = (function () {
             var todo_id=$(this).attr("id").replace("todo_delete_","");
             var todo=$(this).parents("li");
             
-            var item = $("#delete_todo_form_"+todo_id);
-            
             var data = {
                 todo_id: todo_id
             };
@@ -110,8 +124,6 @@ var kisstodo_board = (function () {
             var todo_id=$(this).attr("id").replace("todo_undelete_","");
             var todo=$(this).parents("li");
             
-            var item = $("#delete_todo_form_"+todo_id);
-            
             var data = {
                 todo_id: todo_id
             };
@@ -126,8 +138,6 @@ var kisstodo_board = (function () {
         $('.todo_complete').live('click', function () { 
             var todo_id=$(this).attr("id").replace("todo_complete_","");
             var todo=$(this).parents("li");
-
-            var item = $("#delete_todo_form_"+todo_id);
             
             var data = {
                 todo_id: todo_id
@@ -161,8 +171,10 @@ var kisstodo_board = (function () {
     res.refresh_todo_list = function (list_id) {
         kisstodo_board.lockGui();
         $("#todo_list").fadeOut(kisstodo_board.default_animation_speed);
+        
+        var ajax_url = "{% url todo.views.todo_list '#sort_mode' '' %}".replace('#sort_mode', kisstodo_board.sort_mode);
 
-        $.get("{% url todo.views.todo_list '' %}"+list_id, function(response) {
+        $.get(ajax_url+list_id, function(response) {
             $("#todo_list").html(response);
             $("#todo_list").fadeIn(kisstodo_board.default_animation_speed);
             
@@ -177,6 +189,11 @@ var kisstodo_board = (function () {
             
             kisstodo_board.unlockGui();
         });      
+    }
+    
+    res.refresh_selected_todo_list = function() {
+        var list_id=$('.selected_list').attr('id').replace('list_','');
+        kisstodo_board.refresh_todo_list(list_id);
     }
     
     res.refresh_list_list = function(selected_list_id) {    
@@ -464,6 +481,7 @@ var kisstodo_board = (function () {
     
     res.selected_todo_index=0;
     res.focused_element = '';
+    res.sort_mode = 'D';
     
     // CONFIG
     res.default_animation_speed=150;
@@ -481,7 +499,7 @@ var kisstodo_board = (function () {
     <table>
     <tr><th colspan="2">Special, not deletable lists</th></tr>
     <tr><td colspan="2"><b>@inbox</b>: when you delete a list, all todo are moved to @inbox.</td></tr>
-    <tr><td colspan="2"><b>@hot</b>: a list containing all todo with a priority OR a due date within the next 7 days.</td></tr>
+    <tr><td colspan="2"><b>@hot</b>: a list containing all todo with a priority OR a due date in the past OR within the next 7 days.</td></tr>
     <tr><td colspan="2"><b>@trash</b>: when you delete a todo, it is moved into @trash list. You can un-delete the todo by clicking on the <img src="{{MEDIA_URL}}img/undo.png" /> icon.</td></tr>
     </table>
     
@@ -502,6 +520,8 @@ var kisstodo_board = (function () {
 <form method="post" action="." id="add_list_form" onSubmit="return kisstodo_board.add_list()">
 <input class="big" title="&raquo; CREATE A NEW LIST" size="22" autocomplete="off" type="text" id="name" name="name" /></form>
 <div id="list_list" ></div>
-<span id="todo_list" ></span>
-
+<div class="small sort_by">
+sort by: <a href="#" id="sort_mode_d" class="sort_mode selected_link">DATE</a> <span class="light">  |  </span> <a href="#" id="sort_mode_p" class="sort_mode">PRIORITY</a>
+</div>
+<span id="todo_list"></span>
 {% endblock %}

@@ -131,13 +131,19 @@ class Todo(models.Model):
         ordering = ("complete","due_date","priority","description","id")        
 
     @staticmethod
-    def todo_sort(todos): 
-        todos=list(todos)
-        todos.sort(Todo._date_todo_sort)
+    def todo_sort(todos, mode):
+        if mode=='D':
+            todos=list(todos)
+            todos.sort(Todo._date_todo_sort_date)
+        elif mode=='P':
+            todos=list(todos)
+            todos.sort(Todo._date_todo_sort_priority)        
+        else:
+            raise Exception("Unknown sort mode: "+mode)
         return todos
     
     @staticmethod    
-    def _date_todo_sort(t1, t2):
+    def _date_todo_sort_date(t1, t2):
         if t1.complete!=t2.complete:
             if t1.complete: return 1
             return -1
@@ -157,5 +163,27 @@ class Todo(models.Model):
             return 1               
         else:
             return 0
+            
+    @staticmethod    
+    def _date_todo_sort_priority(t1, t2):
+        if t1.complete!=t2.complete:
+            if t1.complete: return 1
+            return -1
+        elif t1.priority!=t2.priority:
+            if t1.priority<t2.priority: return -1
+            return 1 
+        elif t1.due_date!=t2.due_date:
+            if t1.due_date==None: return 1
+            if t2.due_date==None: return -1
+            if t1.due_date<t2.due_date: return -1
+            return 1                
+        elif t1.description!=t2.description:
+            if t1.description<t2.description: return -1
+            return 1   
+        elif t1.id!=t2.id:
+            if t1.id<t2.id: return -1
+            return 1               
+        else:
+            return 0            
 
                     
