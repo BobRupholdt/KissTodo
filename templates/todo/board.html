@@ -83,11 +83,12 @@ var kisstodo_board = (function () {
             };
        
             $.post("{%url todo.views.list_delete%}", data, function (response) {
+                    kisstodo_board.show_message("List deleted.");
                     kisstodo_board.refresh_list_list(-1);
                     kisstodo_board.refresh_todo_list(-1);
             });        
     		
-            kisstodo_board.show_message("List deleted.");
+            
             return false;
         });   
 
@@ -537,7 +538,7 @@ var kisstodo_board = (function () {
 <input class="big" title="&raquo; CREATE A NEW LIST" size="22" autocomplete="off" type="text" id="name" name="name" /></form>
 <div id="list_list" ></div>
 <div class="small sort_by">
-sort by: <a href="#" id="sort_mode_d" class="sort_mode selected_link">DATE</a> <span class="light">  |  </span> <a href="#" id="sort_mode_p" class="sort_mode">PRIORITY</a>
+sort by: <a href="#" id="sort_mode_d" class="sort_mode selected_link">DATE</a><span class="light"> | </span><a href="#" id="sort_mode_p" class="sort_mode">PRIORITY</a>
 </div>
 <span id="todo_list"></span>
 {% endblock %}
