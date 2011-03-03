@@ -39,7 +39,7 @@ def board(request):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
     return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id}))
     
-def todo_list(request, list_id, sort_mode):
+def todo_list(request, list_id, sort_mode, show_complete='F'):
     #import time
     #time.sleep(1)
     if int(list_id)>0:
@@ -57,6 +57,11 @@ def todo_list(request, list_id, sort_mode):
     else:
         todos = Todo.objects.filter(list__id=list_id)
         
+    if (show_complete=='F'):
+        todos = [t for t in todos if not t.complete]
+        
+    #if show_complete is None: show_complete="N-A"
+    #return HttpResponse("***"+show_complete+"***", mimetype="text/plain")      
     return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list}))
     
 def list_list(request, selected_list_id):

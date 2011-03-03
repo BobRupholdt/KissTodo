@@ -31,17 +31,17 @@ var kisstodo_board = (function () {
         
         //$('#sort_mode').change(function() {kisstodo_board.refresh_selected_todo_list();});
         
-        $('#sort_mode_p').live('click', function() {
+        $('#sort_mode_P,#sort_mode_D,#sort_mode_A').live('click', function() {
             $('.sort_mode').removeClass('selected_link');
             $(this).addClass('selected_link');
-            kisstodo_board.sort_mode='P'; 
+            kisstodo_board.sort_mode=$(this).attr('id').replace('sort_mode_',''); 
             kisstodo_board.refresh_selected_todo_list();
         });
         
-        $('#sort_mode_d').live('click', function() {
-            $('.sort_mode').removeClass('selected_link');
+        $('#show_complete_T,#show_complete_F').live('click', function() {
+            $('.show_complete').removeClass('selected_link');
             $(this).addClass('selected_link');
-            kisstodo_board.sort_mode='D'; 
+            kisstodo_board.show_complete=$(this).attr('id').replace('show_complete_','');
             kisstodo_board.refresh_selected_todo_list();
         });        
         
@@ -151,9 +151,8 @@ var kisstodo_board = (function () {
             return true;
         });   
         
-        $(".help_toggle").hover(
-            function(){$('#help').fadeIn(kisstodo_board.default_animation_speed*2);},
-            function(){$('#help').fadeOut(kisstodo_board.default_animation_speed*2);}
+        $(".help_toggle").click(
+            function(){$('#help').toggle(0);}
         );
 
     }
@@ -173,9 +172,12 @@ var kisstodo_board = (function () {
         kisstodo_board.lockGui();
         $("#todo_list").fadeOut(kisstodo_board.default_animation_speed);
         
-        var ajax_url = "{% url todo.views.todo_list '#sort_mode' '' %}".replace('#sort_mode', kisstodo_board.sort_mode);
+        var ajax_url = "{% url todo_list_complete sort_mode='#sort_mode' list_id='#list_id' show_complete='#show_complete' %}";
+        ajax_url=ajax_url.replace('#sort_mode', kisstodo_board.sort_mode);
+        ajax_url=ajax_url.replace('#show_complete', kisstodo_board.show_complete);
+        ajax_url=ajax_url.replace('#list_id', list_id);
 
-        $.get(ajax_url+list_id, function(response) {
+        $.get(ajax_url, function(response) {
             $("#todo_list").html(response);
             $("#todo_list").fadeIn(kisstodo_board.default_animation_speed);
             
@@ -383,11 +385,12 @@ var kisstodo_board = (function () {
         if (event.which == 9) {
             if (kisstodo_board.is_edit_active()) return;
             
-            
             if (kisstodo_board.sort_mode=='D') { 
-                $('#sort_mode_p').click();
+                $('#sort_mode_P').click();
+            } else if (kisstodo_board.sort_mode=='P') {
+                $('#sort_mode_A').click();
             } else {
-                $('#sort_mode_d').click();
+                $('#sort_mode_D').click();
             }
             return false;
         }
@@ -497,6 +500,7 @@ var kisstodo_board = (function () {
     res.selected_todo_index=0;
     res.focused_element = '';
     res.sort_mode = 'D';
+    res.show_complete = 'T'
     
     // CONFIG
     res.default_animation_speed=150;
@@ -538,7 +542,12 @@ var kisstodo_board = (function () {
 <input class="big" title="&raquo; CREATE A NEW LIST" size="22" autocomplete="off" type="text" id="name" name="name" /></form>
 <div id="list_list" ></div>
 <div class="small sort_by">
-sort by: <a href="#" id="sort_mode_d" class="sort_mode selected_link">DATE</a><span class="light"> | </span><a href="#" id="sort_mode_p" class="sort_mode">PRIORITY</a>
+sort by: 
+<a href="#" id="sort_mode_D" class="sort_mode selected_link">DATE</a><span class="light"> | </span>
+<a href="#" id="sort_mode_P" class="sort_mode">PRIORITY</a><span class="light"> | </span>
+<a href="#" id="sort_mode_A" class="sort_mode">A-Z</a>
+<br/>
+show completed: <a href="#" class="show_complete selected_link" id="show_complete_T">YES</a><span class="light"> | </span><a href="#" class="show_complete" id="show_complete_F">NO</a>
 </div>
 <span id="todo_list"></span>
 {% endblock %}
