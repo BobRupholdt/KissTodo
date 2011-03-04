@@ -76,7 +76,6 @@ var kisstodo_board = (function () {
     
         $('.list_delete').live('click', function () { 
             var list_id=$(this).attr('id').replace('list_delete_','');
-            var item = $("#delete_list_form_"+list_id);
             
             var data = {
                 list_id: list_id
