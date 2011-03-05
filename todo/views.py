@@ -103,7 +103,14 @@ def todo_complete(request):
     _check_permission(t.list)
     t.complete=not t.complete
     t.save()
-    return HttpResponse("", mimetype="text/plain")    
+    return HttpResponse("", mimetype="text/plain")  
+
+def todo_postpone(request):
+    t=Todo.objects_raw.get(id=int(request.POST['todo_id']))
+    _check_permission(t.list)
+    t.postpone()
+    t.save()
+    return HttpResponse("", mimetype="text/plain")        
 
 def todo_edit(request, todo_id):
     t=Todo.objects_raw.get(id=int(todo_id))

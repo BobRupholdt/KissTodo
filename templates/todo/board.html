@@ -351,7 +351,13 @@ var kisstodo_board = (function () {
         if (event.which == 99) {
             if (kisstodo_board.is_edit_active()) return;
             $(".selected_todo .todo_complete").click();
-        }        
+        }   
+
+        // p
+        if (event.which == 112) {
+            if (kisstodo_board.is_edit_active()) return;
+            kisstodo_board.postpone_selected_todo();
+        }           
         
         // 1..4
         if (event.which >= 49 && event.which<=52) {
@@ -375,6 +381,23 @@ var kisstodo_board = (function () {
         kisstodo_board.refresh_list_list(list_id);
         kisstodo_board.refresh_todo_list(list_id);
     }    
+    
+    res.postpone_selected_todo = function() {
+        if ($('.selected_todo').length==0) return;
+        
+        var d = $(".selected_todo .todo_item");
+        var todo_id=$(".selected_todo").attr("id").replace('todo_li_', '');
+        d.fadeOut(kisstodo_board.default_animation_speed);
+        
+        var data = {
+                todo_id: todo_id
+        };
+            
+        $.post("{%url todo.views.todo_postpone%}", data, function (response) {
+                d.load("{%url todo.views.todo_show_item '' %}"+todo_id, function () {d.fadeIn(kisstodo_board.default_animation_speed);});      
+        });        
+        
+    }
 
     res.event_keydown = function(event) {  
         
@@ -526,8 +549,9 @@ var kisstodo_board = (function () {
     <tr><td><span class="kbd">&larr;</span> / <span class="kbd">&rarr;</span></td><td>select prev. / next list</td></td>
     <tr><td><span class="kbd">&uarr;</span> / <span class="kbd">&darr;</span></td><td>select prev. / next todo</td></td>
     <tr><td><span class="kbd">1</span> .. <span class="kbd">4</span></td><td>change todo priority<br/><span class="small">1 = max, 4 = none</span></td></td>
-    <tr><td><span class="kbd">c</span></td><td>(un)complete selected todo</td></td>
-    <tr><td><span class="kbd">d</span></td><td>delete selected todo</td></td>
+    <tr><td><span class="kbd">C</span></td><td>(un)complete selected todo</td></td>
+    <tr><td><span class="kbd">P</span></td><td>postopone selected todo</td></td>
+    <tr><td><span class="kbd">D</span></td><td>delete selected todo</td></td>
     <tr><td><span class="kbd">TAB</span></td><td>change todo sorting</td></td>
     <tr><td><span class="kbd">ENTER</span></td><td>edit / save selected todo</td></td>
     <tr><td><span class="kbd">ESC</span></td><td>cancel current edit</td></td>

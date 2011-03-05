@@ -52,7 +52,7 @@ class TodoTest(TestCase):
 
     def test_sorting(self):
         """
-        Tests Todo sorting
+        Tests different todo sorting
         """
         
         l = List(name='myList', owner='me')
@@ -76,15 +76,45 @@ class TodoTest(TestCase):
         t=Todo(description='t5', list=l, due_date=date(1984, 12, 31))
         t.save()                    
     
-        todos = Todo.todo_sort(Todo.objects.all())
+        todos = Todo.todo_sort(Todo.objects.all(), 'D') # by date
         
         assert(todos[0].description=="t5")     
         assert(todos[1].description=="t0")     
         assert(todos[2].description=="t3")     
         assert(todos[3].description=="t1")     
         assert(todos[4].description=="t4")             
-        assert(todos[5].description=="t2")         
-                
+        assert(todos[5].description=="t2")      
+
+        todos = Todo.todo_sort(Todo.objects.all(), 'P') # by priority
+
+        assert(todos[0].description=="t3")     
+        assert(todos[1].description=="t4")     
+        assert(todos[2].description=="t5")     
+        assert(todos[3].description=="t0")     
+        assert(todos[4].description=="t1")             
+        assert(todos[5].description=="t2")      
+        
+        todos = Todo.todo_sort(Todo.objects.all(), 'A') #  by description (a-z)
+
+        assert(todos[0].description=="t0")     
+        assert(todos[1].description=="t1")     
+        assert(todos[2].description=="t3")     
+        assert(todos[3].description=="t4")     
+        assert(todos[4].description=="t5")             
+        assert(todos[5].description=="t2")             
+        
+    def test_postpone(self):
+        """
+        Test postpone: if due_date is none, it is set to tomorrow, otherwise one more day is added
+        """
+        
+        t=Todo()
+        assert(t.due_date is None)
+        t.postpone()
+        d1=t.due_date
+        assert(t.due_date == datetime.now().date() + timedelta(days=1))
+        t.postpone()
+        assert(t.due_date == d1 + timedelta(days=1))
   
 class ListTest(TestCase):
     def test_logic_delete(self):

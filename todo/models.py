@@ -123,6 +123,10 @@ class Todo(models.Model):
     def is_overdue(self): 
         if self.due_date is None: return False
         return self.due_date.date() < datetime.now().date()
+        
+    def postpone(self): 
+        if self.due_date is None: self.due_date = datetime.now().date()
+        self.due_date = self.due_date + timedelta(days=1)
             
     def __unicode__(self):
         return u'%s' % (self.description)
@@ -134,19 +138,19 @@ class Todo(models.Model):
     def todo_sort(todos, mode):
         if mode=='D':
             todos=list(todos)
-            todos.sort(Todo._date_todo_sort_date)
+            todos.sort(Todo._todo_sort_date)
         elif mode=='P':
             todos=list(todos)
-            todos.sort(Todo._date_todo_sort_priority)      
+            todos.sort(Todo._todo_sort_priority)      
         elif mode=='A':
             todos=list(todos)
-            todos.sort(Todo._date_todo_sort_az)                  
+            todos.sort(Todo._todo_sort_az)                  
         else:
             raise Exception("Unknown sort mode: "+mode)
         return todos
     
     @staticmethod    
-    def _date_todo_sort_date(t1, t2):
+    def _todo_sort_date(t1, t2):
         if t1.complete!=t2.complete:
             if t1.complete: return 1
             return -1
@@ -168,7 +172,7 @@ class Todo(models.Model):
             return 0
             
     @staticmethod    
-    def _date_todo_sort_priority(t1, t2):
+    def _todo_sort_priority(t1, t2):
         if t1.complete!=t2.complete:
             if t1.complete: return 1
             return -1
@@ -190,7 +194,7 @@ class Todo(models.Model):
             return 0            
             
     @staticmethod    
-    def _date_todo_sort_az(t1, t2):
+    def _todo_sort_az(t1, t2):
         if t1.complete!=t2.complete:
             if t1.complete: return 1
             return -1
