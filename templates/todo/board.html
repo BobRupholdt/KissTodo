@@ -534,8 +534,10 @@ var kisstodo_board = (function () {
 </script>
 {% endblock %}
 
-{% block content_title %}KissTodo {% endblock %}
-{% block content_headline%}<span class="no_background"><a class="help_toggle" href="#"><img src="{{MEDIA_URL}}img/help.png" /></a></span>
+{% block content_title %}{% endblock %}
+{% block content_headline%}
+{{ block.super }}
+&nbsp;&nbsp;<span class="small"><a class="help_toggle" href="#">[HELP]</a></span>
 <div id="help" style="display:none;">
     <table>
     <tr><th colspan="2">Special, not deletable lists</th></tr>
@@ -558,7 +560,6 @@ var kisstodo_board = (function () {
     
     </table>
 </div>
-{{ block.super }}
 {% endblock %}
 {% block content %}
 <form method="post" action="." id="add_list_form" onSubmit="return kisstodo_board.add_list()">
@@ -566,11 +567,11 @@ var kisstodo_board = (function () {
 <div id="list_list" ></div>
 <div class="small sort_by">
 sort by: 
-<a href="#" id="sort_mode_D" class="sort_mode selected_link">DATE</a><span class="light"> | </span>
-<a href="#" id="sort_mode_P" class="sort_mode">PRIORITY</a><span class="light"> | </span>
-<a href="#" id="sort_mode_A" class="sort_mode">A-Z</a>
+<a href="#" id="sort_mode_D" class="sort_mode selected_link">[DATE]</a><span class="light"> | </span>
+<a href="#" id="sort_mode_P" class="sort_mode">[PRIORITY]</a><span class="light"> | </span>
+<a href="#" id="sort_mode_A" class="sort_mode">[A-Z]</a>
 <br/>
-show completed: <a href="#" class="show_complete selected_link" id="show_complete_T">YES</a><span class="light"> | </span><a href="#" class="show_complete" id="show_complete_F">NO</a>
+show completed: <a href="#" class="show_complete selected_link" id="show_complete_T">[YES]</a><span class="light"> | </span><a href="#" class="show_complete" id="show_complete_F">[NO]</a>
 </div>
 <span id="todo_list"></span>
 {% endblock %}
