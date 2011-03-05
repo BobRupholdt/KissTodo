@@ -1,13 +1,11 @@
 ﻿{% extends "todo/base_site.html" %}
-
+{% load todo_custom_tags %}
 {% block extra_head %}
 {{ block.super }}
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/overlay/jquery.hint.js"></script> 
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/blockui/jquery.blockUI.js"></script> 
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/ui/js/jquery-ui-1.8.10.custom.min.js"></script>
 <link href="{{MEDIA_URL}}js/jquery/ui/css/blitzer/jquery-ui-1.8.10.custom.css" rel="stylesheet" type="text/css" />
-
-
 
 <script type="text/javascript">
 
@@ -537,7 +535,7 @@ var kisstodo_board = (function () {
 {% block content_title %}{% endblock %}
 {% block content_headline%}
 {{ block.super }}
-&nbsp;&nbsp;<span class="small"><a class="help_toggle" href="#">[HELP]</a></span>
+<span class="small" style="float:right;position:absolute;right:100;">{% google_user %}<br/><a class="help_toggle" href="#">[HELP]</a></span>
 <div id="help" style="display:none;">
     <table>
     <tr><th colspan="2">Special, not deletable lists</th></tr>
