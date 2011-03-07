@@ -111,8 +111,10 @@ var kisstodo_board = (function () {
                 todo_id: todo_id
             };
             
+            kisstodo_board.lockGui();
             $.post("{%url todo.views.todo_delete%}", data, function (response) {
                 todo.remove();
+                kisstodo_board.unlockGui();
             });        
     		
             return false;
@@ -141,8 +143,10 @@ var kisstodo_board = (function () {
                 todo_id: todo_id
             };
             
+            kisstodo_board.lockGui();
             $.post("{%url todo.views.todo_complete%}", data, function (response) {
                 todo.toggleClass("complete");
+                kisstodo_board.unlockGui();
             });        
     		
             return true;
@@ -156,11 +160,16 @@ var kisstodo_board = (function () {
     
     res.update_todo = function(todo_id, data) {
         data.todo_id=todo_id
-            
+
+        kisstodo_board.lockGui();
         $.post("{%url todo.views.todo_edit ''%}"+todo_id, data, function (response) {
-            var p=''; 
-            if (data.priority<4) p='P'+data.priority;
-            $('#todo_li_'+data.todo_id+' .todo_priority').html(p);
+            var d = $(".selected_todo .todo_item");
+            d.fadeOut(kisstodo_board.default_animation_speed);
+            d.load("{%url todo.views.todo_show_item ''%}"+todo_id, function () {
+                d.fadeIn(kisstodo_board.default_animation_speed);
+                kisstodo_board.unlockGui();
+            });
+
         });    
         
     }
@@ -391,8 +400,11 @@ var kisstodo_board = (function () {
                 todo_id: todo_id
         };
             
+            
+        kisstodo_board.lockGui();
         $.post("{%url todo.views.todo_postpone%}", data, function (response) {
                 d.load("{%url todo.views.todo_show_item '' %}"+todo_id, function () {d.fadeIn(kisstodo_board.default_animation_speed);});      
+                kisstodo_board.unlockGui();
         });        
         
     }
