@@ -1,23 +1,13 @@
-<span class="list_item" id="list_item_{{inbox_list.id}}">
-    <a class="list{% if inbox_list.id|stringformat:"s" == selected_list_id %} selected_link selected_list{% endif %}" id="list_{{inbox_list.id}}" href="#">{{ inbox_list.name }}</a>
-</span>
-<span class="list light">  |  </span>
-<span class="list_item" id="list_item_-2">
-    <a class="list{% if -2|stringformat:"s" == selected_list_id %} selected_link selected_list{% endif %}" id="list_-2" href="#">@hot</a>
-</span>    
-<span class="list light">  |  </span>
-<span class="list_item" id="list_item_-3">
-    <a class="list{% if -3|stringformat:"s" == selected_list_id %} selected_link selected_list{% endif %}" id="list_-3" href="#">@trash</a>
-</span>    
+<span class="small">your lists:</span>
+<select id="selected_list_option" name="selected_list_option">
+<option value="{{inbox_list.id}}" >{{ inbox_list.name }}</option>
+<option value="-2">@hot</option>
+<option value="-3">@trash</option>
 {% for l in lists %}
-{% if l.name != "@inbox" %}
-<span class="list_item" id="list_item_{{l.id}}">
-    <a class="list{% if l.id|stringformat:"s" == selected_list_id %} selected_link selected_list{% endif %}" id="list_{{l.id}}" href="#">{{ l.name }}</a>
-    <span class="no_background">
-        <a style="display:none" href="#" class="list_edit" id="list_edit_{{l.id}}"><img alt="edit" src="{{MEDIA_URL}}img/edit.png" /></a> 
-        <a style="display:none" href="#" class="list_delete" id="list_delete_{{l.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a> 
-    </span>
-</span>
-{% if not forloop.last %}<span class="list light">  |  </span>{% endif %}
-{% endif %}    
+    {% if l.name != inbox_list.name %}<option value="{{l.id}}" {%if l.id|stringformat:"s" == selected_list_id%}selected="selected"{%endif%} >{{ l.name }}</option>{% endif %}  
 {% endfor %} 
+</select>
+<span class="list_edit_delete no_background" style="display:none;">
+        <a href="#" class="list_edit"><img alt="edit" src="{{MEDIA_URL}}img/edit.png" /></a> 
+        <a href="#" class="list_delete"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a> 
+</span>
