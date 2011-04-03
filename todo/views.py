@@ -143,7 +143,7 @@ def list_edit(request, list_id):
         return HttpResponse("", mimetype="text/plain")  
         #return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
     else:
-        return render_to_response('todo/list_edit.html', RequestContext(request, {'list':List.objects.get(id=int(list_id)),}))            
+        return render_to_response('todo/list_edit.html', RequestContext(request, {'list':l}))            
 
 def todo_show_item(request, todo_id):
     t = Todo.objects_raw.get(id=int(todo_id))
