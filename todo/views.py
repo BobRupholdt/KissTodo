@@ -258,4 +258,4 @@ def _get_current_user():
     return '[anonymous user]'
     
 class ImportRtmForm(forms.Form):
-    text = forms.CharField(widget=forms.Textarea())
+    text = forms.CharField(widget=forms.Textarea(), label='Atom feed')

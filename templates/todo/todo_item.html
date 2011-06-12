@@ -1,5 +1,5 @@
 <span class="todo_item">
-    <span class="todo_priority">{% if todo.priority < 4%}P{{ todo.priority }}{% endif %}</span>
+    <span class="todo_priority todo_priority_{{ todo.priority }}">{% if todo.priority < 4%}&nbsp;P{{ todo.priority }}&nbsp;{% endif %}</span>
     <span class="todo_description {% if todo.is_overdue %}overdue{% endif %}{% if todo.is_today%} today{% endif %}"><a href="#">{{ todo.description }}</a></span>
     <span class="small todo_list_name">{% if todo.due_date %}&nbsp;{{todo.due_date|date:'Y b d'}}{% endif %}{% if show_list %}&nbsp;[{{todo.list.name}}]{% endif %}</span>
     <span class="no_background">

@@ -126,10 +126,18 @@ ul.todos li {
 
 .todo_priority {
     font-weight: bold;
-    background-color:#ee0505;
+    background-color:#ea5200;
     color:#fff;
     font-size:10px;
     margin:0 1px;
+}
+
+.todo_priority_2 {
+    background-color:#0060bf;
+}
+
+.todo_priority_3 {
+    background-color:#359aff;
 }
 
 .today{

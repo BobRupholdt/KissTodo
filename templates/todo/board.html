@@ -1,4 +1,4 @@
-﻿{% extends "todo/base_site.html" %}
+﻿{% extends "todo/base_auth_site.html" %}
 {% load todo_custom_tags %}
 {% block extra_head %}
 {{ block.super }}
@@ -605,32 +605,9 @@ var kisstodo_board = (function () {
 {% endblock %}
 
 {% block content_title %}{% endblock %}
-{% block content_headline%}
-{{ block.super }}
-<span class="small" style="float:right;position:absolute;right:100;"><b>{% google_user %}</b><br/><a class="help_toggle" href="#">[HELP]</a></span>
-<div id="help" style="display:none;">
-    <table>
-    <tr><th colspan="2">Special, not deletable lists</th></tr>
-    <tr><td colspan="2"><b>@inbox</b>: when you delete a list, all todo are moved to @inbox.</td></tr>
-    <tr><td colspan="2"><b>@hot</b>: a list containing all todo with a priority OR a due date in the past OR within the next 7 days.</td></tr>
-    <tr><td colspan="2"><b>@trash</b>: when you delete a todo, it is moved into @trash list. You can un-delete the todo by clicking on the <img src="{{MEDIA_URL}}img/undo.png" /> icon.</td></tr>
-    </table>
-    
-    <table>
-    <tr><th colspan="2">Keyboard shortcuts</th></tr>
-    <tr><td><span class="kbd">&larr;</span> / <span class="kbd">&rarr;</span></td><td>select prev. / next list</td></td>
-    <tr><td><span class="kbd">&uarr;</span> / <span class="kbd">&darr;</span></td><td>select prev. / next todo</td></td>
-    <tr><td><span class="kbd">1</span> .. <span class="kbd">4</span></td><td>change todo priority<br/><span class="small">1 = max, 4 = none</span></td></td>
-    <tr><td><span class="kbd">C</span></td><td>(un)complete selected todo</td></td>
-    <tr><td><span class="kbd">P</span></td><td>postopone selected todo</td></td>
-    <tr><td><span class="kbd">D</span></td><td>delete selected todo</td></td>
-    <tr><td><span class="kbd">TAB</span></td><td>change todo sorting</td></td>
-    <tr><td><span class="kbd">ENTER</span></td><td>edit / save selected todo</td></td>
-    <tr><td><span class="kbd">ESC</span></td><td>cancel current edit</td></td>
-    
-    </table>
-</div>
-{% endblock %}
+
+{% block content_headline%}{{ block.super }}{% endblock %}
+
 {% block content %}
 <form method="post" action="." id="add_list_form" onSubmit="return kisstodo_board.add_list()">
 <input class="big" title="&raquo; CREATE A NEW LIST" size="22" autocomplete="off" type="text" id="name" name="name" /></form>
