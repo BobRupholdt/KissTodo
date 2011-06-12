@@ -66,6 +66,14 @@ indexes:
   properties:
   - name: deleted
   - name: complete
+  - name: due_date
+  - name: priority
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: deleted
+  - name: complete
   - name: priority
   - name: description
 
@@ -73,6 +81,15 @@ indexes:
   properties:
   - name: deleted
   - name: deleted
+  - name: priority
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: deleted
+  - name: external_source
+  - name: complete
+  - name: due_date
   - name: priority
   - name: description
 
@@ -96,6 +113,14 @@ indexes:
 - kind: todo_todo
   properties:
   - name: deleted
+  - name: priority
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: external_source
+  - name: complete
+  - name: due_date
   - name: priority
   - name: description
 

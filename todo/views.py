@@ -21,9 +21,11 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django import forms
 from random import choice
 from google.appengine.api import users
 from datetime import datetime
+
 
 from models import *
   
@@ -161,6 +163,92 @@ def todo_add(request):
     out = t.id
     return HttpResponse(out, mimetype="text/plain")     
     
+def import_rtm(request):
+    if request.method == 'POST':
+        
+        form = ImportRtmForm(request.POST)
+        if not form.is_valid(): return HttpResponse("FORM ERROR", mimetype="text/plain")     
+        
+        text = form.cleaned_data['text']
+        
+        from xml.dom import minidom
+        from datetime import datetime
+        
+        xmldoc = minidom.parseString(text.encode( "utf-8" ));
+        entries=xmldoc.getElementsByTagName("entry")
+        
+        out=""
+        
+        for t in Todo.objects_raw.filter(external_source="RememberTheMilk"):
+            if t.list.owner==_get_current_user(): t.delete_raw()
+            
+        for e in entries: 
+        
+            t = Todo()
+            t.description = e.getElementsByTagName("title")[0].firstChild.nodeValue
+            t.deleted = False
+            t.completed = False
+            
+            t.external_source = "RememberTheMilk"
+            t.external_id = e.getElementsByTagName("id")[0].firstChild.nodeValue
+            
+            
+            
+
+            out += 'external_id: "'+e.getElementsByTagName("id")[0].firstChild.nodeValue+'"\n'
+            out += "title: "+e.getElementsByTagName("title")[0].firstChild.nodeValue+"\n"
+    
+            count=0
+            field_name = ""
+            for c in e.getElementsByTagName("content")[0].getElementsByTagName("span"):
+                #out += ('"'+(c.firstChild.nodeValue or u"*")+'" ')
+                if count % 2 == 0: 
+                    field_name = str(c.firstChild.nodeValue).strip()[0:-1]
+                else:
+                    out += '"%s"=>"%s"' % (field_name, c.firstChild.nodeValue)
+                    
+                    if field_name == "Due": 
+                        t.due_date = _parse_date(c.firstChild.nodeValue)
+                    elif field_name == "Priority": 
+                        t.priority = str(_parse_priority(c.firstChild.nodeValue))
+                    elif field_name == "List": 
+                        t.list = _parse_list(c.firstChild.nodeValue, _get_current_user())
+                    out += u"\n"
+                        
+                count+=1
+            
+            out += t.__unicode__() +"\n"
+            out += "\n"
+            t.save()
+        return HttpResponse(out, mimetype="text/plain")     
+    else:
+        return render_to_response("todo/import_rtm_form.html",RequestContext(request, {'form': ImportRtmForm()}))  
+
+def _parse_date(date):
+    # 'never' or 'Mon 13 Jun 11 at 8:30AM' or 'Mon 13 Jun 11'
+    
+    if date=='never': return None
+    
+    try:
+        dt = datetime.strptime(date, '%a %d %b %y at %I:%M%p')
+    except:
+        dt = datetime.strptime(date, '%a %d %b %y')
+    return dt
+    
+def _parse_priority(priority):
+    # 'none', '1', '2', '3'
+    
+    if priority=='none': return 4
+    return int(priority)
+    
+def _parse_list(list, user):
+    if list=='Inbox': 
+        return List.objects.get_or_create_inbox(user)
+    else:
+        list, created = List.objects.get_or_create(name=list, owner=_get_current_user())
+        return list
+                        
+    return int(priority)     
 def _check_permission(list):
     if list.owner!=_get_current_user(): raise Exception("Permission denied")
     
@@ -169,3 +257,5 @@ def _get_current_user():
     if user: return  user.nickname()
     return '[anonymous user]'
     
+class ImportRtmForm(forms.Form):
+    text = forms.CharField(widget=forms.Textarea())

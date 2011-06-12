@@ -1,0 +1,22 @@
+﻿{% extends "todo/base_site.html" %}
+{% load todo_custom_tags %}
+{% block extra_head %}
+{{ block.super }}
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/overlay/jquery.hint.js"></script> 
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/blockui/jquery.blockUI.js"></script> 
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/hoverintent/jquery.hoverIntent.minified.js"></script> 
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/ui/js/jquery-ui-1.8.10.custom.min.js"></script>
+<link href="{{MEDIA_URL}}js/jquery/ui/css/blitzer/jquery-ui-1.8.10.custom.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block content_headline%}{{ block.super }}{% endblock %}
+
+{% block content %}
+    <form method="post" action="{% url todo.views.import_rtm %}" >
+        {{ form.as_table }}
+        {% csrf_token %}
+        <input type="submit" value="Ok" />
+    </form>
+{% endblock %}

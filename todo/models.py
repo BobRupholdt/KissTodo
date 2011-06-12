@@ -30,7 +30,7 @@ class List(models.Model):
     HOT_LIST_NAME = '@hot'
     TRASH_LIST_NAME = '@trash'
     
-    name = models.CharField(max_length=1000)
+    name = models.CharField(max_length=5000)
     owner = models.CharField(max_length=255)
     
     objects = ListManager() 
@@ -92,12 +92,15 @@ class TodoManager(models.Manager):
         return [t for t in deleted if t.list.owner == user]        
         
 class Todo(models.Model):
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=5000)
     priority = models.IntegerField(default=4)
     complete = models.BooleanField(default=False)
     list = models.ForeignKey(List)
     deleted = models.BooleanField(default=False)
     due_date = models.DateTimeField(null=True, blank=True)
+    
+    external_source = models.CharField(max_length=255, blank=True)
+    external_id = models.CharField(max_length=1000, blank=True)    
     
     objects = TodoManager() 
     objects_raw = models.Manager() 
