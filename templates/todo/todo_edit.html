@@ -1,17 +1,50 @@
-<select id="edit_todo_priority" name="edit_todo_priority" >
-    <option value="4" {% if todo.priority = 4 %}selected="selected"{% endif %}> - </option>
-    <option value="1" {% if todo.priority = 1 %}selected="selected"{% endif %}>P1</option>
-    <option value="2" {% if todo.priority = 2 %}selected="selected"{% endif %}>P2</option>
-    <option value="3" {% if todo.priority = 3 %}selected="selected"{% endif %}>P3</option>
-</select>
-<input type="text" value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
-<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" value="{{todo.due_date|date:'Y/m/d'}}" id="edit_todo_due_date" name="edit_todo_due_date" />
-<select id="edit_todo_list_id" name="edit_todo_list_id" >
-{% for l in lists %}
-    <option value="{{l.id}}" {% if todo.list.id = l.id%}selected="selected"{% endif %}>{{l.name}}</option>
-{% endfor %} 
-</select>
+<span class="small">Edit todo "{{ todo.description|truncatewords:5 }}"</span>
+<div style="float:left;height:120px; border:1px solid #aaa">
+<span style="float:left;margin:3px;">
+    <span class="small">priority</span><br/>
+    <select id="edit_todo_priority" name="edit_todo_priority" >
+        <option value="4" {% if todo.priority = 4 %}selected="selected"{% endif %}> - </option>
+        <option value="1" {% if todo.priority = 1 %}selected="selected"{% endif %}>P1</option>
+        <option value="2" {% if todo.priority = 2 %}selected="selected"{% endif %}>P2</option>
+        <option value="3" {% if todo.priority = 3 %}selected="selected"{% endif %}>P3</option>
+    </select>
+</span>
+
+<span style="float:left;margin:3px;">
+    <span class="small">description</span><br/>
+    <input type="text" value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
+</span>
+
+<span style="float:left;margin:3px;">
+    <span class="small">list</span><br/>
+    <select id="edit_todo_list_id" name="edit_todo_list_id" >
+    {% for l in lists %}
+        <option value="{{l.id}}" {% if todo.list.id = l.id%}selected="selected"{% endif %}>{{l.name}}</option>
+    {% endfor %} 
+    </select>
+</span>
+
+<div style="clear:both"></div>
+
+<span style="float:left;margin:3px;">
+    <span class="small">due date</span><br/>
+    <input type="text" value="{{todo.due_date|date:'Y/m/d'}}" id="edit_todo_due_date" name="edit_todo_due_date" />
+</span>
+
+<span style="float:left;margin:3px;">
+    <span class="small">repeat every</span><br/>
+    <input type="text" size="4" value="{% if todo.repeat_every%}{{todo.repeat_every}}{% endif%}" id="edit_todo_repeat_every" name="edit_todo_repeat_every" />
+    <select id="edit_todo_repeat_type" name="edit_todo_repeat_type" >
+    {% for x in repeat_type_choiches %}
+        <option value="{{x.0}}" {% if todo.repeat_type = x.0%}selected="selected"{% endif %}>{{x.1}}</option>
+    {% endfor %} 
+    </select>    
+</span>
+
 <script type="text/javascript">
     $("#edit_todo_due_date").datepicker({ dateFormat: 'yy/mm/dd', firstDay: 1 });
+   
 </script>
+
+</div>
+<div style="clear:both"></div>

@@ -16,7 +16,7 @@
 
 from django.db import models
 from django.db.models import Q
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 class ListManager(models.Manager):
     
@@ -90,7 +90,7 @@ class TodoManager(models.Manager):
         
         #due to a GAE limitation, it is not possibile to filter on list__owner
         return [t for t in deleted if t.list.owner == user]        
-        
+
 class Todo(models.Model):
     description = models.CharField(max_length=5000)
     priority = models.IntegerField(default=4)
@@ -99,8 +99,13 @@ class Todo(models.Model):
     deleted = models.BooleanField(default=False)
     due_date = models.DateTimeField(null=True, blank=True)
     
+    repeat_type_choiches = (('', ' - no repeat - '),    ('d', 'days'),    ('w', 'weeks'),   ('m', 'months'), ('y', 'years'),)
+    
+    repeat_type = models.CharField(max_length=1, choices=repeat_type_choiches, null=True, blank=True)
+    repeat_every = models.IntegerField(null=True, blank=True)
+    
     external_source = models.CharField(max_length=255, blank=True)
-    external_id = models.CharField(max_length=1000, blank=True)    
+    external_id = models.CharField(null=True)    
     
     objects = TodoManager() 
     objects_raw = models.Manager() 
@@ -111,6 +116,23 @@ class Todo(models.Model):
             self.save()
         else:
             self.delete_raw()
+            
+    def toggle_complete(self): 
+         if self.complete:
+            self.complete = False
+         else:
+            if (self.repeat_type and self.repeat_every):
+                today = datetime.now().date()
+                if self.repeat_type=="d":
+                    self.due_date = today + timedelta(days=self.repeat_every)
+                elif self.repeat_type=="w":
+                    self.due_date = today + timedelta(days=self.repeat_every*7)
+                elif self.repeat_type=="m":
+                    self.due_date = today + timedelta(days=self.repeat_every*30)
+                elif self.repeat_type=="y":
+                    self.due_date = date(year=today.year+repeat_every, month=today.month, day=today.day)
+            else:
+                self.complete = True
         
     def undelete(self): 
         self.deleted=False

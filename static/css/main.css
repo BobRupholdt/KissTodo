@@ -4,7 +4,7 @@
 
 body {
     font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
-	font-size: 16px;
+	font-size: 14px;
     margin:10px;
 }
 
@@ -188,6 +188,7 @@ ul.todos li {
     width:200px;
     text-align:center;
     font-weight: bold;
+    white-space:nowrap;
 }
 
 .todo_list_name {
@@ -200,5 +201,9 @@ div.ui-datepicker {
 }
 
 .content {
-    width:210px;
+    width:480px;
+}
+
+#description {
+     width:200px;
 }

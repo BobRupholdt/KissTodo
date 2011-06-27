@@ -103,8 +103,11 @@ def todo_undelete(request):
 def todo_complete(request):
     t=Todo.objects_raw.get(id=int(request.POST['todo_id']))
     _check_permission(t.list)
-    t.complete=not t.complete
+    
+    t.toggle_complete()
+    
     t.save()
+    
     return HttpResponse("", mimetype="text/plain")  
 
 def todo_postpone(request):
@@ -127,12 +130,16 @@ def todo_edit(request, todo_id):
             t.due_date=None
             if request.POST['due_date']: t.due_date=datetime.strptime(request.POST['due_date'],'%Y/%m/%d')
             
+        if 'repeat_type' in request.POST: t.repeat_type=request.POST['repeat_type']
+        if 'repeat_every' in request.POST and request.POST['repeat_every']: t.repeat_every=int(request.POST['repeat_every'])
+        
+
         t.save()
         
         #return HttpResponse("", mimetype="text/plain")  
         return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
     else:
-        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':t,'lists':List.objects.filter(owner=_get_current_user())}))
+        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':t,'repeat_type_choiches':Todo.repeat_type_choiches,'lists':List.objects.filter(owner=_get_current_user())}))
         
 def list_edit(request, list_id):
     l=List.objects.get(id=int(list_id))
@@ -167,20 +174,27 @@ def import_rtm(request):
     if request.method == 'POST':
         
         form = ImportRtmForm(request.POST)
-        if not form.is_valid(): return HttpResponse("FORM ERROR", mimetype="text/plain")     
+        if not form.is_valid(): return HttpResponse("FORM ERROR", mimetype="text/plain")           
         
-        text = form.cleaned_data['text']
+        url = form.cleaned_data['url']
+        
+        if url == "":
+            for t in Todo.objects_raw.filter(external_source="RememberTheMilk"):
+                if t.list.owner==_get_current_user(): t.delete_raw()
+            return HttpResponse("Empty atom feed received. Cleanup complete.", mimetype="text/plain")  
+            
+        import urllib2
+        text = urllib2.urlopen(url).read()
+        #return HttpResponse(text, mimetype="text/plain")             
         
         from xml.dom import minidom
         from datetime import datetime
         
-        xmldoc = minidom.parseString(text.encode( "utf-8" ));
+        #xmldoc = minidom.parseString(text.encode( "utf-8" ))
+        xmldoc = minidom.parseString(text)
         entries=xmldoc.getElementsByTagName("entry")
         
         out=""
-        
-        for t in Todo.objects_raw.filter(external_source="RememberTheMilk"):
-            if t.list.owner==_get_current_user(): t.delete_raw()
             
         for e in entries: 
         
@@ -191,9 +205,6 @@ def import_rtm(request):
             
             t.external_source = "RememberTheMilk"
             t.external_id = e.getElementsByTagName("id")[0].firstChild.nodeValue
-            
-            
-            
 
             out += 'external_id: "'+e.getElementsByTagName("id")[0].firstChild.nodeValue+'"\n'
             out += "title: "+e.getElementsByTagName("title")[0].firstChild.nodeValue+"\n"
@@ -258,4 +269,6 @@ def _get_current_user():
     return '[anonymous user]'
     
 class ImportRtmForm(forms.Form):
-    text = forms.CharField(widget=forms.Textarea(), label='Atom feed')
+    #text = forms.CharField(widget=forms.Textarea(), label='Atom feed', required=False)
+    url = forms.CharField(label='url', required=False)
+    

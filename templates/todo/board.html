@@ -7,6 +7,8 @@
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/hoverintent/jquery.hoverIntent.minified.js"></script> 
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/ui/js/jquery-ui-1.8.10.custom.min.js"></script>
 <link href="{{MEDIA_URL}}js/jquery/ui/css/blitzer/jquery-ui-1.8.10.custom.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/spinner/ui.spinner.min.js"></script> 
+<link href="{{MEDIA_URL}}js/jquery/spinner/ui.spinner.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
 
@@ -349,6 +351,7 @@ var kisstodo_board = (function () {
             $('#edit_todo_description').focus();
             //setTimeout( function(){$('#edit_todo_description').select();}, 20);
             kisstodo_board.unlockGui();
+            $('#edit_todo_repeat_every').spinner({ min: 1, max: 999 });
         });
     }     
     
@@ -367,7 +370,10 @@ var kisstodo_board = (function () {
                     description: $('#edit_todo_description').val(),
                     priority: $('#edit_todo_priority').val(),
                     list_id: $('#edit_todo_list_id').val(),
-                    due_date: $('#edit_todo_due_date').val()
+                    due_date: $('#edit_todo_due_date').val(),
+                    
+                    repeat_type: $('#edit_todo_repeat_type').val(),
+                    repeat_every: $('#edit_todo_repeat_every').val()
                 };
                 
                 $.post("{%url todo.views.todo_edit ''%}"+todo_id, data, function (response) {
@@ -609,10 +615,19 @@ var kisstodo_board = (function () {
 {% block content_headline%}{{ block.super }}{% endblock %}
 
 {% block content %}
-<form method="post" action="." id="add_list_form" onSubmit="return kisstodo_board.add_list()">
-<input class="big" title="&raquo; CREATE A NEW LIST" size="22" autocomplete="off" type="text" id="name" name="name" /></form>
-<div id="list_list" ></div>
-<div id="list_edit_container" ></div>
+
+<form style="_float:left" method="post" action="." id="add_list_form" onSubmit="return kisstodo_board.add_list()">
+<input class="big" title="&raquo; NEW LIST" size="22" autocomplete="off" type="text" id="name" name="name" />
+</form>
+  
+<span id="list_list" ></span>
+<span id="list_edit_container" ></span>
+
+<span class="message" style="height:16px;margin:2px;">
+    <span id="message_text" style="display:none;vertical-align:top;">message</span>
+    <span id="wait" style="display:none;"><img src="{{MEDIA_URL}}img/wait.gif" alt="wait" /></span>
+</span>
+
 <div class="small sort_by">
 sort by: 
 <a href="#" id="sort_mode_D" class="sort_mode selected_link">[DATE]</a><span class="light"> | </span>
