@@ -56,6 +56,9 @@ def todo_list(request, list_id, sort_mode, show_complete='F'):
     elif int(list_id)==-3:
         todos = Todo.objects.deleted(_get_current_user())
         show_list = True    
+    elif int(list_id)==-4:
+        todos = Todo.objects.all_by_user(_get_current_user())
+        show_list = True          
     else:
         todos = Todo.objects.filter(list__id=list_id)
         

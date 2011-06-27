@@ -28,6 +28,7 @@ class List(models.Model):
 
     INBOX_LIST_NAME = '@inbox'
     HOT_LIST_NAME = '@hot'
+    ALL_LIST_NAME = '@all'
     TRASH_LIST_NAME = '@trash'
     
     name = models.CharField(max_length=5000)
@@ -45,6 +46,7 @@ class List(models.Model):
         if self.name==List.INBOX_LIST_NAME: return
         if self.name==List.HOT_LIST_NAME: return
         if self.name==List.TRASH_LIST_NAME: return
+        if self.name==List.ALL_LIST_NAME: return
         
         todos_raw = Todo.objects_raw.filter(list=self).all()
         
@@ -89,7 +91,10 @@ class TodoManager(models.Manager):
         deleted = super(TodoManager, self).get_query_set().filter(deleted=True).order_by("priority", "description")
         
         #due to a GAE limitation, it is not possibile to filter on list__owner
-        return [t for t in deleted if t.list.owner == user]        
+        return [t for t in deleted if t.list.owner == user]   
+
+    def all_by_user(self, user):
+        return [t for t in self.all() if t.list.owner == user]
 
 class Todo(models.Model):
     description = models.CharField(max_length=5000)

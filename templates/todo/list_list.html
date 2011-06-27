@@ -2,6 +2,7 @@
 <select id="selected_list_option" name="selected_list_option">
 <option value="{{inbox_list.id}}" >{{ inbox_list.name }}</option>
 <option value="-2">@hot</option>
+<option value="-4">@all</option>
 <option value="-3">@trash</option>
 {% for l in lists %}
     {% if l.name != inbox_list.name %}<option value="{{l.id}}" {%if l.id|stringformat:"s" == selected_list_id%}selected="selected"{%endif%} >{{ l.name }}</option>{% endif %}  

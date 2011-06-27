@@ -22,7 +22,6 @@ var kisstodo_board = (function () {
     res.init_board=function() {
 
         kisstodo_board.refresh_list_list({{inbox_list_id}});
-        kisstodo_board.refresh_todo_list({{inbox_list_id}});
        
         $('#description').hint();
         $('#description').blur();
@@ -80,8 +79,7 @@ var kisstodo_board = (function () {
        
             $.post("{%url todo.views.list_delete%}", data, function (response) {
                     kisstodo_board.show_message("List deleted.");
-                    kisstodo_board.refresh_list_list(-1);
-                    kisstodo_board.refresh_todo_list(-1);
+                    kisstodo_board.refresh_list_list({{inbox_list_id}});
             });        
     		
             
@@ -233,6 +231,8 @@ var kisstodo_board = (function () {
             kisstodo_board.unlockGui();
             kisstodo_board.update_list_edit_tools();
             $("#list_list").fadeIn(kisstodo_board.default_animation_speed);
+            
+            kisstodo_board.refresh_todo_list(selected_list_id);
         });   
     }    
     
@@ -307,7 +307,6 @@ var kisstodo_board = (function () {
                 
         $.post("{%url todo.views.list_add%}", data, function (response) {
             kisstodo_board.refresh_list_list(response);
-            kisstodo_board.refresh_todo_list(response);
         });
 
         kisstodo_board.show_message("List created.");
@@ -316,7 +315,7 @@ var kisstodo_board = (function () {
     
     res.update_list_edit_tools = function() {
         var index = $('#selected_list_option').attr('selectedIndex');
-        if (index<3) 
+        if (index<4) 
             $('.list_edit_delete').hide();
         else
             $('.list_edit_delete').show();
@@ -388,7 +387,6 @@ var kisstodo_board = (function () {
                 
                 $.post("{%url todo.views.list_edit ''%}"+list_id, data, function (response) {
                     kisstodo_board.refresh_list_list(list_id);
-                    kisstodo_board.refresh_todo_list(list_id);
                     
                     $('#list_edit_container').fadeOut(kisstodo_board.default_animation_speed);
                     $('#list_edit_container').html("");
@@ -437,7 +435,6 @@ var kisstodo_board = (function () {
     res.list_edit_abort = function() {
         var list_id=$('#selected_list_option').val();
         kisstodo_board.refresh_list_list(list_id);
-        kisstodo_board.refresh_todo_list(list_id);
         $('#list_edit_container').fadeOut(kisstodo_board.default_animation_speed);
         $('#list_edit_container').html("");
     }    
