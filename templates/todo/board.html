@@ -166,6 +166,9 @@ var kisstodo_board = (function () {
             
             kisstodo_board.lockGui();
             $.post("{%url todo.views.todo_complete%}", data, function (response) {
+                var d = $(".selected_todo .todo_item");
+                d.fadeOut(kisstodo_board.default_animation_speed);
+                d.load("{%url todo.views.todo_show_item '' %}"+todo_id, function () {d.fadeIn(kisstodo_board.default_animation_speed);});      
                 todo.toggleClass("complete");
                 kisstodo_board.unlockGui();
             });        
@@ -173,7 +176,7 @@ var kisstodo_board = (function () {
             return true;
         });   
         
-        $(".help_toggle").click(
+        $(".help_toggle, #help").click(
             function(){$('#help').toggle(0);}
         );
 
