@@ -1,8 +1,4 @@
-<span class="todo_item">
-    <span class="todo_priority todo_priority_{{ todo.priority }}">{% if todo.priority < 4%}&nbsp;P{{ todo.priority }}&nbsp;{% endif %}</span>
-    <span class="todo_description {% if todo.is_overdue %}overdue{% endif %}{% if todo.is_today%} today{% endif %}"><a href="#">{{ todo.description }}</a></span>
-    <span class="small todo_list_name">{% if todo.due_date %}&nbsp;{{todo.due_date|date:'Y b d'}}{% endif %}{% if todo.repeat_type %}&nbsp;<img alt="repeat" src="{{MEDIA_URL}}img/repeat.png" />{% endif %}{% if show_list %}&nbsp;[{{todo.list.name}}]{% endif %}</span>
-    <span class="no_background"><a href="#" class="todo_delete" id="todo_delete_{{todo.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a>{% if todo.deleted %}&nbsp;<a href="#" class="todo_undelete" id="todo_undelete_{{todo.id}}"><img alt="undelete" src="{{MEDIA_URL}}img/undo.png" /></a>{% endif %}</span>
-</span>
-
-
+<span class="todo_priority todo_priority_{{ todo.priority }}">{% if todo.priority < 4%}&nbsp;P{{ todo.priority }}&nbsp;{% endif %}</span>
+<span class="todo_description {% if todo.is_overdue %}overdue{% endif %}{% if todo.is_today%} today{% endif %}"><a href="#">{{ todo.description }}</a></span>
+<span class="small todo_list_name">{% if todo.due_date %}&nbsp;{{todo.due_date|date:'Y b d'}}{% endif %}{% if todo.repeat_type %}&nbsp;<img alt="repeat" src="{{MEDIA_URL}}img/repeat.png" />{% endif %}{% if show_list %}&nbsp;[{{todo.list.name}}]{% endif %}</span>
+<span class="no_background" ><a href="#" class="todo_delete" id="todo_delete_{{todo.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a>{% if todo.deleted %}&nbsp;<a href="#" class="todo_undelete" id="todo_undelete_{{todo.id}}"><img alt="undelete" src="{{MEDIA_URL}}img/undo.png" /></a>{% endif %}</span>

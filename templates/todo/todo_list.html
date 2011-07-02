@@ -12,7 +12,9 @@
     <li style="white-space:nowrap;" id="todo_li_{{ t.id }}" class="todo_li {% if t.complete %}complete{% endif %}">
         <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} /> 
         {% with t as todo %}
+            <span class="todo_item" style="display:inline">
             {% include "todo/todo_item.html" %}
+            </span>
         {% endwith %}
     </li>
     {% endfor %} 

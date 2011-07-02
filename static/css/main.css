@@ -40,12 +40,13 @@ input.blur {
 textarea { width: 400px;}
 
 input:focus, select:focus, textarea:focus {
-    /*background-color: #efe578;*/
-    border: 1px solid #efe578;
+    border: 1px solid #cd0707;
 }
 
-a:link, a:visited  {color: #666; text-decoration: none}
-a:hover, a.selected_link   {background: #efe578; text-decoration: none; }
+a:link, a:visited  {color: #666; text-decoration: none;}
+a:hover, a.selected_link   {background: #cd0707; color:#fff; text-decoration: none;}
+
+.small a:link, .small a:visited, .small a:hover, .small a.selected_link   {padding:0 3px;}
 
 .no_background a:hover
 {
@@ -68,7 +69,7 @@ label {
 
 table.grid { border-collapse: collapse; }
 table.grid,table.grid th,table.grid td { border: 1px solid #ddd; padding: 6px; }
-table.grid th {color: #666; background-color: #efe578; padding:2px;}
+table.grid th {color: #fff; background-color: #cd0707; padding:2px;}
 table.grid tr.alternate_row { background-color: #f3f3f3;}
 
 .menu {
@@ -125,16 +126,23 @@ ul.todos li {
     cursor: default;
 }
 .selected_todo  .todo_description {
-    background-color:#efe578;
-    /*font-style:italic;*/
+    background-color:#cd0707;
+    color: #666;
+    text-decoration: none;
 }
+.selected_todo  .todo_description a {
+    color: #fff;
+}
+
 
 .todo_priority {
     font-weight: bold;
-    background-color:#ea5200;
+    /*background-color:#ea5200;*/
+    background-color:#cd0707;
     color:#fff;
     font-size:10px;
     margin:0 1px;
+    padding:2px 0 1px 0;
 }
 
 .todo_priority_2 {
@@ -192,8 +200,8 @@ ul.todos li {
 
 #message_text {
     -moz-border-radius: 4px 4px 4px 4px;
-    background-color: #efe578;
-    color: #d21;
+    background-color: #cd0707;
+    color: #fff;
     width:200px;
     text-align:center;
     font-weight: bold;

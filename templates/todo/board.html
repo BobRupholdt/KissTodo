@@ -240,9 +240,8 @@ var kisstodo_board = (function () {
     }    
     
     res.select_next_list = function(increment) {
-    
         var option_count = $('#selected_list_option option').length;
-        var selected_index = $('#selected_list_option').attr('selectedIndex');
+        var selected_index = $('#selected_list_option').prop('selectedIndex');
         
         var new_selected_index = selected_index + increment;
         
@@ -250,7 +249,7 @@ var kisstodo_board = (function () {
         if (new_selected_index>=option_count) new_selected_index = option_count-1;        
         
         if (selected_index!=new_selected_index) {
-            $('#selected_list_option').attr('selectedIndex', new_selected_index);
+            $('#selected_list_option').prop('selectedIndex', new_selected_index);
             $('#selected_list_option').change();
         }
         
@@ -317,7 +316,7 @@ var kisstodo_board = (function () {
     }    
     
     res.update_list_edit_tools = function() {
-        var index = $('#selected_list_option').attr('selectedIndex');
+        var index = $('#selected_list_option').prop('selectedIndex');
         if (index<4) 
             $('.list_edit_delete').hide();
         else
@@ -379,8 +378,8 @@ var kisstodo_board = (function () {
                 };
                 
                 $.post("{%url todo.views.todo_edit ''%}"+todo_id, data, function (response) {
-                    d.html(response);
-                    d.fadeIn(kisstodo_board.default_animation_speed);
+                    d.fadeOut(0);
+                    d.load("{%url todo.views.todo_show_item '' %}"+todo_id, function () {d.fadeIn(kisstodo_board.default_animation_speed);});
                 });    
             }
             else if (kisstodo_board.is_list_edit_active()) {
@@ -630,11 +629,11 @@ var kisstodo_board = (function () {
 
 <div class="small sort_by">
 sort by: 
-<a href="#" id="sort_mode_D" class="sort_mode selected_link">[DATE]</a><span class="light"> | </span>
-<a href="#" id="sort_mode_P" class="sort_mode">[PRIORITY]</a><span class="light"> | </span>
-<a href="#" id="sort_mode_A" class="sort_mode">[A-Z]</a>
+<a href="#" id="sort_mode_D" class="sort_mode selected_link">DATE</a><span class="light"> | </span>
+<a href="#" id="sort_mode_P" class="sort_mode">PRIORITY</a><span class="light"> | </span>
+<a href="#" id="sort_mode_A" class="sort_mode">A-Z</a>
 <br/>
-show completed: <a href="#" class="show_complete selected_link" id="show_complete_T">[YES]</a><span class="light"> | </span><a href="#" class="show_complete" id="show_complete_F">[NO]</a>
+show completed: <a href="#" class="show_complete selected_link" id="show_complete_T">YES</a><span class="light"> | </span><a href="#" class="show_complete" id="show_complete_F">NO</a>
 </div>
 <span id="todo_list"></span>
 {% endblock %}
