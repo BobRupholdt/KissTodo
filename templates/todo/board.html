@@ -356,6 +356,28 @@ var kisstodo_board = (function () {
         });
     }     
     
+    res.save_selected_todo = function() {
+        var todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
+        var d = $(".selected_todo .todo_item");
+        
+        var data = {
+            todo_id: todo_id,
+            description: $('#edit_todo_description').val(),
+            priority: $('#edit_todo_priority').val(),
+            list_id: $('#edit_todo_list_id').val(),
+            due_date: $('#edit_todo_due_date').val(),
+            
+            repeat_type: $('#edit_todo_repeat_type').val(),
+            repeat_every: $('#edit_todo_repeat_every').val()
+        };
+        
+        kisstodo_board.lockGui();
+        $.post("{%url todo.views.todo_edit ''%}"+todo_id, data, function (response) {
+            d.fadeOut(0);
+            d.load("{%url todo.views.todo_show_item '' %}"+todo_id, function () {d.fadeIn(kisstodo_board.default_animation_speed);kisstodo_board.unlockGui();});
+        });    
+    }
+    
     res.event_keypress = function(event) {
         
         //console.log ("event_keypress: "+event.which);
@@ -363,24 +385,7 @@ var kisstodo_board = (function () {
         // enter
         if (event.which == 13) {
             if (kisstodo_board.is_todo_edit_active()) {
-                var todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
-                var d = $(".selected_todo .todo_item");
-                
-                var data = {
-                    todo_id: todo_id,
-                    description: $('#edit_todo_description').val(),
-                    priority: $('#edit_todo_priority').val(),
-                    list_id: $('#edit_todo_list_id').val(),
-                    due_date: $('#edit_todo_due_date').val(),
-                    
-                    repeat_type: $('#edit_todo_repeat_type').val(),
-                    repeat_every: $('#edit_todo_repeat_every').val()
-                };
-                
-                $.post("{%url todo.views.todo_edit ''%}"+todo_id, data, function (response) {
-                    d.fadeOut(0);
-                    d.load("{%url todo.views.todo_show_item '' %}"+todo_id, function () {d.fadeIn(kisstodo_board.default_animation_speed);});
-                });    
+                kisstodo_board.save_selected_todo();
             }
             else if (kisstodo_board.is_list_edit_active()) {
                 var list_id=$('#selected_list_option').val();

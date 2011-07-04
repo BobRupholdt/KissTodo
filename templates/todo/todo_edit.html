@@ -1,6 +1,7 @@
 <span class="small">Edit todo "{{ todo.description|truncatewords:5 }}"</span>
 <br/>
-<div style="float:left;height:120px; border:1px solid #aaa">
+<div style="float:left;height:150px; border:1px solid #aaa">
+
 <span style="float:left;margin:3px;">
     <span class="small">priority</span><br/>
     <select id="edit_todo_priority" name="edit_todo_priority" >
@@ -13,7 +14,7 @@
 
 <span style="float:left;margin:3px;">
     <span class="small">description</span><br/>
-    <input type="text" value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
+    <input type="text" style="width:145px" value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
 </span>
 
 <span style="float:left;margin:3px;">
@@ -40,6 +41,12 @@
         <option value="{{x.0}}" {% if todo.repeat_type = x.0%}selected="selected"{% endif %}>{{x.1}}</option>
     {% endfor %} 
     </select>    
+</span>
+
+<div style="clear:both"></div>
+
+<span style="float:right;margin:3px;">
+    <input type="submit" name="edit_todo_ok" id="edit_todo_ok"  value="save" onClick="kisstodo_board.save_selected_todo();return false;"  />
 </span>
 
 <script type="text/javascript">

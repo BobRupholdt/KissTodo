@@ -126,7 +126,7 @@ ul.todos li {
     cursor: default;
 }
 .selected_todo  .todo_description {
-    background-color:#cd0707;
+    background-color:#a0a7a7;
     color: #666;
     text-decoration: none;
 }
