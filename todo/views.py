@@ -168,6 +168,12 @@ def todo_add(request):
     
     t=Todo()
     t.description=request.POST['description']
+    
+    for p in range(1,4):
+        if t.description[0:2]=="!"+str(p): 
+            t.priority=p
+            t.description=t.description[2:]
+
     t.list=l
     t.save()
     out = t.id
