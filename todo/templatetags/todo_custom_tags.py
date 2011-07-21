@@ -32,3 +32,21 @@ def google_user():
     else:
         return "[a]"
     
+@register.filter
+def atom_date(value):
+    if not value : return 'never'
+    return value.strftime('%a %d %b %y')
+    
+@register.filter
+def atom_priority(value):
+    if not value or value>3 : return 'none'
+    
+    return int(value)
+    
+@register.filter
+def atom_repeat_type(value):
+    if not value: return 'none'
+    
+    return value
+    
+    

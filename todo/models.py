@@ -127,7 +127,9 @@ class Todo(models.Model):
             self.complete = False
          else:
             if (self.repeat_type and self.repeat_every):
+            
                 today = datetime.now().date()
+                
                 if self.repeat_type=="d":
                     self.due_date = today + timedelta(days=self.repeat_every)
                 elif self.repeat_type=="w":

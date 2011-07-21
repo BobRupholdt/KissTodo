@@ -182,7 +182,7 @@ def import_rtm(request):
         url = form.cleaned_data['url']
         
         if url == "":
-            for t in Todo.objects_raw.filter(external_source="RememberTheMilk"):
+            for t in Todo.objects_raw.filter(external_source="ATOM"):
                 if t.list.owner==_get_current_user(): t.delete_raw()
             return HttpResponse("Empty atom feed received. Cleanup complete.", mimetype="text/plain")  
             
@@ -206,7 +206,7 @@ def import_rtm(request):
             t.deleted = False
             t.completed = False
             
-            t.external_source = "RememberTheMilk"
+            t.external_source = "ATOM"
             t.external_id = e.getElementsByTagName("id")[0].firstChild.nodeValue
 
             out += 'external_id: "'+e.getElementsByTagName("id")[0].firstChild.nodeValue+'"\n'
@@ -227,6 +227,12 @@ def import_rtm(request):
                         t.priority = str(_parse_priority(c.firstChild.nodeValue))
                     elif field_name == "List": 
                         t.list = _parse_list(c.firstChild.nodeValue, _get_current_user())
+                    elif field_name == "URL": 
+                        t.description += " (%s)" % (c.firstChild.firstChild.nodeValue,)
+                    elif field_name == "Repeat every": 
+                        t.repeat_every = int(c.firstChild.nodeValue)
+                    elif field_name == "Repeat type": 
+                        t.repeat_type = _parse_repeat_type(c.firstChild.nodeValue)
                     out += u"\n"
                         
                 count+=1
@@ -237,6 +243,18 @@ def import_rtm(request):
         return HttpResponse(out, mimetype="text/plain")     
     else:
         return render_to_response("todo/import_rtm_form.html",RequestContext(request, {'form': ImportRtmForm()}))  
+        
+def export_atom(request):
+   
+    list=[]
+    
+    for t in Todo.objects.filter(complete=False):
+        if t.list.owner==_get_current_user(): list.append(t)
+            
+    return render_to_response("todo/export_atom.atom",RequestContext(request, {'todos': list}))  # , mimetype="application/atom+xml"
+    #return HttpResponse(out, mimetype="text/plain")
+    #return HttpResponse(out, mimetype="application/atom+xml")     
+      
 
 def _parse_date(date):
     # 'never' or 'Mon 13 Jun 11 at 8:30AM' or 'Mon 13 Jun 11'
@@ -254,6 +272,12 @@ def _parse_priority(priority):
     
     if priority=='none': return 4
     return int(priority)
+    
+def _parse_repeat_type(r):
+    # 'none', 'd', 'w', 'm', 'y'
+    
+    if r=='none': return ''
+    return r
     
 def _parse_list(list, user):
     if list=='Inbox': 

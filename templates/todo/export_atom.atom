@@ -1,0 +1,19 @@
+{% load todo_custom_tags %}<?xml version="1.0" encoding="UTF-8"?>
+<feed>
+{% for t in todos %}  
+<entry>
+    <id>{{ t.id  }}</id>
+    <title type="html">{{ t.description }}</title>
+    <content type="xhtml">
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            <div class="rtm_due"><span class="rtm_due_title">Due: </span><span class="rtm_due_value">{{ t.due_date|atom_date  }}</span></div>
+            <div class="rtm_priority"><span class="rtm_priority_title">Priority: </span><span class="rtm_priority_value">{{ t.priority|atom_priority }}</span></div>
+            <div class="rtm_list"><span class="rtm_list_title">List: </span><span class="rtm_list_value">{{ t.list }}</span></div>
+            <div class="repeat_every"><span class="repeat_every_title">Repeat every: </span><span class="repeat_every_value">{{ t.repeat_every|default_if_none:"1" }}</span></div>
+            <div class="repeat_type"><span class="repeat_type_title">Repeat type: </span><span class="repeat_type_value">{{ t.repeat_type|atom_repeat_type }}</span></div> 
+        </div>
+    </content>
+</entry>
+
+{% endfor %} 
+</feed>
