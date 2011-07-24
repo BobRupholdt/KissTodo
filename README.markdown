@@ -15,4 +15,8 @@ External libraries:
 * [JQuery hint](http://code.google.com/p/jquery-values/source/browse/other/hint/?r=98)
 * [JQuery BlockUI](http://jquery.malsup.com/block/)
 
-More info: [massimobarbieri.it](http://www.massimobarbieri.it)  
+Screenshot:
+
+![screenshot](screenshot_001.png)
+
+More info: [massimobarbieri.it/KissTodo](http://www.massimobarbieri.it/KissTodo)  
