@@ -114,6 +114,7 @@ ul.todos li {
     text-decoration: line-through;
     font-style:italic;
     font-weight: normal;
+    font-size: 12px;
 }
 
 .complete .todo_description a {
