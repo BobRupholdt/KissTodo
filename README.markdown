@@ -17,6 +17,6 @@ External libraries:
 
 Screenshot:
 
-![screenshot](screenshot_001.png)
+![screenshot](http://www.massimobarbieri.it/KissTodo/screenshot_001.png)
 
 More info: [massimobarbieri.it/KissTodo](http://www.massimobarbieri.it/KissTodo)  
