@@ -17,6 +17,7 @@
 from django.db import models
 from django.db.models import Q
 from datetime import date, datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 class ListManager(models.Manager):
     
@@ -110,7 +111,7 @@ class Todo(models.Model):
     repeat_every = models.IntegerField(null=True, blank=True)
     
     external_source = models.CharField(max_length=255, blank=True)
-    external_id = models.CharField(null=True)    
+    external_id = models.CharField(null=True,max_length=2000)    
     
     objects = TodoManager() 
     objects_raw = models.Manager() 
@@ -135,7 +136,7 @@ class Todo(models.Model):
                 elif self.repeat_type=="w":
                     self.due_date = today + timedelta(days=self.repeat_every*7)
                 elif self.repeat_type=="m":
-                    self.due_date = today + timedelta(days=self.repeat_every*30)
+                    self.due_date = today + relativedelta(months=self.repeat_every)
                 elif self.repeat_type=="y":
                     self.due_date = date(year=today.year+repeat_every, month=today.month, day=today.day)
             else:
