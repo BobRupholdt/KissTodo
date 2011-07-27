@@ -138,7 +138,7 @@ class Todo(models.Model):
                 elif self.repeat_type=="m":
                     self.due_date = today + relativedelta(months=self.repeat_every)
                 elif self.repeat_type=="y":
-                    self.due_date = date(year=today.year+repeat_every, month=today.month, day=today.day)
+                    self.due_date = today + relativedelta(years=self.repeat_every)
             else:
                 self.complete = True
         
