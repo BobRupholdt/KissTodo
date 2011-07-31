@@ -232,7 +232,9 @@ class Todo(models.Model):
             if t1.complete: return 1
             return -1
         elif t1.description!=t2.description:
-            if t1.description<t2.description: return -1
+            if not t1.description:return -1
+            if not t2.description:return 1
+            if t1.description.upper()<t2.description.upper(): return -1
             return 1              
         elif t1.priority!=t2.priority:
             if t1.priority<t2.priority: return -1
