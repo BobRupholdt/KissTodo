@@ -39,17 +39,16 @@ $(function() {
 {% block content_headline%}{{ block.super }}{% endblock %}
 
 {% block content %}
-<form style="_float:left" method="post" action="." id="add_list_form" onSubmit="return kisstodo_board.add_list()">
+<form style="display:inline" method="post" action="." id="add_list_form" onSubmit="return kisstodo_board.add_list()">
 <input class="big" title="&raquo; NEW LIST" size="22" autocomplete="off" type="text" id="name" name="name" />
+<span class="message">
+    <span id="wait" style="display:none;"><img src="{{MEDIA_URL}}img/wait.gif" alt="wait" /></span>
+    <span id="message_text" style="display:none;vertical-align:center;">message</span>
+</span>
 </form>
-  
+<br/>
 <span id="list_list" ></span>
 <span id="list_edit_container" ></span>
-
-<span class="message" style="height:16px;margin:2px;">
-    <span id="message_text" style="display:none;vertical-align:center;">message</span>
-    <span id="wait" style="display:none;"><img src="{{MEDIA_URL}}img/wait.gif" alt="wait" /></span>
-</span>
 
 <div class="small sort_by">
 sort by: 

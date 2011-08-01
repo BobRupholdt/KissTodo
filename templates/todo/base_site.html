@@ -37,13 +37,13 @@
             </div>
         </div>
         
-        <span class="content_title" style="width:100px;">
+        <div class="content_title" style="width:100px;">
             <div style="display:inline">
                 <span class="no_background"><a class="nobg" href="{% url todo.views.board %}"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a></span>
                 <h1 style="display:inline">{% block content_title %}{% endblock %}</h1>
             </div>
             {% block content_headline %}{% endblock %}
-        </span>
+        </div>
         
         <div class="content">
             {% block content %}{% endblock %}

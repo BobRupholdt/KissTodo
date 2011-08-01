@@ -60,8 +60,8 @@ var kisstodo_board = (function () {
             };
        
             $.post(kisstodo_board.urls['list_delete'], data, function (response) {
-                    kisstodo_board.show_message("List deleted.");
                     kisstodo_board.refresh_list_list(kisstodo_board.inbox_list_id);
+                    kisstodo_board.show_message("List deleted.");
             });        
     		
             
@@ -291,9 +291,10 @@ var kisstodo_board = (function () {
                 
         $.post(kisstodo_board.urls['list_add'], data, function (response) {
             kisstodo_board.refresh_list_list(response);
+            kisstodo_board.show_message("List created.");
         });
 
-        kisstodo_board.show_message("List created.");
+        
         return false;
     }    
     
