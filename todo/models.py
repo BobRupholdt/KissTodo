@@ -196,8 +196,10 @@ class Todo(models.Model):
             if t1.priority<t2.priority: return -1
             return 1   
         elif t1.description!=t2.description:
-            if t1.description<t2.description: return -1
-            return 1   
+            if not t1.description:return -1
+            if not t2.description:return 1
+            if t1.description.upper()<t2.description.upper(): return -1
+            return 1
         elif t1.id!=t2.id:
             if t1.id<t2.id: return -1
             return 1               
@@ -218,8 +220,10 @@ class Todo(models.Model):
             if t1.due_date<t2.due_date: return -1
             return 1                
         elif t1.description!=t2.description:
-            if t1.description<t2.description: return -1
-            return 1   
+            if not t1.description:return -1
+            if not t2.description:return 1
+            if t1.description.upper()<t2.description.upper(): return -1
+            return 1     
         elif t1.id!=t2.id:
             if t1.id<t2.id: return -1
             return 1               

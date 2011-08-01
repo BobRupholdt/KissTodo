@@ -39,7 +39,8 @@ def test_page(request):
 
 def board(request):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
-    return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id}))
+    logout_url=users.create_logout_url("todo/board")
+    return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url}))
     
 def todo_list(request, list_id, sort_mode, show_complete='F'):
     #import time

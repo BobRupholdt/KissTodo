@@ -3,8 +3,8 @@
 
 {% block content_headline%}
 {{ block.super }}
-<span class="small" style="float:right;position:absolute;right:100;"><b>{% google_user %}</b><br/><a class="help_toggle" href="#">HELP</a></span>
-<div id="help" style="display:none;">
+<span class="small" style="float:right;position:absolute;right:100;"><b>{% google_user %}</b> <a href="{{logout_url}}">logout</a> <a class="help_toggle" href="#">help</a></span>
+<div id="help" style="display:none;" class="small">
     <table>
     <tr><th colspan="2">Special, not deletable lists</th></tr>
     <tr><td colspan="2"><b>@inbox</b>: when you delete a list, all todo are moved to @inbox.</td></tr>
