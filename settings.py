@@ -7,9 +7,8 @@ import os
 
 SECRET_KEY = '7vyl7&d^725^kllplihdr2f#a7q15c#gcdlaih4h^-%93v%36^'
 
-
 # barmassimo
-DEBUG = True
+DEBUG = False
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'static')
 MEDIA_URL = '/static/'
