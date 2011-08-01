@@ -18,11 +18,11 @@
         
         <div class="header">
             <div class="float_right">
-                <div class="menu" style="display:none;">
+                {% if false %}
+                <div class="menu">
                     Welcome, <strong>{%google_user%}</strong>
                 </div>
                 
-                {% if false %}
                 <div class="menu menu_border">
                     
                     <span>
@@ -37,13 +37,13 @@
             </div>
         </div>
         
-        <p class="content_title" style="width:100px;">
+        <span class="content_title" style="width:100px;">
             <div style="display:inline">
                 <span class="no_background"><a class="nobg" href="{% url todo.views.board %}"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a></span>
                 <h1 style="display:inline">{% block content_title %}{% endblock %}</h1>
             </div>
             {% block content_headline %}{% endblock %}
-        </p>
+        </span>
         
         <div class="content">
             {% block content %}{% endblock %}
