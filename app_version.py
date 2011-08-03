@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 APP_VERSION_MAJOR=1
-APP_VERSION_MINOR=21
-APP_VERSION_FIX=5
+APP_VERSION_MINOR=23
+APP_VERSION_FIX=2
 
 APP_VERSION="%s.%s.%s" % (APP_VERSION_MAJOR, APP_VERSION_MINOR, APP_VERSION_FIX)

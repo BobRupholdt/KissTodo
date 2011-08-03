@@ -35,7 +35,7 @@ def google_user():
 @register.filter
 def atom_date(value):
     if not value : return 'never'
-    return value.strftime('%a %d %b %y')
+    return value.strftime('%a %d %b %y %H:%M')
     
 @register.filter
 def atom_priority(value):

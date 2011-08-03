@@ -26,9 +26,8 @@ from random import choice
 from google.appengine.api import users
 from datetime import datetime
 
-
 from models import *
-  
+
 def test_page(request):
     if 'op' in request.POST and request.POST['op']=='simulate error':
         raise Exception("Simulated Error!")
@@ -41,7 +40,29 @@ def board(request):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
     logout_url=users.create_logout_url("todo/board")
     return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url}))
+
+def todo_send_mail(request):
+
+    from google.appengine.api import mail
     
+    todos = Todo.objects.hot('barmassimo')
+
+    if len(todos)==0: return HttpResponse("Nothing to do.", mimetype="text/plain")       
+    
+    address_from = "daily_reminder@kisstodo2.appspotmail.com" 
+    address_to = "barmassimo@gmail.com"
+    subject="KissTodo daily reminder"
+    body="Your todos:"
+    for t in todos:
+        body +="\r\n"+t.description
+    
+    mail.send_mail(sender=address_from,
+              to=address_to,
+              subject=subject,
+              body=body)
+    
+    return HttpResponse("Ok.", mimetype="text/plain")       
+
 def todo_list(request, list_id, sort_mode, show_complete='F'):
     #import time
     #time.sleep(1)
@@ -132,7 +153,14 @@ def todo_edit(request, todo_id):
         if 'list_id' in request.POST: t.list=List.objects.get(id=int(request.POST['list_id']))
         if 'due_date' in request.POST: 
             t.due_date=None
-            if request.POST['due_date']: t.due_date=datetime.strptime(request.POST['due_date'],'%Y/%m/%d')
+            if request.POST['due_date']: 
+                try:
+                    t.due_date=datetime.strptime(request.POST['due_date'],'%Y/%m/%d %H:%M') # 2012/12/21 15:42
+                except:
+                    try:
+                        t.due_date=datetime.strptime(request.POST['due_date'],'%Y/%m/%d') # 2012/12/21
+                    except:
+                        pass # wrong format
             
         if 'repeat_type' in request.POST: t.repeat_type=request.POST['repeat_type']
         if 'repeat_every' in request.POST and request.POST['repeat_every']: t.repeat_every=int(request.POST['repeat_every'])
@@ -264,12 +292,12 @@ def export_atom(request):
       
 
 def _parse_date(date):
-    # 'never' or 'Mon 13 Jun 11 at 8:30AM' or 'Mon 13 Jun 11'
+    # 'never' or 'Mon 13 Jun 11 18:30' or 'Mon 13 Jun 11'
     
     if date=='never': return None
     
     try:
-        dt = datetime.strptime(date, '%a %d %b %y at %I:%M%p')
+        dt = datetime.strptime(date, '%a %d %b %y %H:%M')
     except:
         dt = datetime.strptime(date, '%a %d %b %y')
     return dt
