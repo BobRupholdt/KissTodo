@@ -26,6 +26,12 @@ indexes:
   - name: complete
   - name: deleted
   - name: due_date
+
+- kind: todo_todo
+  properties:
+  - name: complete
+  - name: deleted
+  - name: due_date
   - name: description
 
 - kind: todo_todo
@@ -44,6 +50,20 @@ indexes:
   - name: due_date
   - name: priority
   - name: description
+
+- kind: todo_todo
+  properties:
+  - name: complete
+  - name: deleted
+  - name: notify_done
+  - name: due_date
+
+- kind: todo_todo
+  properties:
+  - name: complete
+  - name: deleted
+  - name: notify_todo
+  - name: due_date
 
 - kind: todo_todo
   properties:

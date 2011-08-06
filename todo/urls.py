@@ -34,6 +34,7 @@ urlpatterns = patterns('',
     (r'^ajax/todo/postpone/$', todo_postpone),
     (r'^ajax/todo/edit/(?P<todo_id>.*)$', todo_edit),
     (r'^ajax/todo/show_item/(?P<todo_id>.*)$', todo_show_item),
+    (r'^ajax/todo/empty_trash/$', todo_empty_trash),
     
     (r'^import/rtm$', import_rtm),
     (r'^export/atom$', export_atom),

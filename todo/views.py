@@ -23,8 +23,10 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django import forms
 from random import choice
-from google.appengine.api import users
 from datetime import datetime
+
+from google.appengine.api import users
+from google.appengine.api import mail
 
 from models import *
 
@@ -41,28 +43,34 @@ def board(request):
     logout_url=users.create_logout_url("todo/board")
     return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url}))
 
-def todo_send_mail(request):
-
-    from google.appengine.api import mail
-    
-    todos = Todo.objects.hot('barmassimo')
-
-    if len(todos)==0: return HttpResponse("Nothing to do.", mimetype="text/plain")       
-    
+def _do_send_mail(t):
     address_from = "daily_reminder@kisstodo2.appspotmail.com" 
-    address_to = "barmassimo@gmail.com"
-    subject="KissTodo daily reminder"
-    body="Your todos:"
-    for t in todos:
-        body +="\r\n"+t.description
+    address_to = t.list.owner
+    if not '@' in address_to: address_to += "@gmail.com"
+    subject="KissTodo reminder"
+    body="This is a reminder for your todo:\n\n"+t.description+" from list '"+t.list.name+"', at "+str(t.due_date)+"\n\n"+"-- \nKissTodo notify service"
     
-    mail.send_mail(sender=address_from,
-              to=address_to,
-              subject=subject,
-              body=body)
+    mail.send_mail(sender=address_from,to=address_to,subject=subject,body=body)
     
-    return HttpResponse("Ok.", mimetype="text/plain")       
+def todo_send_mail(request):
+    
+    todos = Todo.objects.filter(notify_todo=True, complete=False, due_date__isnull=False).order_by('due_date')
+        
+    res = "\nres:\n"
+    now = datetime.now() 
+    for t in todos: 
+        if t.due_date - timedelta(minutes=t.notify_minutes) + timedelta(minutes=t.time_offset)< now:
+            res += "\nTODO:"+t.description+"\n"
+            _do_send_mail(t)
+            t.notify_todo=False
+            t.save()
+        
+    return HttpResponse(str(now)+res, mimetype="text/plain") 
 
+def todo_empty_trash(request):
+    for t in Todo.objects.deleted(_get_current_user()): t.delete_raw()
+    return HttpResponse("", mimetype="text/plain") 
+    
 def todo_list(request, list_id, sort_mode, show_complete='F'):
     #import time
     #time.sleep(1)
@@ -71,6 +79,7 @@ def todo_list(request, list_id, sort_mode, show_complete='F'):
         _check_permission(l)
     
     show_list = False
+    show_empty_trash = False
     
     if int(list_id)==-2:
         todos = Todo.objects.hot(_get_current_user())
@@ -78,6 +87,7 @@ def todo_list(request, list_id, sort_mode, show_complete='F'):
     elif int(list_id)==-3:
         todos = Todo.objects.deleted(_get_current_user())
         show_list = True    
+        if len(todos)>0: show_empty_trash = True
     elif int(list_id)==-4:
         todos = Todo.objects.all_by_user(_get_current_user())
         show_list = True          
@@ -89,7 +99,8 @@ def todo_list(request, list_id, sort_mode, show_complete='F'):
         
     #if show_complete is None: show_complete="N-A"
     #return HttpResponse("***"+show_complete+"***", mimetype="text/plain")      
-    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list}))
+    
+    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash}))
     
 def list_list(request, selected_list_id):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
@@ -165,6 +176,11 @@ def todo_edit(request, todo_id):
         if 'repeat_type' in request.POST: t.repeat_type=request.POST['repeat_type']
         if 'repeat_every' in request.POST and request.POST['repeat_every']: t.repeat_every=int(request.POST['repeat_every'])
         
+        if 'notify_minutes' in request.POST and request.POST['notify_minutes']: t.notify_minutes=int(request.POST['notify_minutes'])
+        
+        if 'time_offset' in request.POST and request.POST['time_offset']: t.time_offset=int(request.POST['time_offset'])
+        
+        t.update_notify_todo()
 
         t.save()
         

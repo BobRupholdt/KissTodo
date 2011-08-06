@@ -1,3 +1,4 @@
 cron:
-
-  
+- description: daily reminder
+  url: /todo/send_mail
+  schedule: every 5 minutes

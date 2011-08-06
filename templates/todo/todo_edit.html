@@ -1,6 +1,6 @@
 <span class="small">Edit todo "{{ todo.description|truncatewords:5 }}"</span>
 <br/>
-<div style="float:left;height:150px; border:1px solid #aaa">
+<div style="float:left;height:200px; border:1px solid #aaa">
 
 <span style="float:left;margin:3px;">
     <span class="small">priority</span><br/>
@@ -40,6 +40,22 @@
     {% for x in repeat_type_choiches %}
         <option value="{{x.0}}" {% if todo.repeat_type = x.0%}selected="selected"{% endif %}>{{x.1}}</option>
     {% endfor %} 
+    </select>    
+</span>
+
+<div style="clear:both"></div>
+
+<span style="float:left;margin:3px;">
+    <span class="small">notify me</span><br/>
+    <select id="edit_todo_notify_minutes" name="edit_todo_notify_minutes" >
+        <option value="-1" {% if todo.notify_minutes = -1%}selected="selected"{% endif %}>don't notify</option>
+        <option value="10" {% if todo.notify_minutes = 10%}selected="selected"{% endif %}>10 minutes before</option>
+        <option value="30" {% if todo.notify_minutes = 30%}selected="selected"{% endif %}>30 minutes before</option>
+        <option value="60" {% if todo.notify_minutes = 60%}selected="selected"{% endif %}>1 hour before</option>
+        <option value="120" {% if todo.notify_minutes = 120%}selected="selected"{% endif %}>2 hours before</option>
+        <option value="240" {% if todo.notify_minutes = 240%}selected="selected"{% endif %}>4 hours before</option>
+        <option value="480" {% if todo.notify_minutes = 480%}selected="selected"{% endif %}>8 hours before</option>
+        <option value="1440" {% if todo.notify_minutes = 1440%}selected="selected"{% endif %}>24 hours before</option>
     </select>    
 </span>
 

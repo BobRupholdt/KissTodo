@@ -113,6 +113,11 @@ class Todo(models.Model):
     external_source = models.CharField(max_length=255, blank=True)
     external_id = models.CharField(null=True,max_length=2000)    
     
+    notify_minutes = models.IntegerField(default=-1)
+    notify_todo = models.BooleanField(default=False)
+    
+    time_offset = models.IntegerField(default=0)
+    
     objects = TodoManager() 
     objects_raw = models.Manager() 
     
@@ -121,7 +126,7 @@ class Todo(models.Model):
             self.deleted=True
             self.save()
         else:
-            self.delete_raw()
+            self.delete_raw()   
             
     def toggle_complete(self): 
          if self.complete:
@@ -139,6 +144,8 @@ class Todo(models.Model):
                     self.due_date = today + relativedelta(months=self.repeat_every)
                 elif self.repeat_type=="y":
                     self.due_date = today + relativedelta(years=self.repeat_every)
+                    
+                self.update_notify_todo()
             else:
                 self.complete = True
         
@@ -148,6 +155,12 @@ class Todo(models.Model):
         
     def delete_raw(self): 
         super(Todo, self).delete()
+    
+    def update_notify_todo(self): 
+        if self.notify_minutes>=0: 
+            self.notify_todo = True 
+        else: 
+            self.notify_todo = False        
 
     def is_today(self): 
         if self.due_date is None: return False

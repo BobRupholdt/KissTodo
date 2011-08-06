@@ -68,6 +68,18 @@ var kisstodo_board = (function () {
             return false;
         });   
         
+        $('#empty_trash').live('click', function () { 
+            var list_id=$('#selected_list_option').val();
+            
+            var data = {};
+       
+            $.post(kisstodo_board.urls['todo_empty_trash'], data, function (response) {
+                    kisstodo_board.refresh_list_list(kisstodo_board.inbox_list_id);
+            });        
+    		
+            return false;
+        });   
+        
         $('.list_item').live('hover', function () { 
         
             var config = {    
@@ -351,7 +363,11 @@ var kisstodo_board = (function () {
             due_date: $('#edit_todo_due_date').val(),
             
             repeat_type: $('#edit_todo_repeat_type').val(),
-            repeat_every: $('#edit_todo_repeat_every').val()
+            repeat_every: $('#edit_todo_repeat_every').val(),
+            
+            notify_minutes: $('#edit_todo_notify_minutes').val(),
+            
+            time_offset: new Date().getTimezoneOffset()
         };
         
         kisstodo_board.lockGui();
