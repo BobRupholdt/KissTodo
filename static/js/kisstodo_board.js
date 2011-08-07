@@ -170,9 +170,11 @@ var kisstodo_board = (function () {
             return true;
         });   
         
-        $(".help_toggle, #help").click(
+        $(".help_toggle").colorbox({inline:true, href:"#help"});
+        
+        /*$(".help_toggle, #help").click(
             function(){$('#help').toggle(0);}
-        );
+        );*/
 
     }
     

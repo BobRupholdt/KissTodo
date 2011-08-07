@@ -4,7 +4,8 @@
 {% block content_headline%}
 {{ block.super }}
 <span class="small" style="float:right;position:absolute;right:100;"><b>{% google_user %}</b> <a href="{{logout_url}}">logout</a> <a class="help_toggle" href="#">help</a></span>
-<div id="help" style="display:none;" class="small">
+<div style='display:none'>
+<div id="help" class="small">
     <table>
     <tr><th colspan="2">Special, not deletable lists</th></tr>
     <tr><td colspan="2"><b>@inbox</b>: when you delete a list, all todo are moved to @inbox.</td></tr>
@@ -29,5 +30,6 @@
     <tr><th colspan="2">Todo smart insert</th></tr>
     <tr><td colspan="2"><b>priority</b>: start a new task description with !1, !2 or !3, and the priority will be automatically assigned.</td></tr>
     </table>    
+</div>
 </div>
 {% endblock %}
