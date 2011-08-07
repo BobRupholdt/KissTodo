@@ -1,0 +1,10 @@
+This is a reminder for your todo:
+
+{{t.description}} 
+
+from list {{t.list.name}}, due at {{t.due_date|}} {{todo.due_date|time:"G:i"}}
+
+Have a nice day.
+
+-- 
+KissTodo notification service

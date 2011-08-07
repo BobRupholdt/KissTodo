@@ -25,6 +25,8 @@ from django import forms
 from random import choice
 from datetime import datetime
 
+import os
+
 from google.appengine.api import users
 from google.appengine.api import mail
 
@@ -44,16 +46,17 @@ def board(request):
     return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url}))
 
 def _do_send_mail(t):
-    address_from = "daily_reminder@kisstodo2.appspotmail.com" 
+    address_from = "todo_reminder@"+str(os.environ['APPLICATION_ID'])+".appspotmail.com" 
     address_to = t.list.owner
     if not '@' in address_to: address_to += "@gmail.com"
-    subject="KissTodo reminder"
-    body="This is a reminder for your todo:\n\n"+t.description+" from list '"+t.list.name+"', at "+str(t.due_date)+"\n\n"+"-- \nKissTodo notify service"
-    
-    mail.send_mail(sender=address_from,to=address_to,subject=subject,body=body)
-    
+    subject="KissTodo notification"
+
+    template = get_template('todo/todo_notification_email.txt')
+    ctx=RequestContext(request, {'todo':t})
+
+    mail.send_mail(sender=address_from,to=address_to,subject=subject,body=template.render(ctx))
+
 def todo_send_mail(request):
-    
     todos = Todo.objects.filter(notify_todo=True, complete=False, due_date__isnull=False).order_by('due_date')
         
     res = "\nres:\n"
