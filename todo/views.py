@@ -46,7 +46,7 @@ def board(request):
     logout_url=users.create_logout_url("todo/board")
     return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url}))
 
-def _do_send_mail(t):
+def _do_send_mail(t, request):
     address_from = "todo_reminder@"+str(os.environ['APPLICATION_ID'])+".appspotmail.com" 
     address_to = t.list.owner
     if not '@' in address_to: address_to += "@gmail.com"
@@ -65,7 +65,7 @@ def todo_send_mail(request):
     for t in todos: 
         if t.due_date - timedelta(minutes=t.notify_minutes) + timedelta(minutes=t.time_offset)< now:
             res += "\nTODO:"+t.description+"\n"
-            _do_send_mail(t)
+            _do_send_mail(t, request)
             t.notify_todo=False
             t.save()
         

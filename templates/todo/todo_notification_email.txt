@@ -1,8 +1,8 @@
 This is a reminder for your todo:
 
-{{t.description}} 
+{{todo.description}} 
 
-from list {{t.list.name}}, due at {{t.due_date|}} {{todo.due_date|time:"G:i"}}
+from list {{todo.list.name}}, due at {{todo.due_date}}
 
 Have a nice day.
 
