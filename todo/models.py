@@ -19,6 +19,8 @@ from django.db.models import Q
 from datetime import date, datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
+# from dbindexer.api import register_index
+
 class ListManager(models.Manager):
     
     def get_or_create_inbox(self, user):
@@ -87,6 +89,15 @@ class TodoManager(models.Manager):
         
         #due to a GAE limitation, it is not possibile to filter on list__owner
         return [t for t in hot if t.list.owner == user]
+        
+    def search(self, user, string):
+        #due to a GAE limitation, it is not possibile to filter on list__owner
+        
+        #todos = list(self.filter(idxf_description_l_icontains=string).order_by("idxf_description_l_icontains"))
+        #return [t for t in todos if t.list.owner == user]        
+        
+        todos = self.all()
+        return [t for t in todos if t.list.owner == user and t.description.upper().find(string.upper())>-1]        
         
     def deleted(self, user):
         deleted = super(TodoManager, self).get_query_set().filter(deleted=True).order_by("priority", "description")
@@ -267,4 +278,4 @@ class Todo(models.Model):
         else:
             return 0            
 
-                    
+# register_index(Todo, {'description': 'icontains'})

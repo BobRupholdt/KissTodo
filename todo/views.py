@@ -75,6 +75,14 @@ def todo_empty_trash(request):
     for t in Todo.objects.deleted(_get_current_user()): t.delete_raw()
     return HttpResponse("", mimetype="text/plain") 
     
+def todo_search(request, search_string, sort_mode, show_complete='F'):
+    todos = Todo.objects.search(_get_current_user(), search_string)
+    
+    if (show_complete=='F'):
+        todos = [t for t in todos if not t.complete]
+        
+    return render_to_response('todo/todo_list.html', RequestContext(request, {'todos':Todo.todo_sort(todos, sort_mode), 'show_list': True }))
+
 def todo_list(request, list_id, sort_mode, show_complete='F'):
     #import time
     #time.sleep(1)
@@ -100,9 +108,6 @@ def todo_list(request, list_id, sort_mode, show_complete='F'):
         
     if (show_complete=='F'):
         todos = [t for t in todos if not t.complete]
-        
-    #if show_complete is None: show_complete="N-A"
-    #return HttpResponse("***"+show_complete+"***", mimetype="text/plain")      
     
     return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash}))
     

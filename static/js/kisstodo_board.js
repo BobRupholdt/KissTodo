@@ -194,6 +194,24 @@ var kisstodo_board = (function () {
         
     }
     
+    res.search_todo = function(search_string) {
+        kisstodo_board.lockGui();
+        $("#todo_list").fadeOut(kisstodo_board.default_animation_speed);
+        
+        var ajax_url = kisstodo_board.urls['todo_search'];
+        
+        ajax_url=ajax_url.replace('#sort_mode', kisstodo_board.sort_mode);
+        ajax_url=ajax_url.replace('#show_complete', kisstodo_board.show_complete);
+        ajax_url=ajax_url.replace('#search_string', $("#search_string").val());
+        
+        $.get(ajax_url, function(response) {
+            $("#todo_list").html(response);
+            $("#todo_list").fadeIn(kisstodo_board.default_animation_speed);
+            kisstodo_board.unlockGui();
+            $("#search_string").focus();
+        });  
+    }
+    
     res.refresh_todo_list = function (list_id) {
         kisstodo_board.lockGui();
         $("#todo_list").fadeOut(kisstodo_board.default_animation_speed);
@@ -403,6 +421,12 @@ var kisstodo_board = (function () {
             else if ($(".selected_todo").length>0) {
                 kisstodo_board.edit_selected_todo();
             }
+            else if (kisstodo_board.focused_element=='search_string') {
+                search_string = $("#search_string").val();
+                if (search_string=="") return;
+                kisstodo_board.search_todo(search_string);
+            }
+            
         }
         
         //  d

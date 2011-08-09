@@ -46,6 +46,12 @@ indexes:
   properties:
   - name: complete
   - name: deleted
+  - name: idxf_description_l_contains
+
+- kind: todo_todo
+  properties:
+  - name: complete
+  - name: deleted
   - name: list_id
   - name: due_date
   - name: priority
@@ -116,6 +122,20 @@ indexes:
   properties:
   - name: deleted
   - name: external_source
+  - name: complete
+  - name: due_date
+  - name: priority
+  - name: description
+
+- kind: todo_todo
+  properties:
+  - name: deleted
+  - name: idxf_description_l_icontains
+
+- kind: todo_todo
+  properties:
+  - name: deleted
+  - name: idxf_description_l_icontains
   - name: complete
   - name: due_date
   - name: priority
