@@ -21,6 +21,10 @@ handlers:
   expiration: '0'
   login: admin
   
+- url: /todo/send_mail
+  script: djangoappengine/main/main.py
+  login: admin  
+  
 - url: /.*
   script: djangoappengine/main/main.py
   login: admin
