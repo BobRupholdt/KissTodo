@@ -2,6 +2,7 @@
 {% load todo_custom_tags %}
 {% block extra_head %}
 {{ block.super }}
+
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/overlay/jquery.hint.js"></script> 
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/blockui/jquery.blockUI.js"></script> 
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/hoverintent/jquery.hoverIntent.minified.js"></script> 
@@ -33,6 +34,8 @@ $(function() {
     kisstodo_board.urls['todo_empty_trash']="{%url todo.views.todo_empty_trash%}";
     
     kisstodo_board.init_board();
+    
+    window.scrollTo(1,0);
 });
 
 </script>

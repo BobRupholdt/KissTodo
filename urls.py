@@ -33,4 +33,6 @@ urlpatterns = patterns('',
 
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/img/favicon.ico'}),
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',{'document_root': settings.MEDIA_ROOT}),
+    
+    (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/todo/board'}),
 )
