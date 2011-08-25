@@ -4,6 +4,11 @@ var kisstodo_board = (function () {
     res.init_board=function() {
     
         $(document).ajaxStart(function() { kisstodo_board.lockGui(); }).ajaxStop(function() { kisstodo_board.unlockGui(); });        
+        
+        $(document).ajaxError(function(e, xhr, settings, exception) {
+          //alert("A network error occurred: " + xhr.status + " " + xhr.responseText);
+          kisstodo_board.show_message("Network error.");
+        });
 
         kisstodo_board.refresh_list_list(kisstodo_board.inbox_list_id);
        
@@ -173,8 +178,8 @@ var kisstodo_board = (function () {
         /*$(".help_toggle, #help").click(function(){$('#help').toggle(0);});*/
         
         $("#list_list").touchwipe({
-             wipeLeft: function() { kisstodo_board.select_next_list(-1); },
-             wipeRight: function() { kisstodo_board.select_next_list(1); },
+             wipeLeft: function() { kisstodo_board.select_next_list(1); },
+             wipeRight: function() { kisstodo_board.select_next_list(-1); },
              wipeUp: function() { },
              wipeDown: function() { },
              min_move_x: 20,
