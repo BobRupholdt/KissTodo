@@ -315,7 +315,10 @@ def export_atom(request):
     #return HttpResponse(out, mimetype="text/plain")
     #return HttpResponse(out, mimetype="application/atom+xml")     
       
-
+def cache_manifest(request):
+    return HttpResponse(get_template('todo/cache.manifest').render(RequestContext(request, {'host': request.META.get('HTTP_HOST')})), mimetype="text/cache-manifest")
+   
+ 
 def _parse_date(date):
     # 'never' or 'Mon 13 Jun 11 18:30' or 'Mon 13 Jun 11'
     

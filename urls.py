@@ -20,9 +20,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 from django.conf import settings
-urlpatterns = patterns('',
 
-    
+from todo.views import *
+
+urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     
@@ -35,4 +36,6 @@ urlpatterns = patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',{'document_root': settings.MEDIA_ROOT}),
     
     (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/todo/board'}),
+    
+    (r'^cache.manifest$', cache_manifest),
 )
