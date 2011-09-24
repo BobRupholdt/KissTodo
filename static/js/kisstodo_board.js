@@ -10,10 +10,30 @@ var kisstodo_board = (function () {
         $(document).ajaxStart(function() { kisstodo_board.lockGui(); }).ajaxStop(function() { kisstodo_board.unlockGui(); });        
         
         $(document).ajaxError(function(e, xhr, settings, exception) {
-          //alert("A network error occurred: " + xhr.status + " " + xhr.responseText);
-          kisstodo_board.show_message("Network error.");
+          //console.log("AE:"+xhr.status);
+          
+          if (localStorage.getItem("redirected")=="true")
+          {
+                kisstodo_board.show_message("Network error.");
+                localStorage.setItem("redirected","false");
+          }
+          else
+          {
+            localStorage.setItem("redirected","true")
+            window.location.replace(kisstodo_board.urls['login']);
+          }
+          
           //kisstodo_board.check_network();
         });
+        
+        //$(document).ajaxComplete(function(e, xhr, settings) {
+        //console.log("AC status:"+xhr.status);
+        //console.log("AC location:"+xhr.location);
+        //console.log("AC header"+xhr.getResponseHeader('Location'));
+        //if (xhr.status == 302) {
+        //    window.location.href = xhr.getResponseHeader("Location").replace(/\?.*$/, "?next="+window.location.pathname);
+        //}
+        //});
 
         kisstodo_board.update_currently_online_visualization(false);
         kisstodo_board.refresh_list_list(kisstodo_board.inbox_list_id);
@@ -662,7 +682,7 @@ var kisstodo_board = (function () {
                 cache: false,
                 dataType: "json",
                 error: function (req, status, ex) {
-                    console.log("error45: " + ex);
+                    console.log("error: " + ex);
                     res.show_network(false);
                 },
                 success: function (data, status, req) {

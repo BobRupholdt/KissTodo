@@ -40,6 +40,7 @@ urlpatterns = patterns('',
     (r'^import/rtm$', import_rtm),
     (r'^export/atom$', export_atom),
     (r'^send_mail$', todo_send_mail),
+    (r'^redirect_login$', redirect_login),
     
 )
 

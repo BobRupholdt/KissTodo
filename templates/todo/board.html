@@ -33,6 +33,8 @@ $(function() {
     kisstodo_board.urls['todo_list_complete']="{% url todo_list_complete sort_mode='#sort_mode' list_id='#list_id' show_complete='#show_complete' %}";
     kisstodo_board.urls['todo_search']="{% url todo.views.todo_search sort_mode='#sort_mode' search_string='#search_string' show_complete='#show_complete' %}";
     kisstodo_board.urls['todo_empty_trash']="{%url todo.views.todo_empty_trash%}";
+    //kisstodo_board.urls['login']="{{login_url}}";
+    kisstodo_board.urls['login']="{%url todo.views.redirect_login %}";
     
     kisstodo_board.init_board();
     

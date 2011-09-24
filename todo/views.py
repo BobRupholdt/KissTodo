@@ -43,7 +43,8 @@ def test_page(request):
 
 def board(request):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
-    logout_url=users.create_logout_url("todo/board")
+    logout_url=users.create_logout_url("http://www.massimobarbieri.it/kisstodo")
+    #login_url=users.create_login_url("/")
     return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url}))
 
 def _do_send_mail(t, request):
@@ -318,6 +319,8 @@ def export_atom(request):
 def cache_manifest(request):
     return HttpResponse(get_template('todo/cache.manifest').render(RequestContext(request, {'host': request.META.get('HTTP_HOST')})), mimetype="text/cache-manifest")
    
+def redirect_login(request):
+    return render_to_response("todo/redirect_login.html",RequestContext(request, {}))  
  
 def _parse_date(date):
     # 'never' or 'Mon 13 Jun 11 18:30' or 'Mon 13 Jun 11'
