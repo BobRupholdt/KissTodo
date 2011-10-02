@@ -269,6 +269,8 @@ var kisstodo_board = (function () {
             
             localStorage.setItem('todo_list_'+list_id, response);
             
+            if (kisstodo_board.mobile) $("#todo_list ul").listview();
+            
         });
         } else
         {
@@ -299,6 +301,8 @@ var kisstodo_board = (function () {
             kisstodo_board.refresh_todo_list(selected_list_id);
             
             localStorage.setItem('list_list', response);
+            
+            if (kisstodo_board.mobile) $('#list_list select').selectmenu();
         });   
         } else {
              $("#list_list").html(localStorage.getItem('list_list'));

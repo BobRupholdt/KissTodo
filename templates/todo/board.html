@@ -6,17 +6,25 @@
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/overlay/jquery.hint.js"></script> 
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/blockui/jquery.blockUI.js"></script> 
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/hoverintent/jquery.hoverIntent.minified.js"></script> 
+{% if mobile %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery_mobile/jquery.mobile-1.0rc1.min.js"></script> 
+<link href="{{MEDIA_URL}}js/jquery_mobile/jquery.mobile-1.0rc1.min.css" rel="stylesheet" type="text/css" />
+{% else %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/ui/js/jquery-ui-1.8.10.custom.min.js"></script>
 <link href="{{MEDIA_URL}}js/jquery/ui/css/blitzer/jquery-ui-1.8.10.custom.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/spinner/ui.spinner.min.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/timepickeraddon/timepicker.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/colorbox/jquery.colorbox-min.js"></script>
+{% endif %}
+
+{% if not mobile %}
 <link href="{{MEDIA_URL}}js/jquery/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
 <link href="{{MEDIA_URL}}js/jquery/spinner/ui.spinner.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/touchwipe/jquery.touchwipe.min.js"></script>
-
+{% endif %}
 <script type="text/javascript">
 $(function() {
+    kisstodo_board.mobile={% if mobile %}true{% else %}false{% endif %};
     kisstodo_board.inbox_list_id = {{inbox_list_id}};
     kisstodo_board.urls = {};
     kisstodo_board.urls['list_list']="{% url todo.views.list_list '' %}";
@@ -62,13 +70,14 @@ $(function() {
 <span id="list_list" ></span>
 <span id="list_edit_container" ></span>
 
-<div class="small sort_by">
+<span class="small sort_by" data-role="controlgroup" data-type="horizontal">
 sort by: 
-<a href="#" id="sort_mode_D" class="sort_mode selected_link">DATE</a><span class="light"> | </span>
-<a href="#" id="sort_mode_P" class="sort_mode">PRIORITY</a><span class="light"> | </span>
-<a href="#" id="sort_mode_A" class="sort_mode">A-Z</a>
-<br/>
-show completed: <a href="#" class="show_complete selected_link" id="show_complete_T">YES</a><span class="light"> | </span><a href="#" class="show_complete" id="show_complete_F">NO</a>
-</div>
+<a href="#" id="sort_mode_D" class="sort_mode selected_link" data-role="button">DATE</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
+<a href="#" id="sort_mode_P" class="sort_mode" data-role="button">PRIORITY</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
+<a href="#" id="sort_mode_A" class="sort_mode" data-role="button">A-Z</a>
+</span>
+<span class="small sort_by" data-role="controlgroup" data-type="horizontal">
+show completed: <a href="#" class="show_complete selected_link" id="show_complete_T" data-role="button">YES</a>{% if not mobile %}<span class="light"> | </span>{% endif %}<a href="#" class="show_complete" id="show_complete_F" data-role="button">NO</a>
+</span>
 <span id="todo_list"></span>
 {% endblock %}

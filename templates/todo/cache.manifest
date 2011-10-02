@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# rev 135
+# rev 138
 NETWORK:
 /ping.js
 http://{{host}}/
@@ -53,3 +53,10 @@ CACHE:
 /static/js/jquery/ui/css/blitzer/jquery-ui-1.8.10.custom.css
 /static/js/jquery/ui/js/jquery-ui-1.8.10.custom.min.js
 /static/js/kisstodo_board.js
+/static/js/jquery_mobile/images/ajax-loader.png
+/static/js/jquery_mobile/images/icons-18-black.png
+/static/js/jquery_mobile/images/icons-18-white.png
+/static/js/jquery_mobile/images/icons-36-black.png
+/static/js/jquery_mobile/images/icons-36-white.png
+/static/js/jquery_mobile/jquery.mobile-1.0rc1.min.css
+/static/js/jquery_mobile/jquery.mobile-1.0rc1.min.js

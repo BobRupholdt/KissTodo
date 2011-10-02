@@ -37,6 +37,8 @@ urlpatterns = patterns('',
     (r'^ajax/todo/show_item/(?P<todo_id>.*)$', todo_show_item),
     (r'^ajax/todo/empty_trash/$', todo_empty_trash),
     
+    (r'^mboard$', board, {'mobile':True}),
+    
     (r'^import/rtm$', import_rtm),
     (r'^export/atom$', export_atom),
     (r'^send_mail$', todo_send_mail),

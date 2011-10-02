@@ -7,16 +7,16 @@
     <link href="/favicon.ico" rel="icon" />
     <link href="/favicon.ico" rel="apple-touch-icon" />
 
-    <link href="{{MEDIA_URL}}css/main.css" rel="stylesheet" type="text/css" />
+    {%if not mobile%}<link href="{{MEDIA_URL}}css/main.css" rel="stylesheet" type="text/css" />{%endif%}
     <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/jquery-1.6.2.min.js"></script> 
         
     {% block extra_head %}{% endblock %}      
 </head>
 
 <body>
-    <div class="container"> 
+    <div class="container" data-role="page" id="main_page"> 
         
-        <div class="header">
+        <div class="header" >
             <div class="float_right">
                 {% if false %}
                 <div class="menu">
@@ -37,7 +37,7 @@
             </div>
         </div>
         
-        <div class="content_title" style="width:100px;">
+        <div class="content_title" data-role="header">
             <div style="display:inline">
                 <span class="no_background"><a class="nobg" href="{% url todo.views.board %}"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a></span>
                 <h1 style="display:inline">{% block content_title %}{% endblock %}</h1>
@@ -45,7 +45,7 @@
             {% block content_headline %}{% endblock %}
         </div>
         
-        <div class="content">
+        <div class="content" data-role="content">
             {% block content %}{% endblock %}
         </div>
         

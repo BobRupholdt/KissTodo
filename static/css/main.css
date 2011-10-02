@@ -226,6 +226,10 @@ div.ui-datepicker {
      width:200px;
 }
 
+.content_title {
+    width:100px;
+}
+
 /* css for timepicker */
 .ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
 .ui-timepicker-div dl{ text-align: left; }

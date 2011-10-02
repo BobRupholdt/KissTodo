@@ -41,11 +41,15 @@ def test_page(request):
         #RequestContext(request, {'media_root':settings.MEDIA_ROOT, 'lists':List.objects, 'todos':Todo.objects,}))
         RequestContext(request, {'media_root':settings.MEDIA_ROOT}))
 
-def board(request):
+def board(request, mobile=False):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
+    
     logout_url=users.create_logout_url("http://www.massimobarbieri.it/kisstodo")
     #login_url=users.create_login_url("/")
-    return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url}))
+        
+    request.session['mobile']=mobile
+    
+    return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url, 'mobile':mobile}))
 
 def _do_send_mail(t, request):
     address_from = "todo_reminder@"+str(os.environ['APPLICATION_ID'])+".appspotmail.com" 
@@ -110,11 +114,11 @@ def todo_list(request, list_id, sort_mode, show_complete='F'):
     if (show_complete=='F'):
         todos = [t for t in todos if not t.complete]
     
-    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash}))
+    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash, 'mobile': request.session['mobile']}))
     
 def list_list(request, selected_list_id):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
-    return render_to_response('todo/list_list.html', RequestContext(request, {'lists':List.objects.filter(owner=_get_current_user()), 'inbox_list': inbox, 'selected_list_id': str(selected_list_id)}))    
+    return render_to_response('todo/list_list.html', RequestContext(request, {'lists':List.objects.filter(owner=_get_current_user()), 'inbox_list': inbox, 'selected_list_id': str(selected_list_id), 'mobile':request.session['mobile']}))    
 
 def list_add(request):
     l=List()
