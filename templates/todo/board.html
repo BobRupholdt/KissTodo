@@ -14,13 +14,13 @@
 <link href="{{MEDIA_URL}}js/jquery/ui/css/blitzer/jquery-ui-1.8.10.custom.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/spinner/ui.spinner.min.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/timepickeraddon/timepicker.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/colorbox/jquery.colorbox-min.js"></script>
-{% endif %}
 
-{% if not mobile %}
+{% endif %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/colorbox/jquery.colorbox-min.js"></script>
 <link href="{{MEDIA_URL}}js/jquery/colorbox/colorbox.css" rel="stylesheet" type="text/css" />
+{% if not mobile %}
+
 <link href="{{MEDIA_URL}}js/jquery/spinner/ui.spinner.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="{{MEDIA_URL}}js/jquery/touchwipe/jquery.touchwipe.min.js"></script>
 {% endif %}
 <script type="text/javascript">
 $(function() {
@@ -70,14 +70,25 @@ $(function() {
 <span id="list_list" ></span>
 <span id="list_edit_container" ></span>
 
+<br/>{% if mobile %}<br/>{% endif %}
+
 <span class="small sort_by" data-role="controlgroup" data-type="horizontal">
-sort by: 
-<a href="#" id="sort_mode_D" class="sort_mode selected_link" data-role="button">DATE</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
-<a href="#" id="sort_mode_P" class="sort_mode" data-role="button">PRIORITY</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
+sort by:
+<a href="#" id="sort_mode_D" class="sort_mode selected_link ui-btn-active" data-role="button">DATE</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
+<a href="#" id="sort_mode_P" class="sort_mode" data-role="button">PRI{% if not mobile %}ORITY{% endif %}</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
 <a href="#" id="sort_mode_A" class="sort_mode" data-role="button">A-Z</a>
 </span>
+
+<br/>{% if mobile %}<br/>{% endif %}
+
 <span class="small sort_by" data-role="controlgroup" data-type="horizontal">
-show completed: <a href="#" class="show_complete selected_link" id="show_complete_T" data-role="button">YES</a>{% if not mobile %}<span class="light"> | </span>{% endif %}<a href="#" class="show_complete" id="show_complete_F" data-role="button">NO</a>
+show completed:
+<a href="#" class="show_complete selected_link ui-btn-active" id="show_complete_T" data-role="button">YES</a>{% if not mobile %}<span class="light"> | </span>{% endif %}<a href="#" class="show_complete" id="show_complete_F" data-role="button">NO</a>
 </span>
+
+{% if mobile %}<br/><br/><br/>{% endif%}
+
 <span id="todo_list"></span>
+
+
 {% endblock %}

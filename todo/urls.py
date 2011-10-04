@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     (r'^ajax/todo/empty_trash/$', todo_empty_trash),
     
     (r'^mboard$', board, {'mobile':True}),
+    (r'^majax/list/list/(?P<selected_list_id>.*)$', list_list, {'mobile':True}),
     
     (r'^import/rtm$', import_rtm),
     (r'^export/atom$', export_atom),

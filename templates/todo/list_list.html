@@ -1,4 +1,4 @@
-<span class="small">your lists:</span>
+{% if not mobile %}<span class="small">your lists:</span>{% endif %}
 <select id="selected_list_option" name="selected_list_option">
 <option value="{{inbox_list.id}}" >{{ inbox_list.name }}</option>
 <option value="-2">@hot</option>

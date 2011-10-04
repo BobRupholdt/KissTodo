@@ -47,8 +47,8 @@ def board(request, mobile=False):
     logout_url=users.create_logout_url("http://www.massimobarbieri.it/kisstodo")
     #login_url=users.create_login_url("/")
         
-    request.session['mobile']=mobile
-    
+    #request.session['mobile']=mobile
+
     return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url, 'mobile':mobile}))
 
 def _do_send_mail(t, request):
@@ -114,11 +114,11 @@ def todo_list(request, list_id, sort_mode, show_complete='F'):
     if (show_complete=='F'):
         todos = [t for t in todos if not t.complete]
     
-    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash, 'mobile': request.session['mobile']}))
+    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash}))
     
-def list_list(request, selected_list_id):
+def list_list(request, selected_list_id, mobile=False):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
-    return render_to_response('todo/list_list.html', RequestContext(request, {'lists':List.objects.filter(owner=_get_current_user()), 'inbox_list': inbox, 'selected_list_id': str(selected_list_id), 'mobile':request.session['mobile']}))    
+    return render_to_response('todo/list_list.html', RequestContext(request, {'lists':List.objects.filter(owner=_get_current_user()), 'inbox_list': inbox, 'selected_list_id': str(selected_list_id), 'mobile':mobile}))    
 
 def list_add(request):
     l=List()
@@ -321,6 +321,8 @@ def export_atom(request):
     #return HttpResponse(out, mimetype="application/atom+xml")     
       
 def cache_manifest(request):
+    #import uuid
+    #guid=uuid.uuid1()
     return HttpResponse(get_template('todo/cache.manifest').render(RequestContext(request, {'host': request.META.get('HTTP_HOST')})), mimetype="text/cache-manifest")
    
 def redirect_login(request):

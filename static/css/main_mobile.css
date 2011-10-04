@@ -1,0 +1,239 @@
+.test_class { 
+    color:#0a0;
+}
+
+body {
+    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+	font-size: 14px;
+    margin:10px;
+}
+
+img {border:0}
+
+h1  {
+    color:#666;
+    font-size:20px;
+    margin:0 0 0.2em;
+    padding:0 6px 0 0;
+}
+
+h2 {
+	font-weight: lighter;
+	font-size: 18px;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight:bold;
+}
+
+input, select, textarea
+{
+	border: 1px solid #ddd;
+	padding:3px 1px;
+	margin:3px 0;
+}
+
+input.blur {
+    color: #999;
+}
+
+textarea { width: 400px;}
+
+input:focus, select:focus, textarea:focus {
+    border: 1px solid #cd0707;
+}
+
+a, a:link, a:visited  {text-decoration: none;}
+li a:link, li a:visited  {color: #666; text-decoration: none;}
+li a:hover, li a.selected_link {background: #cd0707; color:#fff; text-decoration: none;}
+
+.small a:link, .small a:visited, .small a:hover, .small a.selected_link   {padding:0 3px;}
+
+.no_background a:hover
+{
+    background:#fff
+}
+
+fieldset {
+    border:0;
+    border-top:1px solid #ddd;
+}
+
+label {
+	min-width:100px; 
+    text-align:  right; 
+    margin-right:10px; 
+    float:left;
+	padding:3px;
+	/*margin:3px;*/
+}
+
+table.grid { border-collapse: collapse; }
+table.grid,table.grid th,table.grid td { border: 1px solid #ddd; padding: 6px; }
+table.grid th {color: #fff; background-color: #cd0707; padding:2px;}
+table.grid tr.alternate_row { background-color: #f3f3f3;}
+
+.menu {
+    padding: 8px 0px;
+}
+
+.menu_border {
+    border-top: 1px solid #ddd;
+}
+
+.float_right {
+	float:right;
+    text-align: right;
+}
+
+.list {
+    font-size: 16px;
+}
+
+.light {color:#ddd;}
+
+ul.todos {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0 0;
+}
+
+ul.todos li {
+    /*background-image: url("../img/li.png");x
+            background-position: 0.5em 0.3em; 
+    background-repeat: no-repeat;*/
+    padding-left: 0;
+}
+
+.big {
+    font-size: 16px;
+	padding: 5px;
+}
+
+.complete {
+    color:#999;
+    text-decoration: line-through;
+    font-style:italic;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+.complete .todo_description a {
+    color:#999;
+    font-weight: normal;
+}
+
+.complete a:hover {
+    background-color:#fff;
+    cursor: default;
+}
+.selected_todo  .todo_description {
+    background-color:#a0a7a7;
+    color: #666;
+    text-decoration: none;
+}
+.selected_todo  .todo_description a {
+    color: #fff;
+}
+
+
+.todo_priority {
+    font-weight: bold;
+    /*background-color:#ea5200;*/
+    background-color:#cd0707;
+    color:#fff;
+    font-size:10px;
+    margin:0 1px;
+    padding:2px 0 1px 0;
+}
+
+.todo_priority_2 {
+    background-color:#0060bf;
+}
+
+.todo_priority_3 {
+    background-color:#359aff;
+}
+
+.today{
+    font-weight: bold;
+}
+
+.overdue {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.complete .overdue {
+    text-decoration: none;
+}
+
+.complete .todo_priority {
+    background-color:#ddd;
+    color:#000;
+}
+
+.kbd {
+    -moz-border-radius: 4px 4px 4px 4px;
+    background-color: #EEEEEE;
+    border: 1px solid #AAAAAA;
+    line-height: 1.8em;
+    margin-left: 1px;
+    margin-right: 1px;
+    padding: 2px 3px;
+    vertical-align: baseline;
+    white-space: nowrap;
+    font-size:16px;
+}
+
+.small {
+    font-size: 10px;
+    color: #666;
+}
+
+.sort_by {
+    padding: 10px 0 0 0;
+}
+
+#help {
+    border: 1px solid #ddd;
+    width: 280px;
+}
+
+#message_text {
+    -moz-border-radius: 4px 4px 4px 4px;
+    background-color: #cd0707;
+    color: #fff;
+    width:200px;
+    text-align:center;
+    font-weight: bold;
+    white-space:nowrap;
+}
+
+.todo_list_name {
+    color:#999;
+    font-style:italic;    
+}
+
+div.ui-datepicker {
+ font-size:10px;
+}
+
+.content {
+    /*width:480px;*/
+}
+
+#description {
+     width:200px;
+}
+
+.content_title {
+    width:100px;
+}
+
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
+.ui-timepicker-div dl{ text-align: left; }
+.ui-timepicker-div dl dt{ height: 25px; }
+.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
