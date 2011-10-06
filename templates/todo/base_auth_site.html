@@ -7,6 +7,11 @@
 <b>{% google_user %}</b> <span class="light"> | </span> 
 <a href="#" id="network_switch">network</a> <span class="light"> | </span> 
 <a href="{{logout_url}}">logout</a> <span class="light"> | </span> 
+{% if mobile %}
+<a href="{% url board %}" data-ajax="false">normal version</a> <span class="light"> | </span> 
+{% else %}
+<a href="{% url mobile_board %}">desktop version</a> <span class="light"> | </span> 
+{% endif %}
 <a class="help_toggle" href="#">help</a>
 </span>
 <div style='display:none'>
