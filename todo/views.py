@@ -167,7 +167,7 @@ def todo_postpone(request):
     t.save()
     return HttpResponse("", mimetype="text/plain")        
 
-def todo_edit(request, todo_id):
+def todo_edit(request, todo_id, mobile=False):
     t=Todo.objects_raw.get(id=int(todo_id))
     _check_permission(t.list)
     
@@ -201,7 +201,7 @@ def todo_edit(request, todo_id):
         #return HttpResponse("", mimetype="text/plain")  
         return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
     else:
-        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':t,'repeat_type_choiches':Todo.repeat_type_choiches,'lists':List.objects.filter(owner=_get_current_user())}))
+        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':t,'repeat_type_choiches':Todo.repeat_type_choiches,'lists':List.objects.filter(owner=_get_current_user()), 'mobile':mobile}))
         
 def list_edit(request, list_id):
     l=List.objects.get(id=int(list_id))

@@ -43,6 +43,26 @@ input:focus, select:focus, textarea:focus {
     border: 1px solid #cd0707;
 }
 
+.todo_form_field {
+    float:left;
+    margin:3px;
+}
+
+.todo_form_field_save {
+    float:right;
+    margin:3px;
+}
+
+.todo_form_field_separator {
+    clear:both;
+}
+
+.todo_form_field_container {
+    float:left;
+    height:200px; 
+    border:1px solid #aaa;
+}
+
 a:link, a:visited  {color: #666; text-decoration: none;}
 a:hover, a.selected_link   {background: #cd0707; color:#fff; text-decoration: none;}
 

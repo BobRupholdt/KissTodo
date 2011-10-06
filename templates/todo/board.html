@@ -7,6 +7,11 @@
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/blockui/jquery.blockUI.js"></script> 
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery/hoverintent/jquery.hoverIntent.minified.js"></script> 
 {% if mobile %}
+<script type="text/javascript">
+ $(document).bind("mobileinit", function() {
+   $.mobile.page.prototype.options.addBackBtn = true;
+  });
+</script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery_mobile/jquery.mobile-1.0rc1.min.js"></script> 
 <link href="{{MEDIA_URL}}js/jquery_mobile/jquery.mobile-1.0rc1.min.css" rel="stylesheet" type="text/css" />
 {% else %}
@@ -27,22 +32,29 @@ $(function() {
     kisstodo_board.mobile={% if mobile %}true{% else %}false{% endif %};
     kisstodo_board.inbox_list_id = {{inbox_list_id}};
     kisstodo_board.urls = {};
-    kisstodo_board.urls['list_list']="{% url todo.views.list_list '' %}";
-    kisstodo_board.urls['list_delete']="{%url todo.views.list_delete%}";
-    kisstodo_board.urls['list_edit']="{%url todo.views.list_edit ''%}";
-    kisstodo_board.urls['list_add']="{%url todo.views.list_add%}";
-    kisstodo_board.urls['todo_delete']="{%url todo.views.todo_delete%}";
-    kisstodo_board.urls['todo_undelete']="{%url todo.views.todo_undelete%}";
-    kisstodo_board.urls['todo_complete']="{%url todo.views.todo_complete%}";
-    kisstodo_board.urls['todo_show_item']="{%url todo.views.todo_show_item '' %}";
-    kisstodo_board.urls['todo_postpone']="{%url todo.views.todo_postpone%}";                                      
-    kisstodo_board.urls['todo_edit']="{%url todo.views.todo_edit ''%}";
-    kisstodo_board.urls['todo_add']="{%url todo.views.todo_add%}";
+    
+    kisstodo_board.urls['list_list']="{% url list_list '' %}";
+    kisstodo_board.urls['list_delete']="{% url todo.views.list_delete%}";
+    kisstodo_board.urls['list_edit']="{% url todo.views.list_edit ''%}";
+    kisstodo_board.urls['list_add']="{% url todo.views.list_add%}";
+    kisstodo_board.urls['todo_delete']="{% url todo.views.todo_delete%}";
+    kisstodo_board.urls['todo_undelete']="{% url todo.views.todo_undelete%}";
+    kisstodo_board.urls['todo_complete']="{% url todo.views.todo_complete%}";
+    kisstodo_board.urls['todo_show_item']="{% url todo.views.todo_show_item '' %}";
+    kisstodo_board.urls['todo_postpone']="{% url todo.views.todo_postpone%}";                                      
+    kisstodo_board.urls['todo_edit']="{% url todo_edit ''%}";
+    kisstodo_board.urls['todo_add']="{% url todo.views.todo_add%}";
     kisstodo_board.urls['todo_list_complete']="{% url todo_list_complete sort_mode='#sort_mode' list_id='#list_id' show_complete='#show_complete' %}";
     kisstodo_board.urls['todo_search']="{% url todo.views.todo_search sort_mode='#sort_mode' search_string='#search_string' show_complete='#show_complete' %}";
-    kisstodo_board.urls['todo_empty_trash']="{%url todo.views.todo_empty_trash%}";
+    kisstodo_board.urls['todo_empty_trash']="{% url todo.views.todo_empty_trash%}";
     //kisstodo_board.urls['login']="{{login_url}}";
-    kisstodo_board.urls['login']="{%url todo.views.redirect_login %}";
+    kisstodo_board.urls['login']="{% url todo.views.redirect_login %}";
+    
+    if (kisstodo_board.mobile)
+    {
+        kisstodo_board.urls['list_list']="{% url mobile_list_list '' %}";
+        kisstodo_board.urls['todo_edit']="{% url mobile_todo_edit ''%}";
+    }
     
     kisstodo_board.init_board();
     

@@ -1,8 +1,18 @@
-<span class="small">Edit todo "{{ todo.description|truncatewords:5 }}"</span>
-<br/>
-<div style="float:left;height:200px; border:1px solid #aaa">
+{% if mobile %}
+<!DOCTYPE html> 
+<html> 
+<body>
+<div data-role="page" id="jqmobile_page_todo_edit">
+<div data-role="header" id="h"> 
+             <h1>Edit todo "{{ todo.description|truncatewords:5 }}"</h1>
+</div>
+<div data-role="content">
+{% else %}
+<span class="small">Edit todo "{{ todo.description|truncatewords:5 }}"</span><br/>
+{% endif %}
+<div class="todo_form_field_container">
 
-<span style="float:left;margin:3px;">
+<span class="todo_form_field">
     <span class="small">priority</span><br/>
     <select id="edit_todo_priority" name="edit_todo_priority" >
         <option value="4" {% if todo.priority = 4 %}selected="selected"{% endif %}> - </option>
@@ -11,13 +21,13 @@
         <option value="3" {% if todo.priority = 3 %}selected="selected"{% endif %}>P3</option>
     </select>
 </span>
-
-<span style="float:left;margin:3px;">
+{% if mobile %}<br/>{% endif %}
+<span class="todo_form_field">
     <span class="small">description</span><br/>
     <input type="text" style="width:145px" value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
 </span>
-
-<span style="float:left;margin:3px;">
+{% if mobile %}<br/>{% endif %}
+<span class="todo_form_field">
     <span class="small">list</span><br/>
     <select id="edit_todo_list_id" name="edit_todo_list_id" >
     {% for l in lists %}
@@ -26,14 +36,14 @@
     </select>
 </span>
 
-<div style="clear:both"></div>
+<div class="todo_form_field_separator"></div>
 
-<span style="float:left;margin:3px;">
+<span class="todo_form_field">
     <span class="small">due date</span><br/>
     <input type="text" value="{{todo.due_date|date:'Y/m/d'}} {{todo.due_date|time:'H:i'}}" id="edit_todo_due_date" name="edit_todo_due_date" />
 </span>
-
-<span style="float:left;margin:3px;">
+{% if mobile %}<br/>{% endif %}
+<span class="todo_form_field">
     <span class="small">repeat every</span><br/>
     <input type="text" size="4" value="{% if todo.repeat_every%}{{todo.repeat_every}}{% endif%}" id="edit_todo_repeat_every" name="edit_todo_repeat_every" />
     <select id="edit_todo_repeat_type" name="edit_todo_repeat_type" >
@@ -43,9 +53,9 @@
     </select>    
 </span>
 
-<div style="clear:both"></div>
+<div class="todo_form_field_separator"></div>
 
-<span style="float:left;margin:3px;">
+<span class="todo_form_field">
     <span class="small">notify me</span><br/>
     <select id="edit_todo_notify_minutes" name="edit_todo_notify_minutes" >
         <option value="-1" {% if todo.notify_minutes = -1%}selected="selected"{% endif %}>don't notify</option>
@@ -59,15 +69,23 @@
     </select>    
 </span>
 
-<div style="clear:both"></div>
+<div class="todo_form_field_separator"></div>
 
-<span style="float:right;margin:3px;">
+<span class="todo_form_field_save">
     <input type="submit" name="edit_todo_ok" id="edit_todo_ok"  value="save" onClick="kisstodo_board.save_selected_todo();return false;"  />
 </span>
 
 <script type="text/javascript">
-    {% if mobile %} $("#edit_todo_due_date").datetimepicker({ dateFormat: 'yy/mm/dd', firstDay: 1 });{% endif %}
+    {% if not mobile %} $("#edit_todo_due_date").datetimepicker({ dateFormat: 'yy/mm/dd', firstDay: 1 });{% endif %}
 </script>
 
 </div>
-<div style="clear:both"></div>
+<div class="todo_form_field_separator"></div>
+{% if mobile %}
+</div>
+	<div data-role="footer"> 
+		<h4>&nbsp;</h4> 
+	</div>
+</div>
+</body>
+{% endif %}

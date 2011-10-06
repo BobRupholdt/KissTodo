@@ -311,9 +311,8 @@ var kisstodo_board = (function () {
         $("#list_list").fadeOut(kisstodo_board.default_animation_speed);
          if (kisstodo_board.is_currently_online())
         {
-        var ajax_url = kisstodo_board.urls['list_list']+selected_list_id;
-        if (kisstodo_board.mobile) ajax_url=ajax_url.replace('/ajax/','/majax/');
-        $.get(ajax_url, function(response) {
+        
+        $.get(kisstodo_board.urls['list_list']+selected_list_id, function(response) {
             $("#list_list").html(response);
             
             kisstodo_board.update_list_edit_tools();
@@ -455,13 +454,22 @@ var kisstodo_board = (function () {
         
         todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
         var d = $(".selected_todo .todo_item");
-        d.fadeOut(kisstodo_board.default_animation_speed);
-        d.load(kisstodo_board.urls['todo_edit']+todo_id, function () {
-            d.fadeIn(kisstodo_board.default_animation_speed);
-            $('#edit_todo_description').focus();
-            //setTimeout( function(){$('#edit_todo_description').select();}, 20);
-            if (!kisstodo_board.mobile) $('#edit_todo_repeat_every').spinner({ min: 1, max: 999 });
-        });
+        
+        if (kisstodo_board.mobile)
+        {
+            //$.mobile.changePage(kisstodo_board.urls['todo_edit']+todo_id, {	transition: "pop",	reverse: false,	changeHash: false});
+            $.mobile.changePage(kisstodo_board.urls['todo_edit']+todo_id);
+        }
+        else
+        {
+            d.fadeOut(kisstodo_board.default_animation_speed);
+            d.load(kisstodo_board.urls['todo_edit']+todo_id, function () {
+                d.fadeIn(kisstodo_board.default_animation_speed);
+                $('#edit_todo_description').focus();
+                //setTimeout( function(){$('#edit_todo_description').select();}, 20);
+                $('#edit_todo_repeat_every').spinner({ min: 1, max: 999 });
+            });
+        } 
     }     
     
     res.save_selected_todo = function() {
@@ -486,6 +494,7 @@ var kisstodo_board = (function () {
         $.post(kisstodo_board.urls['todo_edit']+todo_id, data, function (response) {
             d.fadeOut(0);
             d.load(kisstodo_board.urls['todo_show_item']+todo_id, function () {d.fadeIn(kisstodo_board.default_animation_speed);});
+            if (kisstodo_board.mobile) history.back();
         });    
     }
     
