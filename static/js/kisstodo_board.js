@@ -55,6 +55,11 @@ var kisstodo_board = (function () {
             kisstodo_board.refresh_selected_todo_list();
         });
         
+        $('.complete_button').live('click', function() {
+           $(this).parent().parent().parent().find(".todo_complete").click();
+           return false;
+        });       
+        
          $('#network_switch').live('click', function() {      
             kisstodo_board.set_currently_online(!kisstodo_board.is_currently_online(), true);
         });

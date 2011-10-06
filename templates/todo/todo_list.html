@@ -10,7 +10,7 @@
     <script type="text/javascript">$('#name').hint();$('#description').hint();</script>
     {% for t in todos %}  
     <li style="white-space:nowrap;" id="todo_li_{{ t.id }}" class="todo_li {% if t.complete %}complete{% endif %}">
-        <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} /> 
+        <input type="checkbox" class="todo_complete" id="todo_complete_{{t.id}}" {% if t.complete %}checked="checked"{% endif %} />
         {% with t as todo %}
             <span class="todo_item" style="display:inline">
             {% include "todo/todo_item.html" %}
@@ -28,4 +28,14 @@
     </span>
     {% endif %}
 </div>
-<script type="text/javascript">if (kisstodo_board.mobile) $('#add_todo_form').trigger('create');</script>
+
+<script type="text/javascript">
+if (kisstodo_board.mobile) {
+    $('#add_todo_form').trigger('create');
+    $('.todo_delete_button_container a').html("delete");
+    $('.todo_delete_button_container').prepend("<br/><a class='complete_button' href='#' data-ajax='false' data-role='button' data-icon='check' data-inline='true'>&nbsp;</a>").trigger('create');
+    
+    $("input[type='checkbox']").hide();
+    //$("input[type='checkbox']").checkboxradio();
+}
+</script>
