@@ -3,7 +3,7 @@
 <html> 
 <body>
 <div data-role="page" id="jqmobile_page_todo_edit">
-<div data-role="header" id="h"> 
+<div data-role="header"> 
              <h1>Edit todo "{{ todo.description|truncatewords:5 }}"</h1>
 </div>
 <div data-role="content">
@@ -24,7 +24,7 @@
 {% if mobile %}<br/>{% endif %}
 <span class="todo_form_field">
     <span class="small">description</span><br/>
-    <input type="text" style="width:145px" value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
+    <input type="text" {% if not mobile %}style="width:145px"{% endif %} value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
 </span>
 {% if mobile %}<br/>{% endif %}
 <span class="todo_form_field">
@@ -72,7 +72,7 @@
 <div class="todo_form_field_separator"></div>
 
 <span class="todo_form_field_save">
-    <input type="submit" name="edit_todo_ok" id="edit_todo_ok"  value="save" onClick="kisstodo_board.save_selected_todo();return false;"  />
+    <input type="submit" name="edit_todo_ok" id="edit_todo_ok" data-icon="check" data-theme="b"  value="save" onClick="kisstodo_board.save_selected_todo();return false;"  />
 </span>
 
 <script type="text/javascript">
@@ -83,9 +83,6 @@
 <div class="todo_form_field_separator"></div>
 {% if mobile %}
 </div>
-	<div data-role="footer"> 
-		<h4>&nbsp;</h4> 
-	</div>
 </div>
 </body>
 {% endif %}
