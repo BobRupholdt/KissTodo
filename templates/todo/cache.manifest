@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# rev 251
+# rev {% load todo_custom_tags %}{% app_version_info %}
 NETWORK:
 /ping.js
 http://{{host}}/

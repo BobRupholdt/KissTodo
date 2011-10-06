@@ -33,15 +33,7 @@ input, select, textarea
 	margin:3px 0;
 }
 
-input.blur {
-    color: #999;
-}
 
-textarea { width: 400px;}
-
-input:focus, select:focus, textarea:focus {
-    border: 1px solid #cd0707;
-}
 
 a, a:link, a:visited  {text-decoration: none;}
 li a:link, li a:visited  {color: #666; text-decoration: none;}
