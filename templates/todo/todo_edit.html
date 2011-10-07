@@ -40,12 +40,12 @@
 
 <span class="todo_form_field">
     <span class="small">due date</span><br/>
-    <input type="text" value="{{todo.due_date|date:'Y/m/d'}} {{todo.due_date|time:'H:i'}}" id="edit_todo_due_date" name="edit_todo_due_date" />
+    <input {% if mobile %}type="datetime-local"{% else %}type="text"{% endif %} value="{{todo.due_date|date:'Y/m/d'}} {{todo.due_date|time:'H:i'}}" id="edit_todo_due_date" name="edit_todo_due_date" />
 </span>
 {% if mobile %}<br/>{% endif %}
 <span class="todo_form_field">
     <span class="small">repeat every</span><br/>
-    <input type="text" size="4" value="{% if todo.repeat_every%}{{todo.repeat_every}}{% endif%}" id="edit_todo_repeat_every" name="edit_todo_repeat_every" />
+    <input {% if mobile %}type="range" min="1" max="30"{% else %}{% endif %} type="text"  size="4" value="{% if todo.repeat_every%}{{todo.repeat_every}}{% endif%}" id="edit_todo_repeat_every" name="edit_todo_repeat_every" />  
     <select id="edit_todo_repeat_type" name="edit_todo_repeat_type" >
     {% for x in repeat_type_choiches %}
         <option value="{{x.0}}" {% if todo.repeat_type = x.0%}selected="selected"{% endif %}>{{x.1}}</option>

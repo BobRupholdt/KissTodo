@@ -88,7 +88,7 @@ def todo_search(request, search_string, sort_mode, show_complete='F'):
         
     return render_to_response('todo/todo_list.html', RequestContext(request, {'todos':Todo.todo_sort(todos, sort_mode), 'show_list': True }))
 
-def todo_list(request, list_id, sort_mode, show_complete='F'):
+def todo_list(request, list_id, sort_mode, show_complete='F', mobile=False):
     #import time
     #time.sleep(1)
     if int(list_id)>0:
@@ -114,7 +114,7 @@ def todo_list(request, list_id, sort_mode, show_complete='F'):
     if (show_complete=='F'):
         todos = [t for t in todos if not t.complete]
     
-    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash}))
+    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash, 'mobile':mobile}))
     
 def list_list(request, selected_list_id, mobile=False):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
@@ -216,10 +216,10 @@ def list_edit(request, list_id):
     else:
         return render_to_response('todo/list_edit.html', RequestContext(request, {'list':l}))            
 
-def todo_show_item(request, todo_id):
+def todo_show_item(request, todo_id, mobile=False):
     t = Todo.objects_raw.get(id=int(todo_id))
     _check_permission(t.list)
-    return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t}))    
+    return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t, 'mobile':mobile}))    
     
 def todo_add(request):
     l=List.objects.get(id=request.POST['list_id'])

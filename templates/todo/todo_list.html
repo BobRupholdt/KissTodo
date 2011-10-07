@@ -32,9 +32,7 @@
 <script type="text/javascript">
 if (kisstodo_board.mobile) {
     $('#add_todo_form').trigger('create');
-    $('.todo_delete_button_container a').html("delete");
-    $('.todo_delete_button_container').prepend("<br/><a class='complete_button' href='#' data-ajax='false' data-role='button' data-icon='check' data-inline='true'>&nbsp;</a>").trigger('create');
-    
+    $('.todo_delete_button_container').trigger('create');
     $("input[type='checkbox']").hide();
     //$("input[type='checkbox']").checkboxradio();
 }

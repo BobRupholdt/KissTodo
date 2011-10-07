@@ -102,7 +102,7 @@ ul.todos li {
 	padding: 5px;
 }
 
-.complete {
+.complete .todo_description  {
     color:#999;
     text-decoration: line-through;
     font-style:italic;
@@ -157,7 +157,7 @@ ul.todos li {
 }
 
 .complete .overdue {
-    text-decoration: none;
+    text-decoration: line-trough;
 }
 
 .complete .todo_priority {
@@ -223,9 +223,3 @@ div.ui-datepicker {
     width:100px;
 }
 
-/* css for timepicker */
-.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
-.ui-timepicker-div dl{ text-align: left; }
-.ui-timepicker-div dl dt{ height: 25px; }
-.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }
-.ui-timepicker-div td { font-size: 90%; }
