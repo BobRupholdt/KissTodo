@@ -73,6 +73,7 @@ $(function() {
 
 {% block content %}
 {%if False%}}<input title="&raquo; SEARCH" size="22" autocomplete="off" type="text" id="search_string" name="search_string" /><br/>{%endif%}
+{% if not mobile %}
 <form style="display:inline" method="post" action="." id="add_list_form" onSubmit="return kisstodo_board.add_list()">
 <input class="big" title="&raquo; NEW LIST" size="22" autocomplete="off" type="text" id="name" name="name" />
 <span class="message">
@@ -80,11 +81,15 @@ $(function() {
     <span id="message_text" style="display:none;vertical-align:center;">message</span>
 </span>
 </form>
+{% endif%}
+{% if mobile %}<span data-role="collapsible" data-collapsed="true"><h3>more</h3>
+{% endif%}
 <br/>
 <span id="list_list" ></span>
 <span id="list_edit_container" ></span>
 
-<br/>{% if mobile %}<br/>{% endif %}
+<br/>
+
 
 <span class="small sort_by" data-role="controlgroup" data-type="horizontal">
 sort by:
@@ -93,15 +98,14 @@ sort by:
 <a href="#" id="sort_mode_A" class="sort_mode" data-role="button">a-z</a>
 </span>
 
-<br/>{% if mobile %}<br/>{% endif %}
+<br/>
 
 <span class="small sort_by" data-role="controlgroup" data-type="horizontal">
 show completed:
 <a href="#" class="show_complete selected_link ui-btn-active" id="show_complete_T" data-role="button">yes</a>{% if not mobile %}<span class="light"> | </span>{% endif %}<a href="#" class="show_complete" id="show_complete_F" data-role="button">no</a>
 </span>
-
-{% if mobile %}<br/><br/><br/>{% endif%}
-
+{% if mobile %}</span>{% endif%}
+{% if mobile %}<br/><br/>{% endif %}
 <span id="todo_list"></span>
 
 
