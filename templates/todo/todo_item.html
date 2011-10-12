@@ -5,9 +5,11 @@
 <span class="no_background todo_delete_button_container" style="text-decoration: none;">
 {% if mobile %}
 <br/>
+<span data-role="controlgroup" data-type="horizontal">
 <a style="margin-left:-1px;" class='complete_button' href='#' data-ajax='false' data-role='button' data-icon='check' data-inline='true'>done</a>
 <a class='edit_button' href='#' data-ajax='false' data-role='button' data-inline='true'>edit</a>
 <a class="todo_delete" href="#" data-role="button" data-icon="delete" data-theme="e" data-inline="true" id="todo_delete_{{todo.id}}">delete</a>
+</span>
 {% else %}
 <a href="#" data-role="button" data-icon="delete" data-inline="true" class="todo_delete" id="todo_delete_{{todo.id}}"><img alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a>
 {% if todo.deleted %}&nbsp;<a href="#" class="todo_undelete" id="todo_undelete_{{todo.id}}"><img alt="undelete" src="{{MEDIA_URL}}img/undo.png" /></a>{% endif %}

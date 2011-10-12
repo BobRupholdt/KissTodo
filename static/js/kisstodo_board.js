@@ -56,7 +56,7 @@ var kisstodo_board = (function () {
         });
         
         $('.complete_button').live('click', function() {
-           $(this).parent().parent().parent().find(".todo_complete").click();
+           $(this).parent().parent().parent().parent().find(".todo_complete").click();
            return false;
         });    
 
