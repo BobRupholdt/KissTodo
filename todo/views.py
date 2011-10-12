@@ -185,7 +185,13 @@ def todo_edit(request, todo_id, mobile=False):
                     try:
                         t.due_date=datetime.strptime(request.POST['due_date'],'%Y/%m/%d') # 2012/12/21
                     except:
-                        pass # wrong format
+                        try:
+                            t.due_date=datetime.strptime(request.POST['due_date'],'%Y-%m-%dT%H:%M') # 2012-12-21T15:42 - for html5 input type
+                        except:
+                            try:
+                                t.due_date=datetime.strptime(request.POST['due_date'],'%Y-%m-%d') # 2012-12-21 - for html5 input type
+                            except:
+                                pass # wrong format
             
         if 'repeat_type' in request.POST: t.repeat_type=request.POST['repeat_type']
         if 'repeat_every' in request.POST and request.POST['repeat_every']: t.repeat_every=int(request.POST['repeat_every'])

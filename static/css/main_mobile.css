@@ -37,14 +37,9 @@ input, select, textarea
 
 a, a:link, a:visited  {text-decoration: none;}
 li a:link, li a:visited  {color: #666; text-decoration: none;}
-li a:hover, li a.selected_link {background: #cd0707; color:#fff; text-decoration: none;}
+li a.selected_link {background: #cd0707; color:#fff; text-decoration: none;}
 
-.small a:link, .small a:visited, .small a:hover, .small a.selected_link   {padding:0 3px;}
-
-.no_background a:hover
-{
-    background:#fff
-}
+.small a:link, .small a:visited, .small a.selected_link   {padding:0 3px;}
 
 fieldset {
     border:0;
@@ -114,20 +109,6 @@ ul.todos li {
     color:#999;
     font-weight: normal;
 }
-
-.complete a:hover {
-    background-color:#fff;
-    cursor: default;
-}
-.selected_todo  .todo_description {
-    background-color:#a0a7a7;
-    color: #666;
-    text-decoration: none;
-}
-.selected_todo  .todo_description a {
-    color: #fff;
-}
-
 
 .todo_priority {
     font-weight: bold;

@@ -310,6 +310,11 @@ var kisstodo_board = (function () {
             
             if (kisstodo_board.mobile) $("#todo_list ul").listview();
         }
+        
+        var selcted_list_name = $("#selected_list_option option[value='"+list_id+"']").text();
+        $('#collapsible_title .ui-btn-text').text(selcted_list_name);
+        
+        //$('#collapsible_container').collapsible({collapsed: false});
     }
     
     res.refresh_selected_todo_list = function() {

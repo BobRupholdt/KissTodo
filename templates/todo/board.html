@@ -81,8 +81,7 @@ $(function() {
     <span id="message_text" style="display:none;vertical-align:center;">message</span>
 </span>
 </form>
-{% endif%}
-{% if mobile %}<span data-role="collapsible" data-collapsed="true"><h3>more</h3>
+{% else %}<span id="collapsible_container" data-role="collapsible" data-collapsed="true"><h3 id="collapsible_title">more</h3>
 {% endif%}
 <br/>
 <span id="list_list" ></span>
@@ -92,13 +91,13 @@ $(function() {
 
 
 <span class="small sort_by" data-role="controlgroup" data-type="horizontal">
-sort by:
+sort:
 <a href="#" id="sort_mode_D" class="sort_mode selected_link ui-btn-active" data-role="button">date</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
 <a href="#" id="sort_mode_P" class="sort_mode" data-role="button">priority{% if not mobile %}{% endif %}</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
 <a href="#" id="sort_mode_A" class="sort_mode" data-role="button">a-z</a>
 </span>
 
-<br/>
+<br/>{% if mobile %}<br/>{% endif %}
 
 <span class="small sort_by" data-role="controlgroup" data-type="horizontal">
 show completed:
