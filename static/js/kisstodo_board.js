@@ -62,7 +62,7 @@ var kisstodo_board = (function () {
         });    
 
         $('.edit_button').live('click', function() {
-           $(this).parent().parent().parent().find(".todo_description").click(); 
+           $(this).parents('li').find(".todo_description").click(); 
            return false;
         });            
         
