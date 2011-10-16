@@ -103,7 +103,14 @@ sort:
 show completed:
 <a href="#" class="show_complete selected_link ui-btn-active" id="show_complete_T" data-role="button">yes</a>{% if not mobile %}<span class="light"> | </span>{% endif %}<a href="#" class="show_complete" id="show_complete_F" data-role="button">no</a>
 </span>
-{% if mobile %}</span>{% endif%}
+{% if mobile %}
+</span><!--collapsible-->
+
+<span class="message">
+    <span id="wait" style="display:none;"><img src="{{MEDIA_URL}}img/wait.gif" alt="wait" /></span>
+    <span id="message_text" style="display:none;vertical-align:center;">message</span>
+</span>
+{% endif%}
 {% if mobile %}<br/><br/>{% endif %}
 <span id="todo_list"></span>
 

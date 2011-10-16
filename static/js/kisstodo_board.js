@@ -7,7 +7,13 @@ var kisstodo_board = (function () {
         //$(document.body).bind("offline", res.check_network);
         //res.check_network();
         
-        $(document).ajaxStart(function() { kisstodo_board.lockGui(); }).ajaxStop(function() { kisstodo_board.unlockGui(); });        
+        $(document).ajaxStart(function() { 
+            kisstodo_board.ajax_pending = true; 
+            kisstodo_board.lockGui(); 
+        }).ajaxStop(function() { 
+            kisstodo_board.unlockGui(); 
+            kisstodo_board.ajax_pending = false; 
+        });        
         
         $(document).ajaxError(function(e, xhr, settings, exception) {
           //console.log("AE:"+xhr.status);
@@ -25,6 +31,14 @@ var kisstodo_board = (function () {
           
           //kisstodo_board.check_network();
         });
+
+        /*
+        $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+          if ( !kisstodo_board.is_currently_online() ) {
+              jqXHR.abort();
+              console.log("request "+options.url+" aborted");
+          }
+        }); */
         
         //$(document).ajaxComplete(function(e, xhr, settings) {
         //console.log("AC status:"+xhr.status);
@@ -185,6 +199,8 @@ var kisstodo_board = (function () {
         });    
         
         $('.todo_delete').live('click', function () { 
+            if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
+            
             var todo_id=$(this).attr("id").replace("todo_delete_","");
             var todo=$(this).parents("li");
             
@@ -200,6 +216,8 @@ var kisstodo_board = (function () {
         });   
 
         $('.todo_undelete').live('click', function () { 
+            if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
+            
             var todo_id=$(this).attr("id").replace("todo_undelete_","");
             var todo=$(this).parents("li");
             
@@ -215,6 +233,10 @@ var kisstodo_board = (function () {
         });           
 
         $('.todo_complete').live('click', function () { 
+            
+            if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return false;}
+            
+        
             var todo_id=$(this).attr("id").replace("todo_complete_","");
             var todo=$(this).parents("li");
             
@@ -310,14 +332,14 @@ var kisstodo_board = (function () {
             
             if (list_id==-1) $("#todo_list").html("");
             
-            localStorage.setItem('todo_list_'+list_id, response);
+            localStorage.setItem('todo_list_'+kisstodo_board.mobile.toString()+list_id, response);
             
             if (kisstodo_board.mobile) $("#todo_list ul").listview();
             
         });
         } else
         {
-            $("#todo_list").html(localStorage.getItem('todo_list_'+list_id));
+            $("#todo_list").html(localStorage.getItem('todo_list_'+kisstodo_board.mobile.toString()+list_id));
             $("#todo_list").fadeIn(kisstodo_board.default_animation_speed);
             
             $("#add_todo_form").find("#description").focus();
@@ -434,6 +456,10 @@ var kisstodo_board = (function () {
 
     }
     
+    res.show_offline_message = function() {
+        kisstodo_board.show_message("Non available in offline mode.");
+    }
+    
     res.add_list = function() {
         
         var item = $("#add_list_form");
@@ -464,6 +490,8 @@ var kisstodo_board = (function () {
     }
     
     res.add_todo = function() {
+        if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
+        
         var item = $("#add_todo_form");
         var data = {
             description: item.find("#description").val(),
@@ -482,6 +510,8 @@ var kisstodo_board = (function () {
     
     res.edit_selected_todo = function() {
         if ($(".selected_todo").hasClass('complete')) return;
+        
+        if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
         
         todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
         var d = $(".selected_todo .todo_item");
@@ -504,6 +534,8 @@ var kisstodo_board = (function () {
     }     
     
     res.save_selected_todo = function() {
+        if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
+        
         var todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
         var d = $(".selected_todo .todo_item");
         
@@ -546,6 +578,8 @@ var kisstodo_board = (function () {
         
         // enter
         if (event.which == 13) {
+            if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
+            
             if (kisstodo_board.is_todo_edit_active()) {
                 kisstodo_board.save_selected_todo();
             }
@@ -578,18 +612,25 @@ var kisstodo_board = (function () {
         //  d
         if (event.which == 100) {
             if (kisstodo_board.is_edit_active()) return;
+            if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
             $(".selected_todo .todo_delete img").click();
         }
         
         // c
         if (event.which == 99) {
             if (kisstodo_board.is_edit_active()) return;
+            
+            if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
+            
+            
             $(".selected_todo .todo_complete").click();
         }   
 
         // p
         if (event.which == 112) {
             if (kisstodo_board.is_edit_active()) return;
+            if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
+            
             kisstodo_board.postpone_selected_todo();
         }           
         
@@ -597,6 +638,9 @@ var kisstodo_board = (function () {
         if (event.which >= 49 && event.which<=52) {
             if (kisstodo_board.is_edit_active()) return;
             if ($(".selected_todo").length==0) return;
+            
+            if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
+            
             var todo_id=$(".selected_todo").attr("id").replace('todo_li_', '');
             kisstodo_board.update_todo(todo_id, {priority:event.which-48});
         }
@@ -703,7 +747,7 @@ var kisstodo_board = (function () {
         // LEFT
         if (event.which == 37) {
             
-            if (kisstodo_board.is_edit_active()) return;
+            if (kisstodo_board.is_edit_active() || kisstodo_board.ajax_pending) return;
             
             $("#selected_list_option").blur();
 
@@ -715,7 +759,7 @@ var kisstodo_board = (function () {
         
         // RIGHT
         if (event.which == 39) {
-            if (kisstodo_board.is_edit_active()) return;
+            if (kisstodo_board.is_edit_active()  || kisstodo_board.ajax_pending) return;
             
             $("#selected_list_option").blur();
             
@@ -758,7 +802,7 @@ var kisstodo_board = (function () {
     }
     
     res.is_edit_active = function() {
-        return  res.is_todo_edit_active() || res.is_list_edit_active();
+        return  kisstodo_board.is_todo_edit_active() || kisstodo_board.is_list_edit_active();
     }    
     
     res.show_message = function(message) {
@@ -826,7 +870,7 @@ var kisstodo_board = (function () {
     res.focused_element = '';
     res.sort_mode = 'D';
     res.show_complete = 'T';
-   
+    res.ajax_pending = false;
     
     // CONFIG
     res.default_animation_speed=150;

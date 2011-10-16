@@ -174,12 +174,10 @@ ul.todos li {
 }
 
 #message_text {
-    -moz-border-radius: 4px 4px 4px 4px;
     background-color: #cd0707;
     color: #fff;
     width:200px;
     text-align:center;
-    font-weight: bold;
     white-space:nowrap;
 }
 
