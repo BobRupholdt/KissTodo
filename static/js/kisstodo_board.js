@@ -132,6 +132,20 @@ var kisstodo_board = (function () {
             return false;
         });   
         
+        /*
+        $('body').bind( 'taphold', function( e, ui ) {
+            alert( 'You tapped and held!'+$(this).attr('id'));
+            //e.stopImmediatePropagation();
+            //return false;
+          });  
+          
+        
+        $('.todo_li').live('tap', function() {
+            console.log($(this).attr('id'));
+        }
+        
+        );*/
+        
         $('.list_item').live('hover', function () { 
         
             var config = {    
