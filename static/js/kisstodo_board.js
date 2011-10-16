@@ -539,6 +539,7 @@ var kisstodo_board = (function () {
         var todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
         var d = $(".selected_todo .todo_item");
         
+        
         var data = {
             todo_id: todo_id,
             description: $('#edit_todo_description').val(),
@@ -553,6 +554,9 @@ var kisstodo_board = (function () {
             
             time_offset: new Date().getTimezoneOffset()
         };
+        
+        if ($('input[name=edit_todo_priority]:checked').length>0)
+            data.priority = $('input[name=edit_todo_priority]:checked').val();
         
         $.post(kisstodo_board.urls['todo_edit']+todo_id, data, function (response) {
             d.fadeOut(0);

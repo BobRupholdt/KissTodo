@@ -12,6 +12,25 @@
 {% endif %}
 <div class="todo_form_field_container">
 
+{% if mobile %}
+<span class="small">priority</span><br/>
+<div data-role="fieldcontain">
+    <fieldset data-role="controlgroup" data-type="horizontal">
+    	<!--<legend>Choose a pet:</legend>-->
+         	<input type="radio" name="edit_todo_priority" id="radio-choice-4" value="4" {% if todo.priority = 4 %}checked="checked"{% endif %}  />
+         	<label for="radio-choice-4"> - </label>
+
+         	<input type="radio" name="edit_todo_priority" id="radio-choice-1" value="1" {% if todo.priority = 1 %}checked="checked"{% endif %}  />
+         	<label for="radio-choice-1">P1</label>
+
+         	<input type="radio" name="edit_todo_priority" id="radio-choice-2" value="2" {% if todo.priority = 2 %}checked="checked"{% endif %}  />
+         	<label for="radio-choice-2">P2</label>
+
+         	<input type="radio" name="edit_todo_priority" id="radio-choice-3" value="3" {% if todo.priority = 3 %}checked="checked"{% endif %}  />
+         	<label for="radio-choice-3">P3</label>
+    </fieldset>
+</div>    
+{% else %}
 <span class="todo_form_field">
     <span class="small">priority</span><br/>
     <select id="edit_todo_priority" name="edit_todo_priority" >
@@ -21,7 +40,9 @@
         <option value="3" {% if todo.priority = 3 %}selected="selected"{% endif %}>P3</option>
     </select>
 </span>
-{% if mobile %}<br/>{% endif %}
+{% endif %}
+
+
 <span class="todo_form_field">
     <span class="small">description</span><br/>
     <input type="text" {% if not mobile %}style="width:145px"{% endif %} value="{{todo.description}}" id="edit_todo_description" name="edit_todo_description" />
