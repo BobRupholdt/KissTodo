@@ -183,6 +183,15 @@ var kisstodo_board = (function () {
             }
         });
         
+
+        $(".todo_item").live("mouseenter", function(event) { 
+            $(this).find(".image_delete").fadeIn();
+        });
+
+        $(".todo_item").live("mouseleave", function(event) { 
+            $(this).find(".image_delete").fadeOut();
+        });
+
         $('.list_edit').live('click', function () { 
             var list_id=$('#selected_list_option').val();
             
