@@ -11,7 +11,7 @@
 <a class="todo_delete" href="#" data-role="button" data-icon="delete" data-theme="e" data-inline="true" id="todo_delete_{{todo.id}}">delete</a>
 </span>
 {% else %}
-<a href="#" data-role="button" data-icon="delete" data-inline="true" class="todo_delete" id="todo_delete_{{todo.id}}"><img class="image_delete" style="display:none" alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a>
 {% if todo.deleted %}&nbsp;<a href="#" class="todo_undelete" id="todo_undelete_{{todo.id}}"><img alt="undelete" src="{{MEDIA_URL}}img/undo.png" /></a>{% endif %}
+<a href="#" data-role="button" data-icon="delete" data-inline="true" class="todo_delete" id="todo_delete_{{todo.id}}"><img class="image_delete" style="display:none" alt="delete" src="{{MEDIA_URL}}img/cancel.png" /></a>
 {% endif %}
 </span>
