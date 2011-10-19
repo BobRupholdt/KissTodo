@@ -129,7 +129,7 @@ ul.todos li {
 	padding: 5px;
 }
 
-.complete {
+.complete .todo_item {
     color:#999;
     text-decoration: line-through;
     font-style:italic;
