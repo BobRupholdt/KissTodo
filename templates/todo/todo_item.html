@@ -4,7 +4,7 @@
 <span class="small todo_list_name">{% if todo.due_date %}&nbsp;{{todo.due_date|naturalday}}{% if not todo.due_date|time:"H:i" == "00:00"%} at {{todo.due_date|time:"G:i"}}{% endif %}{% endif %}{% if todo.repeat_type %}&nbsp;&nbsp;<img alt="repeat" src="{{MEDIA_URL}}img/repeat.png" />{% endif %}{% if show_list %}&nbsp;[{{todo.list.name}}]{% endif %}</span>
 <span class="no_background todo_delete_button_container" style="text-decoration: none;">
 {% if mobile %}
-<div style="margin: 1px 0 0 0" />
+<div style="margin: 2px 0 0 0" />
 <span data-role="controlgroup" data-type="horizontal">
 <a style="margin-left:-1px;" class='complete_button' href='#' data-ajax='false' data-role='button' data-icon='check' data-inline='true'>done</a>
 <a class='edit_button' href='#' data-ajax='false' data-role='button' data-inline='true'>edit</a>
