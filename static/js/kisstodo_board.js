@@ -496,7 +496,9 @@ var kisstodo_board = (function () {
     
     res.update_list_edit_tools = function() {
         var index = $('#selected_list_option').prop('selectedIndex');
-        if (index<4) 
+        var selected = $('#selected_list_option').val();
+        //if (index<4) 
+        if (index==0 || selected <0) 
             $('.list_edit_delete').hide();
         else
             $('.list_edit_delete').show();
