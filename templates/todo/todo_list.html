@@ -6,6 +6,8 @@
         <input type="hidden" value="{{list_id}}" id="list_id" name="list_id" />
         </span>
     </li>
+    {% else %}
+        <input type="hidden" value="{{list_id}}" id="list_id" name="list_id" />
     {% endif %}
     <script type="text/javascript">$('#name').hint();$('#description').hint();</script>
     {% for t in todos %}  

@@ -334,7 +334,12 @@ var kisstodo_board = (function () {
         {
         $.get(ajax_url, function(response) {
             
-            $("#todo_list").html(response);
+            var received_list_id=$(response).find("#list_id").val();
+            
+            //console.log("expecting "+list_id+", selected="+$("#selected_list_option").val());
+            
+            if (received_list_id==$("#selected_list_option").val()) $("#todo_list").html(response);
+            
             $("#todo_list").fadeIn(kisstodo_board.default_animation_speed);
             
             $("#add_todo_form").find("#description").focus();
@@ -344,7 +349,6 @@ var kisstodo_board = (function () {
             localStorage.setItem('todo_list_'+kisstodo_board.mobile.toString()+list_id, response);
             
             if (kisstodo_board.mobile) $("#todo_list ul").listview();
-            
         });
         } else
         {
@@ -760,7 +764,7 @@ var kisstodo_board = (function () {
         // LEFT
         if (event.which == 37) {
             
-            if (kisstodo_board.is_edit_active() || kisstodo_board.ajax_pending) return;
+            if (kisstodo_board.is_edit_active()) return;
             
             $("#selected_list_option").blur();
 
