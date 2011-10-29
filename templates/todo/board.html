@@ -9,7 +9,8 @@
 {% if mobile %}
 <script type="text/javascript">
  $(document).bind("mobileinit", function() {
-   $.mobile.page.prototype.options.addBackBtn = true;
+   //$.mobile.page.prototype.options.addBackBtn = true;
+   $.mobile.page.prototype.options.addBackBtn = false;
   });
 </script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/jquery_mobile/jquery.mobile-1.0rc1.min.js"></script> 
@@ -28,9 +29,10 @@
 <link href="{{MEDIA_URL}}js/jquery/spinner/ui.spinner.css" rel="stylesheet" type="text/css" />
 {% endif %}
 <script type="text/javascript">
-$(function() {
+function prepare_board() {
     kisstodo_board.mobile={% if mobile %}true{% else %}false{% endif %};
     kisstodo_board.inbox_list_id = {{inbox_list_id}};
+    kisstodo_board.selected_list_id = '{{selected_list_id}}';
     kisstodo_board.urls = {};
     
     kisstodo_board.urls['list_list']="{% url list_list '' %}";
@@ -49,6 +51,7 @@ $(function() {
     kisstodo_board.urls['todo_empty_trash']="{% url todo.views.todo_empty_trash%}";
     //kisstodo_board.urls['login']="{{login_url}}";
     kisstodo_board.urls['login']="{% url todo.views.redirect_login %}";
+    kisstodo_board.selector_prefix='';
     
     if (kisstodo_board.mobile)
     {
@@ -56,13 +59,28 @@ $(function() {
         kisstodo_board.urls['todo_edit']="{% url mobile_todo_edit ''%}";
         kisstodo_board.urls['todo_list_complete']="{% url mobile_todo_list_complete sort_mode='#sort_mode' list_id='#list_id' show_complete='#show_complete' %}";
         kisstodo_board.urls['todo_show_item']="{% url mobile_todo_show_item '' %}";
+        kisstodo_board.urls['mobile_board_list_id']="{% url mobile_board_list_id '' %}";
+        
+        kisstodo_board.selector_prefix='.ui-page-active ';
     }
     
     kisstodo_board.init_board();
     
-    window.scrollTo(1,0);
+    //window.scrollTo(1,0);
+}
+{% if mobile %}
+    //$('#main_page').live('pageinit',function(event){
+    $('.main_page').live('pagebeforeshow',function(event){
+        if (!kisstodo_board.initialized)  
+             prepare_board();
+        else
+            kisstodo_board.init_board_refresh();
+    });
+{% else %}
+$(function() {
+    prepare_board();
 });
-
+{% endif %};
 </script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/kisstodo_board.js"></script>
 {% endblock %}
@@ -81,38 +99,34 @@ $(function() {
     <span id="message_text" style="display:none;vertical-align:center;">message</span>
 </span>
 </form>
-{% else %}<span id="collapsible_container" data-role="collapsible" data-collapsed="true"><h3 id="collapsible_title">more</h3>
 {% endif%}
 <br/>
-<span id="list_list" ></span>
+<span class="list_list" id="list_list" ></span>
 <span id="list_edit_container" ></span>
 
+{% if not mobile %}
 <br/>
-
-
 <span class="small sort_by" data-role="controlgroup" data-type="horizontal">
 sort:
 <a href="#" id="sort_mode_D" class="sort_mode selected_link ui-btn-active" data-role="button">date</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
 <a href="#" id="sort_mode_P" class="sort_mode" data-role="button">priority{% if not mobile %}{% endif %}</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
 <a href="#" id="sort_mode_A" class="sort_mode" data-role="button">a-z</a>
 </span>
-
-<br/>{% if mobile %}<br/>{% endif %}
-
+<br/>
 <span class="small sort_by" data-role="controlgroup" data-type="horizontal">
 show completed:
 <a href="#" class="show_complete selected_link ui-btn-active" id="show_complete_T" data-role="button">yes</a>{% if not mobile %}<span class="light"> | </span>{% endif %}<a href="#" class="show_complete" id="show_complete_F" data-role="button">no</a>
 </span>
-{% if mobile %}
-</span><!--collapsible-->
+{% endif %}
 
+{% if mobile %}
 <span class="message">
     <span id="wait" style="display:none;"><img src="{{MEDIA_URL}}img/wait.gif" alt="wait" /></span>
     <span id="message_text" style="display:none;vertical-align:center;">message</span>
 </span>
 {% endif%}
 {% if mobile %}<br/><br/>{% endif %}
-<span id="todo_list"></span>
+<span class="todo_list" id="todo_list"></span>
 
 
 {% endblock %}

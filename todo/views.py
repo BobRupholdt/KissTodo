@@ -41,7 +41,7 @@ def test_page(request):
         #RequestContext(request, {'media_root':settings.MEDIA_ROOT, 'lists':List.objects, 'todos':Todo.objects,}))
         RequestContext(request, {'media_root':settings.MEDIA_ROOT}))
 
-def board(request, mobile=False):
+def board(request, mobile=False, selected_list_id=''):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
     
     logout_url=users.create_logout_url("http://www.massimobarbieri.it/kisstodo")
@@ -49,7 +49,7 @@ def board(request, mobile=False):
         
     #request.session['mobile']=mobile
 
-    return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url, 'mobile':mobile}))
+    return render_to_response('todo/board.html', RequestContext(request, {'inbox_list_id':inbox.id, 'logout_url':logout_url, 'mobile':mobile, 'selected_list_id':selected_list_id}))
 
 def _do_send_mail(t, request):
     address_from = "todo_reminder@"+str(os.environ['APPLICATION_ID'])+".appspotmail.com" 

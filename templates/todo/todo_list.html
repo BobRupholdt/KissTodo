@@ -1,7 +1,7 @@
 <ul class="todos">
     {% if not show_list %}
     <li>
-        <span id="add_todo_form">
+        <span id="add_todo_form" class="add_todo_form">
         <input type="text" title="&raquo; NEW TODO" autocomplete="off" id="description" name="description" />
         <input type="hidden" value="{{list_id}}" id="list_id" name="list_id" />
         </span>
@@ -33,7 +33,7 @@
 
 <script type="text/javascript">
 if (kisstodo_board.mobile) {
-    $('#add_todo_form').trigger('create');
+    $('.add_todo_form').trigger('create');
     $('.todo_delete_button_container').trigger('create');
     $("input[type='checkbox']").hide();
     //$("input[type='checkbox']").checkboxradio();

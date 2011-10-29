@@ -1,12 +1,12 @@
 {% if not mobile %}<span class="small">your lists:</span>{% endif %}
 <select id="selected_list_option" name="selected_list_option">
-<option value="{{inbox_list.id}}" >{{ inbox_list.name }}</option>
-<option value="-2">@hot</option>
+<option value="{{inbox_list.id}}" {%if inbox_list.id|stringformat:"s" == selected_list_id%}selected="selected"{%endif%} >{{ inbox_list.name }}</option>
+<option value="-2" {%if "-2" == selected_list_id%}selected="selected"{%endif%}>@hot</option>
 {% for l in lists %}
     {% if l.name != inbox_list.name %}<option value="{{l.id}}" {%if l.id|stringformat:"s" == selected_list_id%}selected="selected"{%endif%} >{{ l.name }}</option>{% endif %}  
 {% endfor %} 
-<option value="-4">@all</option>
-<option value="-3">@trash</option>
+<option value="-4" {%if "-4" == selected_list_id%}selected="selected"{%endif%}>@all</option>
+<option value="-3" {%if "-3" == selected_list_id%}selected="selected"{%endif%}>@trash</option>
 </select>
 <span class="list_edit_delete no_background" style="display:none;">
         <a href="#" class="list_edit"><img alt="edit" src="{{MEDIA_URL}}img/edit.png" /></a> 

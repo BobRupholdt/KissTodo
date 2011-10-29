@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     (r'^ajax/todo/empty_trash/$', todo_empty_trash),
     
     url(r'^mboard$', board, {'mobile': True}, "mobile_board"),
+    url(r'^mboard/(?P<selected_list_id>.*)$', board, {'mobile': True}, "mobile_board_list_id"),
     url(r'^majax/list/list/(?P<selected_list_id>.*)$', list_list, {'mobile':True}, "mobile_list_list"),
     url(r'^majax/todo/edit/(?P<todo_id>.*)$', todo_edit, {'mobile':True}, "mobile_todo_edit"),
     url(r'^majax/todo/list/(?P<list_id>.+)/(?P<sort_mode>.+)/(?P<show_complete>.+)$', todo_list, {'mobile':True}, 'mobile_todo_list_complete'),
