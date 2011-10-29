@@ -17,7 +17,7 @@
 <div style='display:none'>
 <div id="help" class="small">
     <table>
-    <tr><th colspan="2">Keyboard shortcuts</th></tr>
+    <tr><th colspan="2" style="text-align:left">1. Keyboard shortcuts</th></tr>
     <tr><td><span class="kbd">&larr;</span> / <span class="kbd">&rarr;</span></td><td>select prev. / next list</td></td>
     <tr><td><span class="kbd">&uarr;</span> / <span class="kbd">&darr;</span></td><td>select prev. / next todo</td></td>
     <tr><td><span class="kbd">1</span> .. <span class="kbd">4</span></td><td>change todo priority<br/><span class="small">1 = max, 4 = none</span></td></td>
@@ -30,16 +30,21 @@
     </table>
 
     <table>
-    <tr><th colspan="2">Special, not deletable lists</th></tr>
+    <tr><th colspan="2" style="text-align:left">2. Special, not deletable lists</th></tr>
     <tr><td colspan="2"><b>@inbox</b>: when you delete a list, all todo are moved to @inbox.</td></tr>
     <tr><td colspan="2"><b>@hot</b>: a list containing all todo with a priority OR a due date in the past OR within the next 7 days.</td></tr>
     <tr><td colspan="2"><b>@trash</b>: when you delete a todo, it is moved into @trash list. You can un-delete the todo by clicking on the <img src="{{MEDIA_URL}}img/undo.png" /> icon.</td></tr>
     </table>
     
     <table>
-    <tr><th colspan="2">Todo smart insert</th></tr>
+    <tr><th colspan="2" style="text-align:left">3. Todo smart insert</th></tr>
     <tr><td colspan="2"><b>priority</b>: start a new task description with !1, !2 or !3, and the priority will be automatically assigned.</td></tr>
     </table>    
+    
+    <table>
+    <tr><th colspan="2" style="text-align:left">4. Gestures - mobile view only</th></tr>
+    <tr><td colspan="2"><b>left / right swipe</b>: go to the new / previous list.</td></tr>
+    </table>      
 </div>
 </div>
 {% endblock %}
