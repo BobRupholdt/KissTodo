@@ -593,6 +593,7 @@ var kisstodo_board = (function () {
         if (!kisstodo_board.is_currently_online()) {kisstodo_board.show_offline_message(); return;}
         
         var todo_id=$(".selected_todo").attr("id").replace('todo_li_','');
+        
         var d = $(".selected_todo .todo_item");
         
         
@@ -615,16 +616,19 @@ var kisstodo_board = (function () {
             data.priority = $('input[name=edit_todo_priority]:checked').val();
         
         $.post(kisstodo_board.urls['todo_edit']+todo_id, data, function (response) {
-            d.fadeOut(0);
-            d.load(kisstodo_board.urls['todo_show_item']+todo_id, function () {
-                d.fadeIn(kisstodo_board.default_animation_speed);
-                if (kisstodo_board.mobile) {
+        
+            if (kisstodo_board.mobile) {
                     //$('.todo_delete_button_container').parent().trigger('create');
                     history.back();
                     kisstodo_board.refresh_selected_todo_list();
                     //$.mobile.changePage('#main_page');
-                }
-            });
+            }
+            else {
+                d.fadeOut(0);
+                d.load(kisstodo_board.urls['todo_show_item']+todo_id, function () {
+                    d.fadeIn(kisstodo_board.default_animation_speed);
+                });
+            }
             /*if (kisstodo_board.mobile) {
                 history.back();
                 setTimeout( function(){$('.todo_delete_button_container').trigger('create');}, 500);
