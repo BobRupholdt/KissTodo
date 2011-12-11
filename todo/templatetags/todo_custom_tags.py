@@ -14,7 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from google.appengine.api import users
+from django.conf import settings
+
+if settings.KISSTODO_USE_GAE: 
+    from google.appengine.api import users
+    
 from django import template
 import app_version
 
@@ -26,6 +30,7 @@ def app_version_info():
     
 @register.simple_tag    
 def google_user():
+    if not settings.KISSTODO_USE_GAE: return "[a]"
     user = users.get_current_user()
     if user:
         return str(user.nickname())

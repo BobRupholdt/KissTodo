@@ -22,13 +22,23 @@
     {% endfor %} 
 </ul>
 <div class="small">
+    
+    {% if show_clear_completed_items %}
     <br/>
+    <span id="clear_completed_items_container" class="clear_completed_items_container">
+    <a data-role="button" data-inline="true" id="clear_completed_items" href="#">clear completed todo</a>
+    <script type="text/javascript">if (kisstodo_board.mobile) $('.clear_completed_items_container').trigger('create');</script>
+    </span>
+    {% endif %}    
+    
     {% if show_empty_trash %}
+    <br/>
     <span id="empty_trash_container" class="empty_trash_container">
     <a data-role="button" data-inline="true" id="empty_trash" href="#">empty trash</a>
     <script type="text/javascript">if (kisstodo_board.mobile) $('.empty_trash_container').trigger('create');</script>
     </span>
     {% endif %}
+    
 </div>
 
 <script type="text/javascript">

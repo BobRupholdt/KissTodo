@@ -36,6 +36,7 @@ urlpatterns = patterns('',
     url(r'^ajax/todo/edit/(?P<todo_id>.*)$', todo_edit, {}, "todo_edit"),
     url(r'^ajax/todo/show_item/(?P<todo_id>.*)$', todo_show_item, {}, "todo_show_item"),
     (r'^ajax/todo/empty_trash/$', todo_empty_trash),
+    (r'^ajax/todo/todo_clear_completed_items/(?P<list_id>.*)$', todo_clear_completed_items),
     
     url(r'^mboard$', board, {'mobile': True}, "mobile_board"),
     url(r'^mboard/(?P<selected_list_id>.*)$', board, {'mobile': True}, "mobile_board_list_id"),

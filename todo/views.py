@@ -28,8 +28,9 @@ from datetime import datetime
 
 import os
 
-from google.appengine.api import users
-from google.appengine.api import mail
+if settings.KISSTODO_USE_GAE:
+    from google.appengine.api import users
+    from google.appengine.api import mail
 
 from models import *
 
@@ -44,7 +45,10 @@ def test_page(request):
 def board(request, mobile=False, selected_list_id=''):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
     
-    logout_url=users.create_logout_url("http://www.massimobarbieri.it/kisstodo")
+    if settings.KISSTODO_USE_GAE: 
+        logout_url=users.create_logout_url("http://www.massimobarbieri.it/kisstodo")
+    else:
+        logout_url="#"
     #login_url=users.create_login_url("/")
         
     #request.session['mobile']=mobile
@@ -80,6 +84,16 @@ def todo_empty_trash(request):
     for t in Todo.objects.deleted(_get_current_user()): t.delete_raw()
     return HttpResponse("", mimetype="text/plain") 
     
+def todo_clear_completed_items(request, list_id):
+    l=List.objects.get(id=int(list_id))
+    _check_permission(l)
+    
+    todos=Todo.objects.filter(list__id=list_id)
+    for t in todos: 
+        if t.complete: t.delete_raw()
+    
+    return HttpResponse("", mimetype="text/plain")     
+    
 def todo_search(request, search_string, sort_mode, show_complete='F'):
     todos = Todo.objects.search(_get_current_user(), search_string)
     
@@ -97,6 +111,7 @@ def todo_list(request, list_id, sort_mode, show_complete='F', mobile=False):
     
     show_list = False
     show_empty_trash = False
+    show_clear_completed_items = False
     
     if int(list_id)==-2:
         todos = Todo.objects.hot(_get_current_user())
@@ -111,10 +126,13 @@ def todo_list(request, list_id, sort_mode, show_complete='F', mobile=False):
     else:
         todos = Todo.objects.filter(list__id=list_id)
         
-    if (show_complete=='F'):
-        todos = [t for t in todos if not t.complete]
+    #if (show_complete=='F'):
+    #    todos = [t for t in todos if not t.complete]
     
-    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash, 'mobile':mobile}))
+    if int(list_id)>0: show_clear_completed_items=any([t.complete for t in todos])
+    
+    return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash, 'show_clear_completed_items':show_clear_completed_items, 'mobile':mobile}))
+    
     
 def list_list(request, selected_list_id, mobile=False):
     inbox = List.objects.get_or_create_inbox(_get_current_user())
@@ -204,8 +222,8 @@ def todo_edit(request, todo_id, mobile=False):
 
         t.save()
         
-        #return HttpResponse("", mimetype="text/plain")  
-        return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
+        #return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
+        return HttpResponseRedirect('/todo/ajax/todo/show_item/'+str(t.id));
     else:
         return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':t,'repeat_type_choiches':Todo.repeat_type_choiches,'lists':List.objects.filter(owner=_get_current_user()), 'mobile':mobile}))
         
@@ -369,8 +387,10 @@ def _check_permission(list):
     if list.owner!=_get_current_user(): raise Exception("Permission denied")
     
 def _get_current_user():
-    user = users.get_current_user()
-    if user: return  user.nickname()
+    if settings.KISSTODO_USE_GAE: 
+        user = users.get_current_user()
+        if user: return  user.nickname()
+        
     return '[anonymous user]'
     
 class ImportRtmForm(forms.Form):

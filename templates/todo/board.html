@@ -32,6 +32,7 @@ function prepare_board() {
     kisstodo_board.mobile={% if mobile %}true{% else %}false{% endif %};
     kisstodo_board.inbox_list_id = {{inbox_list_id}};
     kisstodo_board.selected_list_id = '{{selected_list_id}}';
+    kisstodo_board.csrftoken = '{{ csrf_token }}';
     kisstodo_board.urls = {};
     
     kisstodo_board.urls['list_list']="{% url list_list '' %}";
@@ -48,6 +49,7 @@ function prepare_board() {
     kisstodo_board.urls['todo_list_complete']="{% url todo_list_complete sort_mode='#sort_mode' list_id='#list_id' show_complete='#show_complete' %}";
     kisstodo_board.urls['todo_search']="{% url todo.views.todo_search sort_mode='#sort_mode' search_string='#search_string' show_complete='#show_complete' %}";
     kisstodo_board.urls['todo_empty_trash']="{% url todo.views.todo_empty_trash%}";
+    kisstodo_board.urls['todo_clear_completed_items']="{% url todo.views.todo_clear_completed_items '' %}";
     //kisstodo_board.urls['login']="{{login_url}}";
     kisstodo_board.urls['login']="{% url todo.views.redirect_login %}";
     kisstodo_board.selector_prefix='';
@@ -106,13 +108,13 @@ $(function() {
 {% if not mobile %}
 <br/>
 <span class="small sort_by" data-role="controlgroup" data-type="horizontal">
-sort:
+sort by:
 <a href="#" id="sort_mode_D" class="sort_mode selected_link ui-btn-active" data-role="button">date</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
 <a href="#" id="sort_mode_P" class="sort_mode" data-role="button">priority{% if not mobile %}{% endif %}</a>{% if not mobile %}<span class="light"> | </span>{% endif %}
 <a href="#" id="sort_mode_A" class="sort_mode" data-role="button">a-z</a>
 </span>
-<br/>
-<span class="small sort_by" data-role="controlgroup" data-type="horizontal">
+
+<span style="display:none" class="small sort_by" data-role="controlgroup" data-type="horizontal">
 show completed:
 <a href="#" class="show_complete selected_link ui-btn-active" id="show_complete_T" data-role="button">yes</a>{% if not mobile %}<span class="light"> | </span>{% endif %}<a href="#" class="show_complete" id="show_complete_F" data-role="button">no</a>
 </span>
