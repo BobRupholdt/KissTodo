@@ -1,6 +1,8 @@
-# Django settings for kisstodo project.
+# Django settings for KissTodo project.
 
-KISSTODO_USE_GAE=True
+# KissTodo is designet to work on GAE; it works with Django-ORM, but only in single-user mode.
+# if you want to store your data, put the setting below to False
+KISSTODO_USE_GAE=True # False = relational database
 
 if KISSTODO_USE_GAE: from djangoappengine.settings_base import *
 
