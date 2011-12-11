@@ -148,6 +148,7 @@ var kisstodo_board = (function () {
             var data = {csrfmiddlewaretoken : kisstodo_board.csrftoken};
        
             $.post(kisstodo_board.urls['todo_clear_completed_items']+list_id, data, function (response) {
+                    //console.log("LIST_ID2:"+list_id);
                     kisstodo_board.refresh_list_list(list_id);
             });        
     		
@@ -431,6 +432,7 @@ var kisstodo_board = (function () {
     }
     
     res.refresh_list_list = function(selected_list_id) {    
+        //console.log("res.refresh_list_list("+selected_list_id+")");
         $(".list_list").fadeOut(kisstodo_board.default_animation_speed);
          if (kisstodo_board.is_currently_online())
         {

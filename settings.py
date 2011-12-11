@@ -1,6 +1,6 @@
 # Django settings for kisstodo project.
 
-KISSTODO_USE_GAE=False
+KISSTODO_USE_GAE=True
 
 if KISSTODO_USE_GAE: from djangoappengine.settings_base import *
 
@@ -9,7 +9,7 @@ import os
 SECRET_KEY = '7vyl7&d^725^kllplihdr2f#a7q15c#gcdlaih4h^-%93v%36^'
 
 DEBUG = False
-DEBUG = True
+#DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
