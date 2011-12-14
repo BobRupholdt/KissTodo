@@ -415,7 +415,6 @@ def _parse_list(list, user):
     return int(priority)     
     
 def _check_permission(request, list):
-    print "%s vs %s" % (list.owner, _get_current_user(request))
     if list.owner!=_get_current_user(request): raise Exception("Permission denied")
     
 def _get_current_user(request):
