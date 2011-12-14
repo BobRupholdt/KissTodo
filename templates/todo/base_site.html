@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 {% load todo_custom_tags %}
-<html manifest="/cache.manifest" >
+<html {% block html_tag_extra %}{% endblock %} >
 <head>
     <title>{% block title %}KissTodo {%app_version_info%}{% endblock %}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
@@ -21,7 +21,7 @@
             <div class="float_right">
                 {% if false %}
                 <div class="menu">
-                    Welcome, <strong>{%google_user%}</strong>
+                    Welcome, <strong>{%google_user%}{{ user.username }}</strong>
                 </div>
                 
                 <div class="menu menu_border">
@@ -40,7 +40,7 @@
         
         <div class="content_title" data-role="header">
             <div style="display:inline">
-                <span class="no_background">{% if not mobile %}<a class="nobg" href="{% url todo.views.board %}"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a>{% endif %}</span>
+                <span class="no_background">{% if not mobile %}<a class="nobg" href="{% url board %}"><img src="{{MEDIA_URL}}img/logo.png" alt="logo" /></a>{% endif %}</span>
                 <h1 style="display:inline">{% block content_title %}{% endblock %}</h1>
             </div>
             {% block content_headline %}{% endblock %}

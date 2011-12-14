@@ -438,6 +438,10 @@ var kisstodo_board = (function () {
         {
         
         $.get(kisstodo_board.urls['list_list']+selected_list_id, function(response) {
+        
+            //console.log(response);
+            if (response.indexOf('<!DOCTYPE HTML>')==0) document.location = "/accounts/login/";
+            
             $(".list_list").html(response);
             
             kisstodo_board.update_list_edit_tools();

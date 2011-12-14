@@ -1,6 +1,6 @@
 {% extends "todo/base_site.html" %}
 
-{% block content_title %}User login{% endblock %}
+{% block content_title %}Login{% endblock %}
 
 {% block content %}
 
@@ -13,7 +13,7 @@ Please try again.</p>
 {{ form.username }}</p>
 <p><label for="id_password">Password:</label>
 {{ form.password }}</p>
-<input type="hidden" name="next" value="/pm/task_board/" />
+<input type="hidden" name="next" value="/todo/board" />
 <input type="submit" value="login" />
 {% csrf_token %}
 </form>

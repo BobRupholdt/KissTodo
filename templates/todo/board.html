@@ -1,5 +1,6 @@
 ﻿{% extends "todo/base_auth_site.html" %}
 {% load todo_custom_tags %}
+{% block html_tag_extra %}{{ block.super }} manifest="/cache.manifest"{% endblock %}
 {% block extra_head %}
 {{ block.super }}
 <meta name="viewport" content="width=device-width">

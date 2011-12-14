@@ -34,6 +34,18 @@ if settings.KISSTODO_USE_GAE:
 
 from models import *
 
+def my_login_required(function):
+    def decorated_view(*args, **kwargs):
+        
+        if settings.KISSTODO_USE_GAE:
+            f = function # GAE authentication, nothing to do (see app.yaml)
+        else:
+            f = login_required(function) # Django authentication
+        
+        return f(*args, **kwargs)
+        
+    return decorated_view
+
 def test_page(request):
     if 'op' in request.POST and request.POST['op']=='simulate error':
         raise Exception("Simulated Error!")
@@ -41,9 +53,10 @@ def test_page(request):
     return render_to_response('todo/test_page.html', 
         #RequestContext(request, {'media_root':settings.MEDIA_ROOT, 'lists':List.objects, 'todos':Todo.objects,}))
         RequestContext(request, {'media_root':settings.MEDIA_ROOT}))
-
+        
+@my_login_required
 def board(request, mobile=False, selected_list_id=''):
-    inbox = List.objects.get_or_create_inbox(_get_current_user())
+    inbox = List.objects.get_or_create_inbox(_get_current_user(request))
     
     if settings.KISSTODO_USE_GAE: 
         logout_url=users.create_logout_url("http://www.massimobarbieri.it/kisstodo")
@@ -80,13 +93,15 @@ def todo_send_mail(request):
         
     return HttpResponse(str(now)+res, mimetype="text/plain") 
 
+@my_login_required
 def todo_empty_trash(request):
-    for t in Todo.objects.deleted(_get_current_user()): t.delete_raw()
+    for t in Todo.objects.deleted(_get_current_user(request)): t.delete_raw()
     return HttpResponse("", mimetype="text/plain") 
     
+@my_login_required
 def todo_clear_completed_items(request, list_id):
     l=List.objects.get(id=int(list_id))
-    _check_permission(l)
+    _check_permission(request, l)
     
     todos=Todo.objects.filter(list__id=list_id)
     for t in todos: 
@@ -94,34 +109,36 @@ def todo_clear_completed_items(request, list_id):
     
     return HttpResponse("", mimetype="text/plain")     
     
+@my_login_required
 def todo_search(request, search_string, sort_mode, show_complete='F'):
-    todos = Todo.objects.search(_get_current_user(), search_string)
+    todos = Todo.objects.search(_get_current_user(request), search_string)
     
     if (show_complete=='F'):
         todos = [t for t in todos if not t.complete]
         
     return render_to_response('todo/todo_list.html', RequestContext(request, {'todos':Todo.todo_sort(todos, sort_mode), 'show_list': True }))
 
+@my_login_required
 def todo_list(request, list_id, sort_mode, show_complete='F', mobile=False):
     #import time
     #time.sleep(1)
     if int(list_id)>0:
         l=List.objects.get(id=int(list_id))
-        _check_permission(l)
+        _check_permission(request, l)
     
     show_list = False
     show_empty_trash = False
     show_clear_completed_items = False
     
     if int(list_id)==-2:
-        todos = Todo.objects.hot(_get_current_user())
+        todos = Todo.objects.hot(_get_current_user(request))
         show_list = True
     elif int(list_id)==-3:
-        todos = Todo.objects.deleted(_get_current_user())
+        todos = Todo.objects.deleted(_get_current_user(request))
         show_list = True    
         if len(todos)>0: show_empty_trash = True
     elif int(list_id)==-4:
-        todos = Todo.objects.all_by_user(_get_current_user())
+        todos = Todo.objects.all_by_user(_get_current_user(request))
         show_list = True          
     else:
         todos = Todo.objects.filter(list__id=list_id)
@@ -133,15 +150,16 @@ def todo_list(request, list_id, sort_mode, show_complete='F', mobile=False):
     
     return render_to_response('todo/todo_list.html', RequestContext(request, {'list_id':list_id,'todos':Todo.todo_sort(todos, sort_mode), 'show_list':show_list, 'show_empty_trash':show_empty_trash, 'show_clear_completed_items':show_clear_completed_items, 'mobile':mobile}))
     
-    
+@my_login_required
 def list_list(request, selected_list_id, mobile=False):
-    inbox = List.objects.get_or_create_inbox(_get_current_user())
-    return render_to_response('todo/list_list.html', RequestContext(request, {'lists':List.objects.filter(owner=_get_current_user()), 'inbox_list': inbox, 'selected_list_id': str(selected_list_id), 'mobile':mobile}))    
+    inbox = List.objects.get_or_create_inbox(_get_current_user(request))
+    return render_to_response('todo/list_list.html', RequestContext(request, {'lists':List.objects.filter(owner=_get_current_user(request)), 'inbox_list': inbox, 'selected_list_id': str(selected_list_id), 'mobile':mobile}))    
 
+@my_login_required
 def list_add(request):
     l=List()
     l.name=request.POST['name']
-    l.owner=_get_current_user()
+    l.owner=_get_current_user(request)
     if not l.is_special():
         l.save()
         out = l.id
@@ -149,28 +167,32 @@ def list_add(request):
         out=-1
     return HttpResponse(out, mimetype="text/plain") 
     
+@my_login_required
 def list_delete(request):
     l=List.objects.get(id=int(request.POST['list_id']))
-    _check_permission(l)
+    _check_permission(request, l)
     l.delete()
     
     return HttpResponse("", mimetype="text/plain")     
     
+@my_login_required
 def todo_delete(request):
     t=Todo.objects_raw.get(id=int(request.POST['todo_id']))
-    _check_permission(t.list)
+    _check_permission(request, t.list)
     t.delete()
     return HttpResponse("", mimetype="text/plain")    
-    
+
+@my_login_required    
 def todo_undelete(request):
     t=Todo.objects_raw.get(id=int(request.POST['todo_id']))
-    _check_permission(t.list)
+    _check_permission(request, t.list)
     t.undelete()
     return HttpResponse("", mimetype="text/plain")        
     
+@my_login_required
 def todo_complete(request):
     t=Todo.objects_raw.get(id=int(request.POST['todo_id']))
-    _check_permission(t.list)
+    _check_permission(request, t.list)
     
     t.toggle_complete()
     
@@ -178,16 +200,18 @@ def todo_complete(request):
     
     return HttpResponse("", mimetype="text/plain")  
 
+@my_login_required
 def todo_postpone(request):
     t=Todo.objects_raw.get(id=int(request.POST['todo_id']))
-    _check_permission(t.list)
+    _check_permission(request, t.list)
     t.postpone()
     t.save()
     return HttpResponse("", mimetype="text/plain")        
 
+@my_login_required
 def todo_edit(request, todo_id, mobile=False):
     t=Todo.objects_raw.get(id=int(todo_id))
-    _check_permission(t.list)
+    _check_permission(request, t.list)
     
     if request.method == 'POST':
     
@@ -225,11 +249,12 @@ def todo_edit(request, todo_id, mobile=False):
         #return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t,}))    
         return HttpResponseRedirect('/todo/ajax/todo/show_item/'+str(t.id));
     else:
-        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':t,'repeat_type_choiches':Todo.repeat_type_choiches,'lists':List.objects.filter(owner=_get_current_user()), 'mobile':mobile}))
-        
+        return render_to_response('todo/todo_edit.html', RequestContext(request, {'todo':t,'repeat_type_choiches':Todo.repeat_type_choiches,'lists':List.objects.filter(owner=_get_current_user(request)), 'mobile':mobile}))
+
+@my_login_required        
 def list_edit(request, list_id):
     l=List.objects.get(id=int(list_id))
-    _check_permission(l)
+    _check_permission(request, l)
     
     if request.method == 'POST':
         if 'name' in request.POST: l.name=request.POST['name']
@@ -240,14 +265,16 @@ def list_edit(request, list_id):
     else:
         return render_to_response('todo/list_edit.html', RequestContext(request, {'list':l}))            
 
+@my_login_required
 def todo_show_item(request, todo_id, mobile=False):
     t = Todo.objects_raw.get(id=int(todo_id))
-    _check_permission(t.list)
+    _check_permission(request, t.list)
     return render_to_response('todo/todo_item.html', RequestContext(request, {'todo':t, 'mobile':mobile}))    
-    
+
+@my_login_required    
 def todo_add(request):
     l=List.objects.get(id=request.POST['list_id'])
-    _check_permission(l)
+    _check_permission(request, l)
     
     t=Todo()
     t.description=request.POST['description']
@@ -261,7 +288,8 @@ def todo_add(request):
     t.save()
     out = t.id
     return HttpResponse(out, mimetype="text/plain")     
-    
+
+@my_login_required    
 def import_rtm(request):
     if request.method == 'POST':
         
@@ -272,7 +300,7 @@ def import_rtm(request):
         
         if url == "":
             for t in Todo.objects_raw.filter(external_source="ATOM"):
-                if t.list.owner==_get_current_user(): t.delete_raw()
+                if t.list.owner==_get_current_user(request): t.delete_raw()
             return HttpResponse("Empty atom feed received. Cleanup complete.", mimetype="text/plain")  
             
         import urllib2
@@ -315,7 +343,7 @@ def import_rtm(request):
                     elif field_name == "Priority": 
                         t.priority = str(_parse_priority(c.firstChild.nodeValue))
                     elif field_name == "List": 
-                        t.list = _parse_list(c.firstChild.nodeValue, _get_current_user())
+                        t.list = _parse_list(c.firstChild.nodeValue, _get_current_user(request))
                     elif field_name == "URL": 
                         t.description += " (%s)" % (c.firstChild.firstChild.nodeValue,)
                     elif field_name == "Repeat every": 
@@ -332,18 +360,20 @@ def import_rtm(request):
         return HttpResponse(out, mimetype="text/plain")     
     else:
         return render_to_response("todo/import_rtm_form.html",RequestContext(request, {'form': ImportRtmForm()}))  
-        
+      
+@my_login_required      
 def export_atom(request):
    
     list=[]
     
     for t in Todo.objects.filter(complete=False):
-        if t.list.owner==_get_current_user(): list.append(t)
+        if t.list.owner==_get_current_user(request): list.append(t)
             
     return render_to_response("todo/export_atom.atom",RequestContext(request, {'todos': list}))  # , mimetype="application/atom+xml"
     #return HttpResponse(out, mimetype="text/plain")
     #return HttpResponse(out, mimetype="application/atom+xml")     
       
+@my_login_required      
 def cache_manifest(request):
     #import uuid
     #guid=uuid.uuid1()
@@ -379,19 +409,21 @@ def _parse_list(list, user):
     if list=='Inbox': 
         return List.objects.get_or_create_inbox(user)
     else:
-        list, created = List.objects.get_or_create(name=list, owner=_get_current_user())
+        list, created = List.objects.get_or_create(name=list, owner=user)
         return list
                         
     return int(priority)     
-def _check_permission(list):
-    if list.owner!=_get_current_user(): raise Exception("Permission denied")
     
-def _get_current_user():
+def _check_permission(request, list):
+    print "%s vs %s" % (list.owner, _get_current_user(request))
+    if list.owner!=_get_current_user(request): raise Exception("Permission denied")
+    
+def _get_current_user(request):
     if settings.KISSTODO_USE_GAE: 
         user = users.get_current_user()
         if user: return  user.nickname()
-        
-    return '[anonymous user]'
+    else:
+        return request.user.username
     
 class ImportRtmForm(forms.Form):
     #text = forms.CharField(widget=forms.Textarea(), label='Atom feed', required=False)

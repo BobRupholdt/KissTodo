@@ -30,12 +30,13 @@ def app_version_info():
     
 @register.simple_tag    
 def google_user():
-    if not settings.KISSTODO_USE_GAE: return "[a]"
+    if not settings.KISSTODO_USE_GAE: return ""
+    
     user = users.get_current_user()
     if user:
         return str(user.nickname())
     else:
-        return "[a]"
+        return ""
     
 @register.filter
 def atom_date(value):

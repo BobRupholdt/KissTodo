@@ -4,14 +4,14 @@
 {% block content_headline%}
 {{ block.super }}
 <span class="small" style="float:right;position:absolute;right:100;">
-<b>{% google_user %}</b> <span class="light"> | </span> 
-<a href="#" id="network_switch" class="network_switch">network</a> <span class="light"> | </span> 
-<a href="{{logout_url}}">logout</a> <span class="light"> | </span> 
+<b>{% google_user %}{{ user.username }}</b> <span class="light"> | </span> 
 {% if mobile %}
 <a href="{% url board %}" data-ajax="false">desktop view</a> <span class="light"> | </span> 
 {% else %}
 <a href="{% url mobile_board %}">mobile view</a> <span class="light"> | </span> 
 {% endif %}
+<a href="#" id="network_switch" class="network_switch">network</a> <span class="light"> | </span> 
+<a href="{{logout_url}}">logout</a> <span class="light"> | </span> 
 <a class="help_toggle" href="#">help</a>
 </span>
 <div style='display:none'>
