@@ -50,6 +50,8 @@ urlpatterns = patterns('',
     (r'^send_mail$', todo_send_mail),
     (r'^redirect_login$', redirect_login),
     
+    (r'^logout$', do_logout, {}, "logout"),
+    
 )
 
 

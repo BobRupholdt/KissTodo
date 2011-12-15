@@ -21,6 +21,7 @@ from django.template.loader import get_template
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from django.conf import settings
 from django import forms
 from random import choice
@@ -59,9 +60,9 @@ def board(request, mobile=False, selected_list_id=''):
     inbox = List.objects.get_or_create_inbox(_get_current_user(request))
     
     if settings.KISSTODO_USE_GAE: 
-        logout_url=users.create_logout_url("http://www.massimobarbieri.it/kisstodo")
+        logout_url=users.create_logout_url(settings.KISSTODO_SITE_URL)
     else:
-        logout_url="#"
+        logout_url=reverse('logout')
     #login_url=users.create_login_url("/")
         
     #request.session['mobile']=mobile
@@ -372,8 +373,7 @@ def export_atom(request):
     return render_to_response("todo/export_atom.atom",RequestContext(request, {'todos': list}))  # , mimetype="application/atom+xml"
     #return HttpResponse(out, mimetype="text/plain")
     #return HttpResponse(out, mimetype="application/atom+xml")     
-      
-@my_login_required      
+           
 def cache_manifest(request):
     #import uuid
     #guid=uuid.uuid1()
@@ -381,7 +381,11 @@ def cache_manifest(request):
    
 def redirect_login(request):
     return render_to_response("todo/redirect_login.html",RequestContext(request, {}))  
- 
+    
+def do_logout(request):
+    logout(request)
+    return HttpResponseRedirect(settings.KISSTODO_SITE_URL)
+
 def _parse_date(date):
     # 'never' or 'Mon 13 Jun 11 18:30' or 'Mon 13 Jun 11'
     

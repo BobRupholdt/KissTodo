@@ -1,12 +1,14 @@
 # Django settings for KissTodo project.
 
-# KissTodo is designet to work on GAE; it works with Django-ORM, and you can manage users and lists via Admin interface.
+# KissTodo is designet to work on GAE; it works with Django-ORM, and you can manage users and todos via Admin interface.
 # if you want to store your data, put the setting below to False
 KISSTODO_USE_GAE = True # False = Django-ORM
 
-if KISSTODO_USE_GAE: from djangoappengine.settings_base import *
+KISSTODO_SITE_URL = "http://www.massimobarbieri.it/kisstodo"
 
 import os
+
+if KISSTODO_USE_GAE: from djangoappengine.settings_base import *
 
 SECRET_KEY = '7vyl7&d^725^kllplihdr2f#a7q15c#gcdlaih4h^-%93v%36^'
 
