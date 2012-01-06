@@ -1,7 +1,7 @@
 CACHE MANIFEST
 # rev {% load todo_custom_tags %}{% app_version_info %}
 NETWORK:
-/ping.js
+/static/js/ping.js
 http://{{host}}/
 CACHE:
 /static/css/main.css

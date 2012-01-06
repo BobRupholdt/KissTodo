@@ -2,10 +2,6 @@ var kisstodo_board = (function () {
     var res = {};
     
     res.init_board=function() {
-    
-        //$(document.body).bind("online", res.check_network);
-        //$(document.body).bind("offline", res.check_network);
-        //res.check_network();
         
         $(document).ajaxStart(function() { 
             kisstodo_board.ajax_pending = true; 
@@ -16,17 +12,29 @@ var kisstodo_board = (function () {
         });        
         
         $(document).ajaxError(function(e, xhr, settings, exception) {
-          //console.log("AE:"+xhr.status);
+         
+          if (settings.url.indexOf("/static/js/ping.js")==0) return;
           
-          if (localStorage.getItem("redirected")=="true")
+  
+
+          if (xhr.status!="0")
           {
                 kisstodo_board.show_message("Network error.");
-                localStorage.setItem("redirected","false");
           }
           else
           {
-            localStorage.setItem("redirected","true")
-            window.location.replace(kisstodo_board.urls['login']);
+
+            kisstodo_board.check_network();
+            if(kisstodo_board.is_network_available()) {
+                // not logget on GAE
+                window.location.replace(kisstodo_board.urls['login']);
+                
+               
+            } else {
+                kisstodo_board.show_message("Network error.");
+            }
+            
+            
           }
           
           //kisstodo_board.check_network();
@@ -47,6 +55,22 @@ var kisstodo_board = (function () {
         //if (xhr.status == 302) {
         //    window.location.href = xhr.getResponseHeader("Location").replace(/\?.*$/, "?next="+window.location.pathname);
         //}
+        //});
+        
+        // redirect ajax requests that are redirected, not found (404), or forbidden (403.)
+        //$('body').bind('ajaxComplete', function(event,request,settings){
+                //console.log("AJAX COMPLETE: "+request.status);
+                //console.log("HTTP DATA: "+request.responseText);
+                
+                //if (request.responseText.indexOf('<html>')==0) window.location.replace(kisstodo_board.urls['login']);
+                
+                /*
+                switch(request.status) {
+                    case 301: case 404: case 403:                    
+                        
+                        break;
+                }
+                */
         //});
         
         $(document).bind('keypress', kisstodo_board.event_keypress);
@@ -320,6 +344,8 @@ var kisstodo_board = (function () {
         
         kisstodo_board.init_board_refresh();
         
+        kisstodo_board.check_network();
+        
         kisstodo_board.initialized=true;
         
     }
@@ -431,15 +457,13 @@ var kisstodo_board = (function () {
         kisstodo_board.refresh_todo_list(list_id);
     }
     
-    res.refresh_list_list = function(selected_list_id) {    
-        //console.log("res.refresh_list_list("+selected_list_id+")");
+    res.refresh_list_list = function(selected_list_id) {
         $(".list_list").fadeOut(kisstodo_board.default_animation_speed);
          if (kisstodo_board.is_currently_online())
         {
-        
         $.get(kisstodo_board.urls['list_list']+selected_list_id, function(response) {
         
-            //console.log(response);
+            //console.log("refresh_list_list RESPONSE:'"+response+'');
             if (response.indexOf('<!DOCTYPE HTML>')==0) document.location = "/accounts/login/";
             
             $(".list_list").html(response);
@@ -667,7 +691,7 @@ var kisstodo_board = (function () {
             else {
                 d.fadeOut(0);
                 d.html(response);
-                console.log("HTML updated");
+                //console.log("HTML updated");
                 d.fadeIn(kisstodo_board.default_animation_speed);
                 //d.load(kisstodo_board.urls['todo_show_item']+todo_id, function () {
                 //    d.fadeIn(kisstodo_board.default_animation_speed);
@@ -921,41 +945,47 @@ var kisstodo_board = (function () {
     }    
     
     res.check_network = function() {
-                
+        
         if (navigator.onLine) {
             $.ajax({
                 async: true,
                 cache: false,
                 dataType: "json",
                 error: function (req, status, ex) {
-                    console.log("error: " + ex);
-                    res.show_network(false);
+                   
+                   
+                    kisstodo_board.set_network_available(false);
                 },
                 success: function (data, status, req) {
-                    res.show_network(true);
+                    
+                    kisstodo_board.set_network_available(true);
                 },
                 timeout: 10000,
                 type: "GET",
                 url: "/static/js/ping.js"
             });
         } else {
-            res.show_network(false);
+
+            kisstodo_board.set_network_available(false);
         }
     }       
 
+     /*
      res.show_network = function(online) {
-          if (online != kisstodo_board.is_currently_online()) {
+          console.log("called show_network:"+online);
+          console.log("kisstodo_board.is_currently_online(): "+kisstodo_board.is_currently_online());
+          //if (online != kisstodo_board.is_currently_online()) {
             if (online) {
-                $("#online_status").html("Online");
-                 console.log('I am online');
+                
+                 console.log('show_network:I am online');
             } else {
-                $("#online_status").html("Offline");
-                 console.log('I am offline');
+
+                 console.log('show_network:I am offline');
             }
             
             kisstodo_board.set_currently_online(online, true);
-        }
-    }      
+        //}
+    }      */
     
     res.is_currently_online = function() {
         if (localStorage.getItem('currently_online')=="false") return false;
@@ -968,12 +998,29 @@ var kisstodo_board = (function () {
         kisstodo_board.update_currently_online_visualization(notify);
     }
     
+    //
+    res.is_network_available = function() {
+        if (localStorage.getItem('network_available')=="false") return false;
+        
+        return new Boolean(localStorage.getItem('network_available'));
+    }
+    
+    res.set_network_available = function(value, notify) {
+        localStorage.setItem('network_available', value);
+    }
+    //
+    
     res.update_currently_online_visualization = function(notify) {
         value = kisstodo_board.is_currently_online();
         $('.network_switch').html(value?'go offline':'go online');
         if (notify)
             kisstodo_board.show_message('You are '+(value?'online':'offline'))
     }    
+    
+        
+    //$(document.body).bind("online", res.check_network);
+    //$(document.body).bind("offline", res.check_network);
+    
     
     res.selected_todo_index=0;
     res.focused_element = '';
