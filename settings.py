@@ -1,7 +1,7 @@
 # Django settings for KissTodo project.
 
-# KissTodo is designet to work on GAE; it works with Django-ORM, and you can manage users and todos via Admin interface.
-# if you want to store your data, put the setting below to False
+# KissTodo is designet to work on GAE; it works even with Django-ORM, and you can manage users and todos via Admin interface.
+# if you want to store your data on a relational database, put the setting below to False
 KISSTODO_USE_GAE = True # False = Django-ORM
 
 KISSTODO_SITE_URL = "http://www.massimobarbieri.it/kisstodo"
