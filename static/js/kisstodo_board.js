@@ -417,6 +417,8 @@ var kisstodo_board = (function () {
         {
         $.get(ajax_url, function(response) {
         
+            if (response.indexOf('<!DOCTYPE HTML>')==0) document.location = "/accounts/login/";
+            
             var received_list_id=$(response).find("#list_id").val();
             var sel = $(kisstodo_board.selector_prefix+"#selected_list_option").val();
             //console.log("expecting "+list_id+", selected="+sel);
